@@ -1,6 +1,7 @@
 package com.example.shows_jurenivan.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -13,9 +14,19 @@ import com.example.shows_jurenivan.dataStructures.Show
 import kotlinx.android.synthetic.main.activity_episodes.*
 
 const val REQUEST_ID_ADD_EPISODE = 1
-const val RESULT_SHOW = "Show"
 
 class ShowActivity : AppCompatActivity() {
+
+    companion object{
+        const val RESULT_SHOW = "Show"
+
+        fun newInstance(context: Context, position: Int): Intent {
+            val intent = Intent(context, ShowActivity::class.java)
+            intent.putExtra(RESULT_SHOW, position)
+            return intent
+        }
+    }
+
 
     private var lastEpNumber = 0
     private lateinit var adapter: ArrayAdapter<String>

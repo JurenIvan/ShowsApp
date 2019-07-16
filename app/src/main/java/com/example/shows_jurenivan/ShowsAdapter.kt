@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.shows_jurenivan.activities.HomeActivity
+import com.example.shows_jurenivan.activities.ShowActivity
 import com.example.shows_jurenivan.dataStructures.Show
 
 
@@ -26,7 +27,7 @@ class ShowsAdapter(private val shows: List<Show>, private val activityHome: Home
         holder.textViewYears.text = entry.airDate
         holder.imageSrc.setImageResource(entry.image)
         holder.whole.setOnClickListener {
-            activityHome.showClicked(position)
+            activityHome.startActivity(ShowActivity.newInstance(activityHome,position))
         }
     }
 
