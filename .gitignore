@@ -12,7 +12,7 @@
 /captures
 .externalNativeBuild
 uselessFolder/
-idea/
+.idea/
 
 
 # Created by https://www.gitignore.io/api/androidstudio

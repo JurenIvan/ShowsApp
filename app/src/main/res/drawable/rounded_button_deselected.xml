@@ -6,8 +6,8 @@
 
     <solid android:color="@color/colorButtonDisabled"/>
 
-    <corners android:bottomRightRadius="20dp"
-             android:bottomLeftRadius="20dp"
-             android:topRightRadius="20dp"
-             android:topLeftRadius="20dp"/>
+    <corners android:bottomRightRadius="10dp"
+             android:bottomLeftRadius="10dp"
+             android:topRightRadius="10dp"
+             android:topLeftRadius="10dp"/>
 </shape>
