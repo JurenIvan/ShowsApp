@@ -8,11 +8,11 @@
 
     <ImageView
             android:id="@+id/android_logo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/ic_logo_mark"
+            android:src="@drawable/ic_img_logo_mark"
             android:layout_marginTop="72dp"
 
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +50,9 @@
 
             app:errorEnabled="true"
             app:passwordToggleEnabled="true"
-            app:passwordToggleDrawable="@drawable/ic_show_password"
+            app:passwordToggleDrawable="@drawable/ic_show_password_red"
+
+
 
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
@@ -71,13 +73,15 @@
     <Button
             android:id="@+id/btnLogIn"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
 
             android:gravity="center"
-            android:background="@drawable/roundedButtonDisabled"
+            android:background="@drawable/button_selector"
 
             android:layout_marginTop="8dp"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
 
             android:text="@string/login"
             android:textSize="16sp"
@@ -86,7 +90,6 @@
             android:lineSpacingExtra="4sp"
             android:textAlignment="center"
 
-            android:onClick="confirmLogin"
             android:enabled="false"
             tools:layout_editor_absoluteX="20dp"/>
 

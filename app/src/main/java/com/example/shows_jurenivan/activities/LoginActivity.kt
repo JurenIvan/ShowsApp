@@ -1,21 +1,23 @@
-package com.example.shows_jurenivan
+package com.example.shows_jurenivan.activities
 
-import android.support.v7.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.EditText
+import com.example.shows_jurenivan.R
 import kotlinx.android.synthetic.main.activity_login.*
-import android.content.Intent
-
-
-const val USERNAME = "username"
-const val MIN_EMAIL_LEN=1
-const val MIN_PWD_LEN=8
 
 
 class ActivityLogin : AppCompatActivity() {
+
+    companion object {
+        const val USERNAME = "username"
+        const val MIN_EMAIL_LEN = 1
+        const val MIN_PWD_LEN = 8
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,13 +25,9 @@ class ActivityLogin : AppCompatActivity() {
 
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if (checkAllPasswordConditions(passwordTextEditor) && checkAllUsernameConditions(tvUsername)) {
-                    btnLogIn.isEnabled = true
-                    btnLogIn.background = getDrawable(R.drawable.roundedButtonEnabled)
-                } else {
-                    btnLogIn.isEnabled = false
-                    btnLogIn.background = getDrawable(R.drawable.roundedButtonDisabled)
-                }
+
+                btnLogIn.isEnabled =
+                    checkAllPasswordConditions(passwordTextEditor) && checkAllUsernameConditions(tvUsername)
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -41,7 +39,7 @@ class ActivityLogin : AppCompatActivity() {
 
         btnLogIn.setOnClickListener {
             if (Patterns.EMAIL_ADDRESS.matcher(tvUsername.text).matches()) {
-                val intent = Intent(baseContext, ActivityWelcome::class.java)
+                val intent = Intent(baseContext, WelcomeActivity::class.java)
                 intent.putExtra(USERNAME, tvUsername.text.toString())
                 startActivity(intent)
                 finish()

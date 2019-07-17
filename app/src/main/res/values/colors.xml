@@ -2,8 +2,11 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#ff758c</color>
     <color name="colorButtonEnabled">#ff758c</color>
     <color name="colorButtonDisabled">#ffccd5</color>
+    <color name="showsYearsColor">#a0a0a0</color>
+    <color name="showsTitleColor">#505050</color>
+    <color name="black">#000000</color>
 
 </resources>

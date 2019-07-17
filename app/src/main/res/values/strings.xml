@@ -4,4 +4,18 @@
     <string name="password">Password</string>
     <string name="userName">Username</string>
     <string name="email_required">E-mail required</string>
+    <string name="addEpisode">Add episode</string>
+    <string name="save">Save</string>
+    <string name="uploadPhoto">Upload photo</string>
+    <string name="episodeTitle">Episode title</string>
+    <string name="episodeDescripiton">Episode description</string>
+    <string name="small_camera_picture">small camera picture</string>
+    <string name="seasonEpisode">S01 E01</string>
+    <string name="description">episodeTitle</string>
+    <string name="shows">Shows</string>
+    <string name="episodes">Episodes</string>
+    <string name="fallenAsleep">Someone has fallen asleep. Don\'t wake him up.</string>
+    <string name="somebodyFallenAsleep">Someone has fallen asleep.</string>
+    <string name="dontWakeHimUp">Don’t wake him up.</string>
+    <string name="addSomeEpisodes">Add some episodes</string>
 </resources>
