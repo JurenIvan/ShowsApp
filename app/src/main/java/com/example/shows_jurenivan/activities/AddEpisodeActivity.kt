@@ -2,15 +2,16 @@ package com.example.shows_jurenivan.activities
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityCompat.checkSelfPermission
+import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
@@ -22,9 +23,6 @@ import android.widget.NumberPicker
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.dataStructures.Episode
 import kotlinx.android.synthetic.main.activity_add_episode.*
-import android.os.Environment.DIRECTORY_PICTURES
-import android.os.Environment
-import android.support.v4.content.FileProvider
 import java.io.File
 
 
@@ -52,6 +50,7 @@ class AddEpisodeActivity : AppCompatActivity() {
     private lateinit var fileURL: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_episode)
 
@@ -78,8 +77,6 @@ class AddEpisodeActivity : AppCompatActivity() {
         changePhoto.setOnClickListener {
             selectPictureDialog()
         }
-
-
 
         seasonEpisodeNumberSelector.setOnClickListener {
             val builder = AlertDialog.Builder(this)
@@ -109,10 +106,15 @@ class AddEpisodeActivity : AppCompatActivity() {
             dialog.show()
         }
 
-
         btnSave.setOnClickListener {
             val resultIntent = Intent()
-            val episode = Episode(episodeNum, seasonNum, episodeDescription.text.toString(), episodeTitle.text.toString())
+            val episode = Episode(
+                fileURL,
+                episodeNum,
+                seasonNum,
+                episodeDescription.text.toString(),
+                episodeTitle.text.toString()
+            )
             val pos = intent.getIntExtra(RESULT_SHOW_NUM, -1)
             resultIntent.putExtra(RESULT_SHOW_NUM, pos)
             resultIntent.putExtra(RESULT, episode)
@@ -144,8 +146,6 @@ class AddEpisodeActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         builder.show()
-
-
     }
 
 
@@ -171,28 +171,10 @@ class AddEpisodeActivity : AppCompatActivity() {
 
     private fun openCamera() {
 
-//        val values = ContentValues(1)
-//        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
-//        fileURL = contentResolver
-//            .insert(
-//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                values
-//            )
-
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val image = File.createTempFile(
-            "image", /* prefix */
-            ".jpg", /* suffix */
-            storageDir      /* directory */
-        )
-
-        // Save a file: path for use with ACTION_VIEW intents
-        fileURL = FileProvider.getUriForFile(this,
-            "com.example.shows_jurenivan",
-            image);
-
+        val image = File.createTempFile("image", ".jpg", storageDir)
+        fileURL = FileProvider.getUriForFile(this, "com.example.shows_jurenivan", image)
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
         if (intent.resolveActivity(packageManager) != null) {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileURL)
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
@@ -229,11 +211,12 @@ class AddEpisodeActivity : AppCompatActivity() {
     }
 
     private fun pickPicture() {
-        if (checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                //show why
-            }
-            ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_EXTERNAL_STORAGE)
+        if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                REQUEST_READ_EXTERNAL_STORAGE
+            )
         } else {
             val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(pickImageIntent, PICK_PHOTO)
@@ -245,12 +228,10 @@ class AddEpisodeActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 TAKE_PHOTO -> image.setImageURI(fileURL)
-
                 PICK_PHOTO -> {
                     fileURL = data!!.data
                     image.setImageURI(fileURL)
                 }
-
             }
             changeVisibility()
         } else {
