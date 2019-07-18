@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-
-              android:paddingBottom="10dp"
-              android:paddingStart="10dp"
-              android:paddingEnd="10dp"
-              android:orientation="horizontal"
-              android:id="@+id/showListID"
+        android:paddingBottom="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:orientation="horizontal"
+        android:id="@+id/showListID"
 >
 
     <ImageView
@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textSize="20sp"
-                android:text="TROLOLO"
+                android:text="@string/placeholder"
 
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textSize="14sp"
-                android:text="(2007-2008)"
+                android:text="@string/placeholder"
 
 
                 android:layout_marginStart="20dp"

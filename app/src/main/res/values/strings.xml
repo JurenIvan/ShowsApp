@@ -18,4 +18,11 @@
     <string name="somebodyFallenAsleep">Someone has fallen asleep.</string>
     <string name="dontWakeHimUp">Don’t wake him up.</string>
     <string name="addSomeEpisodes">Add some episodes</string>
+    <string name="seasonAndEpisode">Season &amp; episode</string>
+    <string name="season">Season</string>
+    <string name="episode">Episode</string>
+    <string name="saveCapital">SAVE</string>
+    <string name="youreIn">You\'re in!</string>
+    <string name="placeholder">Lorem Ipsum</string>
+    <string name="changePhoto">Change Photo</string>
 </resources>
