@@ -31,16 +31,16 @@
         <activity android:name=".activities.ShowActivity">
         </activity>
         <activity android:name=".activities.HomeActivity">
+
+        </activity>
+        <activity android:name=".activities.WelcomeActivity">
+        </activity>
+        <activity android:name=".activities.ActivityLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity android:name=".activities.WelcomeActivity">
-        </activity>
-        <activity android:name=".activities.ActivityLogin">
-
         </activity>
     </application>
 

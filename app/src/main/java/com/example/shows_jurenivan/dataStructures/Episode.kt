@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Episode(
-    val image:Uri,
+    val image:Uri?,
     val episodeNumber: Int,
     val seasonNumber: Int,
     var description:String,

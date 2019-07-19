@@ -5,11 +5,11 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.design.widget.TextInputEditText
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityCompat.checkSelfPermission
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
@@ -25,9 +25,7 @@ import com.example.shows_jurenivan.dataStructures.Episode
 import kotlinx.android.synthetic.main.activity_add_episode.*
 import java.io.File
 
-
 const val RESULT = "episode"
-
 
 const val MAX_SEASON_NUM = 20
 const val MIN_SEASON_NUM = 1
@@ -38,16 +36,20 @@ const val RESULT_SHOW_NUM = "resultShowNum"
 const val TAKE_PHOTO = 80
 const val PICK_PHOTO = 81
 
-
 const val REQUEST_CAMERA_PERMISSION = 101
 const val REQUEST_READ_EXTERNAL_STORAGE = 102
+
+private const val SAVED_INSTANCE_SEASON = "SEASON"
+private const val SAVED_INSTANCE_EPISODE = "EPISODE"
+private const val SAVED_INSTANCE_FILEURI = "FILE"
 
 
 class AddEpisodeActivity : AppCompatActivity() {
 
     private var seasonNum = 1
     private var episodeNum = 1
-    private lateinit var fileURL: Uri
+    private var fileURL: Uri? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -56,6 +58,19 @@ class AddEpisodeActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        image.setImageResource(R.drawable.ic_camera)
+
+        if (savedInstanceState != null) {
+            seasonNum = savedInstanceState.getInt(SAVED_INSTANCE_SEASON)
+            episodeNum = savedInstanceState.getInt(SAVED_INSTANCE_EPISODE)
+            val uri = savedInstanceState.getString(SAVED_INSTANCE_FILEURI)
+            if (uri != null)
+                fileURL = Uri.parse(uri)
+
+            seasonEpisodeNumberSelector.text = String.format("S%d E%d", seasonNum, episodeNum)
+            image.setImageURI(fileURL)
+        }
 
 
         val textWatcher = object : TextWatcher {
@@ -71,12 +86,11 @@ class AddEpisodeActivity : AppCompatActivity() {
         episodeTitle.addTextChangedListener(textWatcher)
         episodeDescription.addTextChangedListener(textWatcher)
 
-        uploadPhoto.setOnClickListener {
-            selectPictureDialog()
-        }
-        changePhoto.setOnClickListener {
-            selectPictureDialog()
-        }
+        pictureBackground.setOnClickListener { selectPictureDialog() }
+        uploadPhoto.setOnClickListener { selectPictureDialog() }
+        changePhoto.setOnClickListener { selectPictureDialog() }
+
+
 
         seasonEpisodeNumberSelector.setOnClickListener {
             val builder = AlertDialog.Builder(this)
@@ -135,6 +149,25 @@ class AddEpisodeActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        if (episodeDescription.text.toString().isNotBlank() || episodeTitle.text.toString().isNotBlank()) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Confirm back")
+            builder.setMessage("Are you sure you want to discard all changes?")
+            builder.setPositiveButton("Yes") { dialog, _ ->
+                finish()
+                dialog.dismiss()
+            }
+            builder.setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            builder.create().show()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     private fun selectPictureDialog() {
         val options = arrayOf("Camera", "Gallery")
         val builder = AlertDialog.Builder(this)
@@ -150,23 +183,47 @@ class AddEpisodeActivity : AppCompatActivity() {
 
 
     private fun takePicture() {
-        if (checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        val permissionsNeeded = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val requestPermissionList = generatePermissionList(permissionsNeeded)
+
+        if (requestPermissionList.isEmpty()) {
             openCamera()
-        } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-                AlertDialog.Builder(this)
-                    .setTitle("We'll need a permission for camera to take a photo.")
-                    .setNeutralButton("OK") { dialog, _ ->
-                        dialog.dismiss()
-                        ActivityCompat.requestPermissions(
-                            this, arrayOf(Manifest.permission.CAMERA),
-                            REQUEST_CAMERA_PERMISSION
-                        )
-                    }.create().show()
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+        }
+        for (permission in requestPermissionList) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(requestPermissionList.toTypedArray(), REQUEST_CAMERA_PERMISSION)
             }
         }
+    }
+
+    private fun pickPicture() {
+        val permissionsNeeded = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        val requestPermissionList = generatePermissionList(permissionsNeeded)
+
+        if (requestPermissionList.isEmpty()) {
+            openGallery()
+        }
+        for (permission in requestPermissionList) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(requestPermissionList.toTypedArray(), REQUEST_READ_EXTERNAL_STORAGE)
+            }
+        }
+    }
+
+    private fun openGallery() {
+        val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(pickImageIntent, PICK_PHOTO)
+    }
+
+    private fun generatePermissionList(permissionsNeeded: Array<String>): ArrayList<String> {
+        val stillNeeded = ArrayList<String>()
+
+        for (permission in permissionsNeeded) {
+            if (checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                stillNeeded.add(permission)
+            }
+        }
+        return stillNeeded
     }
 
     private fun openCamera() {
@@ -185,42 +242,42 @@ class AddEpisodeActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             REQUEST_CAMERA_PERMISSION -> {
-                if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_DENIED) {
-                    openCamera()
-                } else {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.CAMERA),
-                        REQUEST_CAMERA_PERMISSION
-                    )
+                if (grantResults.isNotEmpty()) {
+                    if (!hasUngrantedPermissions(grantResults)) {
+                        openCamera()
+                    }
                 }
+               // else {
+               //     explainEnablePermission("Camera and write on external storage")
+               // }
             }
             REQUEST_READ_EXTERNAL_STORAGE -> {
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    pickPicture()
-                } else {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                        REQUEST_READ_EXTERNAL_STORAGE
-                    )
+                if ((grantResults.isNotEmpty())) {
+                    if (!hasUngrantedPermissions(grantResults)) {
+                        pickPicture()
+                    }
                 }
-                return
+                else {
+                    explainEnablePermission("Read external storage")
+                }
             }
         }
     }
 
-    private fun pickPicture() {
-        if (checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                REQUEST_READ_EXTERNAL_STORAGE
-            )
-        } else {
-            val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(pickImageIntent, PICK_PHOTO)
+    private fun hasUngrantedPermissions(grantResults: IntArray): Boolean {
+        for (permission in grantResults) {
+            if (permission != PackageManager.PERMISSION_GRANTED) return true
         }
+        return false
+    }
+
+    private fun explainEnablePermission(whichPermission: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Permission needed!")
+        builder.setMessage("$whichPermission permission is needed for this action, please enable it.")
+        builder.setNeutralButton("OK") { dialog, _ -> dialog.dismiss() }
+        builder.show()
+
     }
 
 
@@ -237,6 +294,15 @@ class AddEpisodeActivity : AppCompatActivity() {
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle?) {
+        savedInstanceState?.putInt(SAVED_INSTANCE_SEASON, seasonNum)
+        savedInstanceState?.putInt(SAVED_INSTANCE_EPISODE, episodeNum)
+        if (fileURL != null) {
+            savedInstanceState?.putString(SAVED_INSTANCE_FILEURI, fileURL.toString())
+        }
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     private fun changeVisibility() {
