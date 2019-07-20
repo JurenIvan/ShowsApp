@@ -68,7 +68,7 @@ class AddEpisodeActivity : AppCompatActivity() {
             if (uri != null)
                 fileURL = Uri.parse(uri)
 
-            seasonEpisodeNumberSelector.text = String.format("S%d E%d", seasonNum, episodeNum)
+            seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", seasonNum, episodeNum)
             image.setImageURI(fileURL)
         }
 
@@ -150,7 +150,14 @@ class AddEpisodeActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (episodeDescription.text.toString().isNotBlank() || episodeTitle.text.toString().isNotBlank()) {
+
+        if (episodeDescription.text.toString().isNotBlank() ||
+            episodeTitle.text.toString().isNotBlank() ||
+            fileURL != null ||
+            seasonNum != MIN_SEASON_NUM ||
+            episodeNum != MIN_EPISODE_NUM
+        ) {
+
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Confirm back")
             builder.setMessage("Are you sure you want to discard all changes?")
@@ -227,7 +234,6 @@ class AddEpisodeActivity : AppCompatActivity() {
     }
 
     private fun openCamera() {
-
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val image = File.createTempFile("image", ".jpg", storageDir)
         fileURL = FileProvider.getUriForFile(this, "com.example.shows_jurenivan", image)
@@ -245,21 +251,20 @@ class AddEpisodeActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty()) {
                     if (!hasUngrantedPermissions(grantResults)) {
                         openCamera()
+                    } else {
+                        explainEnablePermission("Camera and write on external storage")
                     }
                 }
-               // else {
-               //     explainEnablePermission("Camera and write on external storage")
-               // }
             }
             REQUEST_READ_EXTERNAL_STORAGE -> {
                 if ((grantResults.isNotEmpty())) {
                     if (!hasUngrantedPermissions(grantResults)) {
                         pickPicture()
+                    } else {
+                        explainEnablePermission("Read external storage")
                     }
                 }
-                else {
-                    explainEnablePermission("Read external storage")
-                }
+
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.shows_jurenivan
+package com.example.shows_jurenivan.Adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.activities.HomeActivity
 import com.example.shows_jurenivan.activities.ShowActivity
 import com.example.shows_jurenivan.dataStructures.Show
@@ -16,7 +17,13 @@ class ShowsAdapter(private val shows: List<Show>, private val activityHome: Home
     RecyclerView.Adapter<ShowsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_show, parent, false))
+        ViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_show,
+                parent,
+                false
+            )
+        )
 
 
     override fun getItemCount(): Int = shows.size

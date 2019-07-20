@@ -69,19 +69,30 @@
         />
     </android.support.design.widget.TextInputLayout>
 
+    <CheckBox
+            android:text="@string/rememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:id="@+id/checkBox"
+
+            app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="20dp"
+            android:textSize="16sp"
+            android:textColor="#505050"
+            android:lineSpacingExtra="6sp"
+
+            android:checked="false"
+            android:layout_marginStart="16dp"/>
 
     <Button
             android:id="@+id/btnLogIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
+            app:layout_constraintTop_toBottomOf="@+id/checkBox"
 
             android:gravity="center"
             android:background="@drawable/button_selector"
-
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="20sp"
-            android:layout_marginEnd="20sp"
 
             android:text="@string/login"
             android:textSize="16sp"
@@ -90,7 +101,11 @@
             android:lineSpacingExtra="4sp"
             android:textAlignment="center"
 
+            android:layout_marginTop="20dp"
             android:enabled="false"
-            tools:layout_editor_absoluteX="20dp"/>
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+           />
+
 
 </android.support.constraint.ConstraintLayout>

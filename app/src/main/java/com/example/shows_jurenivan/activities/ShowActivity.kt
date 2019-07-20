@@ -8,18 +8,20 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
-import android.widget.ArrayAdapter
-import com.example.shows_jurenivan.EpisodeAdapter
+import com.example.shows_jurenivan.Adapters.EpisodeAdapter
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.dataStructures.Episode
 import com.example.shows_jurenivan.dataStructures.Show
+import com.example.shows_jurenivan.shows
 import kotlinx.android.synthetic.main.activity_episodes.*
+
 
 const val REQUEST_ID_ADD_EPISODE = 1
 
 class ShowActivity : AppCompatActivity() {
 
     companion object{
+
         const val RESULT_SHOW = "Show"
 
         fun newInstance(context: Context, position: Int): Intent {
@@ -29,7 +31,6 @@ class ShowActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var adapter: ArrayAdapter<String>
     private lateinit var show: Show
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +40,6 @@ class ShowActivity : AppCompatActivity() {
         recyclerViewEpisodes.layoutManager = LinearLayoutManager(this)
 
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val position = intent.getIntExtra(RESULT_SHOW, 0)
         show = shows[position]
@@ -48,7 +48,7 @@ class ShowActivity : AppCompatActivity() {
         showName.text=show.name
         supportActionBar?.title = ""
 
-        recyclerViewEpisodes.adapter = EpisodeAdapter(show.listOfEpisodes,this)
+        recyclerViewEpisodes.adapter = EpisodeAdapter(show.listOfEpisodes, this)
 
         checkEmptiness()
 
@@ -69,7 +69,7 @@ class ShowActivity : AppCompatActivity() {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 val episode = data!!.getParcelableExtra<Episode>(RESULT)
-                val position=data!!.getIntExtra(RESULT_SHOW_NUM,-1)
+                val position=data.getIntExtra(RESULT_SHOW_NUM,-1)
 
                 shows[position].listOfEpisodes.add(episode)
 
@@ -99,6 +99,7 @@ class ShowActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 
 
 }
