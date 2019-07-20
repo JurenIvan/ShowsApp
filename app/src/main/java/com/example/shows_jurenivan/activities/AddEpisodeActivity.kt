@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.ActivityCompat.checkSelfPermission
@@ -25,31 +26,33 @@ import com.example.shows_jurenivan.dataStructures.Episode
 import kotlinx.android.synthetic.main.activity_add_episode.*
 import java.io.File
 
-const val RESULT = "episode"
-
-const val MAX_SEASON_NUM = 20
-const val MIN_SEASON_NUM = 1
-const val MAX_EPISODE_NUM = 99
-const val MIN_EPISODE_NUM = 1
 
 const val RESULT_SHOW_NUM = "resultShowNum"
-const val TAKE_PHOTO = 80
-const val PICK_PHOTO = 81
-
-const val REQUEST_CAMERA_PERMISSION = 101
-const val REQUEST_READ_EXTERNAL_STORAGE = 102
-
-private const val SAVED_INSTANCE_SEASON = "SEASON"
-private const val SAVED_INSTANCE_EPISODE = "EPISODE"
-private const val SAVED_INSTANCE_FILEURI = "FILE"
-
+const val RESULT = "episode"
 
 class AddEpisodeActivity : AppCompatActivity() {
+
+    companion object{
+
+        const val MAX_SEASON_NUM = 20
+        const val MIN_SEASON_NUM = 1
+        const val MAX_EPISODE_NUM = 99
+        const val MIN_EPISODE_NUM = 1
+
+        const val TAKE_PHOTO = 80
+        const val PICK_PHOTO = 81
+
+        const val REQUEST_CAMERA_PERMISSION = 101
+        const val REQUEST_READ_EXTERNAL_STORAGE = 102
+
+        private const val SAVED_INSTANCE_SEASON = "SEASON"
+        private const val SAVED_INSTANCE_EPISODE = "EPISODE"
+        private const val SAVED_INSTANCE_FILEURI = "FILE"
+    }
 
     private var seasonNum = 1
     private var episodeNum = 1
     private var fileURL: Uri? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -58,6 +61,7 @@ class AddEpisodeActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
         image.setImageResource(R.drawable.ic_camera)
 
@@ -72,13 +76,11 @@ class AddEpisodeActivity : AppCompatActivity() {
             image.setImageURI(fileURL)
         }
 
-
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 btnSave.isEnabled =
                     checkAllTextBoxConditions(episodeTitle) && checkAllTextBoxConditions(episodeDescription)
             }
-
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         }
@@ -123,12 +125,12 @@ class AddEpisodeActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             val resultIntent = Intent()
             val episode = Episode(
-                fileURL,
+                fileURL.toString(),
                 episodeNum,
                 seasonNum,
                 episodeDescription.text.toString(),
                 episodeTitle.text.toString()
-            )
+            ) as Parcelable
             val pos = intent.getIntExtra(RESULT_SHOW_NUM, -1)
             resultIntent.putExtra(RESULT_SHOW_NUM, pos)
             resultIntent.putExtra(RESULT, episode)
@@ -143,7 +145,7 @@ class AddEpisodeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == android.R.id.home) {
-            finish()
+            onBackPressed()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -165,9 +167,7 @@ class AddEpisodeActivity : AppCompatActivity() {
                 finish()
                 dialog.dismiss()
             }
-            builder.setNegativeButton("No") { dialog, _ ->
-                dialog.dismiss()
-            }
+            builder.setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
 
             builder.create().show()
         } else {
@@ -187,7 +187,6 @@ class AddEpisodeActivity : AppCompatActivity() {
         }
         builder.show()
     }
-
 
     private fun takePicture() {
         val permissionsNeeded = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -282,7 +281,6 @@ class AddEpisodeActivity : AppCompatActivity() {
         builder.setMessage("$whichPermission permission is needed for this action, please enable it.")
         builder.setNeutralButton("OK") { dialog, _ -> dialog.dismiss() }
         builder.show()
-
     }
 
 
@@ -314,5 +312,7 @@ class AddEpisodeActivity : AppCompatActivity() {
         uploadPhoto.visibility = View.GONE
         changePhoto.visibility = View.VISIBLE
     }
-
 }
+
+
+

@@ -29,10 +29,9 @@ class ActivityLogin : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         sharedPref = getSharedPreferences(LOGIN, Context.MODE_PRIVATE)
-
-        val userName = sharedPref?.getString(USERNAME, "")
+        val userName = sharedPref.getString(USERNAME, "")
         if (!userName.isNullOrBlank()) {
-            startWelcomeScreen(userName,false)
+            startWelcomeScreen(userName)
         }
 
 
@@ -51,14 +50,14 @@ class ActivityLogin : AppCompatActivity() {
 
         btnLogIn.setOnClickListener {
             if (Patterns.EMAIL_ADDRESS.matcher(tvUsername.text).matches()) {
-                startWelcomeScreen(tvUsername.text.toString(),true)
+                startWelcomeScreen(tvUsername.text.toString())
             } else {
                 userNameLayout.error = getString(R.string.email_required)
             }
         }
     }
 
-    private fun startWelcomeScreen(userName: String,changeData:Boolean) {
+    private fun startWelcomeScreen(userName: String) {
         if (checkBox.isChecked)
             sharedPref.edit().putString("username", tvUsername.text.toString().trim()).apply()
 

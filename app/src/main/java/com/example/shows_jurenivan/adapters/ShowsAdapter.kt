@@ -1,4 +1,4 @@
-package com.example.shows_jurenivan.Adapters
+package com.example.shows_jurenivan.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -24,7 +24,6 @@ class ShowsAdapter(private val shows: List<Show>, private val activityHome: Home
                 false
             )
         )
-
 
     override fun getItemCount(): Int = shows.size
 

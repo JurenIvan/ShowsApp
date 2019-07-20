@@ -1,4 +1,4 @@
-package com.example.shows_jurenivan.Adapters
+package com.example.shows_jurenivan.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import com.example.shows_jurenivan.dataStructures.Episode
 
 class EpisodeAdapter(private val episodes: List<Episode>, private val activityHome: ShowActivity) :
     RecyclerView.Adapter<EpisodeAdapter.ViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder =
         ViewHolder(
