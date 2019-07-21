@@ -22,10 +22,9 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="You're in!"
+            android:text="@string/youreIn"
             android:textStyle="bold"
             android:textSize="28sp"
-            android:lineHeight="40sp"
             android:textAlignment="center"
             android:id="@+id/textView"
             android:textColor="#2e2e2e"
@@ -38,7 +37,7 @@
             android:id="@+id/welcome_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="example"
+            android:text="@string/placeholder"
             android:gravity="center"
             app:layout_constraintTop_toBottomOf="@+id/textView" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
