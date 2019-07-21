@@ -9,12 +9,12 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
-import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.adapters.EpisodeAdapter
-import com.example.shows_jurenivan.data.viewModels.EpisodesViewModel
-import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.dataStructures.Show
-import kotlinx.android.synthetic.main.activity_show.*
+import com.example.shows_jurenivan.data.viewModels.EpisodesViewModel
+import kotlinx.android.synthetic.main.show_details.*
+import com.example.shows_jurenivan.R
+import com.example.shows_jurenivan.data.dataStructures.Episode
 
 
 class ShowActivity : AppCompatActivity() {
@@ -34,7 +34,7 @@ class ShowActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_show)
+        setContentView(R.layout.show_details)
 
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
@@ -55,8 +55,8 @@ class ShowActivity : AppCompatActivity() {
         show = viewModel.show
 
         showDescription.text = show.showDescription
-        showPicture.setImageResource(show.image)
-        showName.text = show.name
+        colappsingtoolbar.setBackgroundResource(show.image)
+        colappsingtoolbar.title = show.name
 
         viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
 
@@ -72,8 +72,10 @@ class ShowActivity : AppCompatActivity() {
     private fun checkEmptiness(episodes: List<Episode>?) {
         if (episodes.isNullOrEmpty()) {
             noEntriesLayout.visibility = View.VISIBLE
+            recyclerViewEpisodes.visibility = View.GONE
         } else {
             noEntriesLayout.visibility = View.GONE
+            recyclerViewEpisodes.visibility = View.VISIBLE
         }
     }
 

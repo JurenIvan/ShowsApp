@@ -100,7 +100,7 @@
                         android:id="@+id/seasonEpisodeNumberSelector"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="@string/seasonEpisode"
+                        android:text="@string/seasonEpisode"
                         android:textColor="@color/colorAccent"
                         android:textSize="14sp"/>
 
