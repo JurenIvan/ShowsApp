@@ -17,7 +17,6 @@ class EpisodesViewModel : ViewModel(), Observer<List<Episode>> {
     private var showId = -1
     lateinit var show: Show
 
-
     val liveData: LiveData<List<Episode>>
         get() = episodesLiveData
 
