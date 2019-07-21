@@ -1,6 +1,8 @@
 package com.example.shows_jurenivan.activities
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
@@ -9,8 +11,6 @@ import android.util.Patterns
 import android.widget.EditText
 import com.example.shows_jurenivan.R
 import kotlinx.android.synthetic.main.activity_login.*
-import android.content.Context
-import android.content.SharedPreferences
 
 
 class ActivityLogin : AppCompatActivity() {

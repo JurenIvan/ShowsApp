@@ -7,10 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.activities.ShowActivity
-import com.example.shows_jurenivan.dataStructures.Episode
+import com.example.shows_jurenivan.data.dataStructures.Episode
 
-class EpisodeAdapter(private val episodes: List<Episode>, private val activityHome: ShowActivity) :
+class EpisodeAdapter(private val activityHome: ShowActivity) :
     RecyclerView.Adapter<EpisodeAdapter.ViewHolder>() {
+
+    private var episodes = listOf<Episode>()
+
+    fun setData(list: List<Episode>) {
+        this.episodes = list
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder =
         ViewHolder(
@@ -25,13 +32,15 @@ class EpisodeAdapter(private val episodes: List<Episode>, private val activityHo
 
     override fun onBindViewHolder(holder: ViewHolder, episodeId: Int) {
         val entry: Episode = episodes[episodeId]
-        holder.episodeTitle.text = entry.title;
+        holder.episodeTitle.text = entry.title
         holder.seasonAndEpisode.text = String.format("S%02d E%02d", entry.seasonNumber, entry.episodeNumber)
     }
+
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val seasonAndEpisode = itemView.findViewById(R.id.seasonAndEpisode) as TextView
         val episodeTitle = itemView.findViewById(R.id.episodeTitle) as TextView
     }
+
 
 }

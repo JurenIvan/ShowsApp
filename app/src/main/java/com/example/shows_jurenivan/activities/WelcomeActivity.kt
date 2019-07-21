@@ -24,7 +24,6 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
 
-
     override fun onPause() {
         handler.removeCallbacksAndMessages(null)
         super.onPause()

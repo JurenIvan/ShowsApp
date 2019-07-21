@@ -2,13 +2,13 @@ package com.example.shows_jurenivan.activities
 
 import android.Manifest
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.os.Parcelable
 import android.provider.MediaStore
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.ActivityCompat.checkSelfPermission
@@ -22,18 +22,19 @@ import android.view.View
 import android.widget.Button
 import android.widget.NumberPicker
 import com.example.shows_jurenivan.R
-import com.example.shows_jurenivan.dataStructures.Episode
+import com.example.shows_jurenivan.data.viewModels.EpisodesViewModel
+import com.example.shows_jurenivan.data.dataStructures.Episode
 import kotlinx.android.synthetic.main.activity_add_episode.*
 import java.io.File
 
 
 const val RESULT_SHOW_NUM = "resultShowNum"
-const val RESULT = "episode"
 
 class AddEpisodeActivity : AppCompatActivity() {
 
-    companion object{
+    private lateinit var viewModel: EpisodesViewModel
 
+    companion object {
         const val MAX_SEASON_NUM = 20
         const val MIN_SEASON_NUM = 1
         const val MAX_EPISODE_NUM = 99
@@ -62,7 +63,6 @@ class AddEpisodeActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-
         image.setImageResource(R.drawable.ic_camera)
 
         if (savedInstanceState != null) {
@@ -81,6 +81,7 @@ class AddEpisodeActivity : AppCompatActivity() {
                 btnSave.isEnabled =
                     checkAllTextBoxConditions(episodeTitle) && checkAllTextBoxConditions(episodeDescription)
             }
+
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         }
@@ -91,8 +92,6 @@ class AddEpisodeActivity : AppCompatActivity() {
         pictureBackground.setOnClickListener { selectPictureDialog() }
         uploadPhoto.setOnClickListener { selectPictureDialog() }
         changePhoto.setOnClickListener { selectPictureDialog() }
-
-
 
         seasonEpisodeNumberSelector.setOnClickListener {
             val builder = AlertDialog.Builder(this)
@@ -116,25 +115,24 @@ class AddEpisodeActivity : AppCompatActivity() {
             btn.setOnClickListener {
                 episodeNum = enp.value
                 seasonNum = snp.value
-                seasonEpisodeNumberSelector.text = String.format("S%d E%d", seasonNum, episodeNum)
+                seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", seasonNum, episodeNum)
                 dialog.dismiss()
             }
             dialog.show()
         }
 
         btnSave.setOnClickListener {
-            val resultIntent = Intent()
+
             val episode = Episode(
                 fileURL.toString(),
                 episodeNum,
                 seasonNum,
                 episodeDescription.text.toString(),
                 episodeTitle.text.toString()
-            ) as Parcelable
-            val pos = intent.getIntExtra(RESULT_SHOW_NUM, -1)
-            resultIntent.putExtra(RESULT_SHOW_NUM, pos)
-            resultIntent.putExtra(RESULT, episode)
-            setResult(RESULT_OK, resultIntent)
+            )
+            viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
+            viewModel.setShow(intent.getIntExtra(RESULT_SHOW_NUM, -1))
+            viewModel.addEpisode(episode)
             finish()
         }
     }
@@ -263,7 +261,6 @@ class AddEpisodeActivity : AppCompatActivity() {
                         explainEnablePermission("Read external storage")
                     }
                 }
-
             }
         }
     }
