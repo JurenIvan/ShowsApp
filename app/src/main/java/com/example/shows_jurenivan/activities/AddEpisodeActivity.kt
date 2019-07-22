@@ -65,6 +65,9 @@ class AddEpisodeActivity : AppCompatActivity() {
 
         image.setImageResource(R.drawable.ic_camera)
 
+        viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
+        viewModel.setShow(intent.getIntExtra(RESULT_SHOW_NUM, -1))
+
         if (savedInstanceState != null) {
             seasonNum = savedInstanceState.getInt(SAVED_INSTANCE_SEASON)
             episodeNum = savedInstanceState.getInt(SAVED_INSTANCE_EPISODE)
@@ -111,7 +114,7 @@ class AddEpisodeActivity : AppCompatActivity() {
 
             builder.setView(view)
             val dialog = builder.create()
-
+            
             btn.setOnClickListener {
                 episodeNum = enp.value
                 seasonNum = snp.value
@@ -130,8 +133,6 @@ class AddEpisodeActivity : AppCompatActivity() {
                 episodeDescription.text.toString(),
                 episodeTitle.text.toString()
             )
-            viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
-            viewModel.setShow(intent.getIntExtra(RESULT_SHOW_NUM, -1))
             viewModel.addEpisode(episode)
             finish()
         }

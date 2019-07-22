@@ -44,28 +44,36 @@ class ShowActivity : AppCompatActivity() {
         recyclerViewEpisodes.adapter = adapter
 
         val position = intent.getIntExtra(RESULT_SHOW, 0)
-
         viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
         viewModel.setShow(position)
 
-        viewModel.liveData.observe(this, Observer { episodes ->
-            adapter.setData(episodes!!)
+
+        viewModel.episodesliveData.observe(this, Observer { episodes ->
+            if (episodes != null) {
+                adapter.setData(episodes)
+            }else{
+                adapter.setData(listOf())
+            }
             checkEmptiness(episodes)
         })
-        show = viewModel.show
 
-        showDescription.text = show.showDescription
-        colappsingtoolbar.setBackgroundResource(show.image)
-        colappsingtoolbar.title = show.name
+        viewModel.showliveData.observe(this, Observer {
+            if (it != null) {
+                this.show= it
+                showDescription.text = show.showDescription
+                colappsingtoolbar.setBackgroundResource(show.image)
+                colappsingtoolbar.title = show.name
+            }
+        })
 
-        viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
+
+
 
 
         fab.setOnClickListener {
             val intent = Intent(this, AddEpisodeActivity::class.java)
             intent.putExtra(RESULT_SHOW_NUM, position)
             startActivity(intent)
-            checkEmptiness(viewModel.liveData.value)
         }
     }
 

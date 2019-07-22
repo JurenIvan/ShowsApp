@@ -24,7 +24,13 @@ class HomeActivity : AppCompatActivity() {
         recyclerViewShows.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(ShowsViewModel::class.java)
-        viewModel.liveData.observe(this, Observer { shows -> adapter.setData(shows!!) })
+        viewModel.liveData.observe(this, Observer { shows ->
+            if (shows != null) {
+                adapter.setData(shows)
+            }else{
+                adapter.setData(listOf())
+            }
+        })
 
     }
 }
