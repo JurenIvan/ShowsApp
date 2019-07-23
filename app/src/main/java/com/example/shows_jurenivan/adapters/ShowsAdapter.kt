@@ -10,11 +10,18 @@ import android.widget.TextView
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.activities.HomeActivity
 import com.example.shows_jurenivan.activities.ShowActivity
-import com.example.shows_jurenivan.dataStructures.Show
+import com.example.shows_jurenivan.data.dataStructures.Show
 
 
-class ShowsAdapter(private val shows: List<Show>, private val activityHome: HomeActivity) :
+class ShowsAdapter(private val activityHome: HomeActivity) :
     RecyclerView.Adapter<ShowsAdapter.ViewHolder>() {
+
+    private var shows = listOf<Show>()
+
+    fun setData(shows: List<Show>) {
+        this.shows = shows
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder =
         ViewHolder(
@@ -33,7 +40,7 @@ class ShowsAdapter(private val shows: List<Show>, private val activityHome: Home
         holder.textViewYears.text = entry.airDate
         holder.imageSrc.setImageResource(entry.image)
         holder.whole.setOnClickListener {
-            activityHome.startActivity(ShowActivity.newInstance(activityHome,position))
+            activityHome.startActivity(ShowActivity.newInstance(activityHome, position))
         }
     }
 

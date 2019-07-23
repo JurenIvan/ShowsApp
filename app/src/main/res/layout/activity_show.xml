@@ -3,12 +3,12 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
 >
 
     <ImageView
-            android:src="@drawable/p220"
+            tools:src="@drawable/p220"
             android:id="@+id/showPicture"
             android:layout_width="match_parent"
             android:layout_height="250dp"
@@ -33,7 +33,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
             android:layout_marginTop="8dp"
-
+            tools:text="ShowTitle example"
 
     />
 
@@ -45,6 +45,7 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginTop="30dp"
+
     >
 
 
@@ -54,7 +55,9 @@
                 android:layout_height="wrap_content"
                 android:textColor="#505050"
                 android:textSize="16sp"
-                android:lineSpacingExtra="8sp"/>
+                android:lineSpacingExtra="8sp"
+                tools:text="Description of Show"
+        />
 
     </ScrollView>
 
