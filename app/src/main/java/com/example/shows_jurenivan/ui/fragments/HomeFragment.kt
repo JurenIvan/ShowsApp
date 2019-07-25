@@ -2,6 +2,7 @@ package com.example.shows_jurenivan.ui.fragments
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -14,7 +15,7 @@ import com.example.shows_jurenivan.data.viewModels.ShowsViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
 
     private lateinit var viewModel: ShowsViewModel
     private lateinit var adapter: ShowsAdapter
@@ -43,11 +44,11 @@ class HomeFragment : Fragment() {
                 var showFragment = ShowFragment()
                 showFragment.setShow( position)
                 if(twoPane)  {
-                    showFragment
+
                     replace(R.id.item_detail_container, showFragment)
                 }
-                    
-                    else     replace(R.id.fragmentContainer, showFragment)
+
+                else     replace(R.id.fragmentContainer, showFragment)
                 addToBackStack("ShowDisplay")
                 commit()
             }
@@ -64,6 +65,12 @@ class HomeFragment : Fragment() {
                 adapter.setData(listOf())
             }
         })
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+
+
     }
 
 

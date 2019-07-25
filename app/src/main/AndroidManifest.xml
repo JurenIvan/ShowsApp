@@ -35,7 +35,7 @@
 
 
         <activity android:name=".ui.ShowsContainerActivity"
-                  android:configChanges="orientation|screenSize|keyboardHidden"
+                  android:configChanges="keyboardHidden"
                   android:windowSoftInputMode="adjustPan|stateHidden"
         >
         </activity>

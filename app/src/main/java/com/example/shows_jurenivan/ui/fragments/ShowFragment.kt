@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.adapters.EpisodeAdapter
 import com.example.shows_jurenivan.data.dataStructures.Episode
@@ -25,7 +26,7 @@ import kotlinx.android.synthetic.main.show_details.recyclerViewEpisodes
 import kotlinx.android.synthetic.main.show_details.showDescription
 
 
-class ShowFragment : Fragment() {
+class ShowFragment : BaseFragment() {
 
 
     private lateinit var viewModel: EpisodesViewModel
@@ -64,11 +65,11 @@ class ShowFragment : Fragment() {
         setHasOptionsMenu(true)
 
 
-            val toolbar = view.findViewById(R.id.toolbar) as Toolbar
-            toolbar.setNavigationIcon(R.drawable.ic_back_arrow_light)
-            toolbar.setNavigationOnClickListener {
-                activity?.onBackPressed()
-            }
+        val toolbar = view.findViewById(R.id.toolbar) as Toolbar
+        toolbar.setNavigationIcon(R.drawable.ic_back_arrow_light)
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
 
 
         adapter = EpisodeAdapter()
@@ -103,11 +104,7 @@ class ShowFragment : Fragment() {
                 addEpisodeFragment.setShow(showId)
                 addToBackStack("ShowDetails")
 
-                if (item_detail_container != null) {
-                    twoPane = true
-                }
-
-                if(twoPane) replace(R.id.item_detail_container, addEpisodeFragment)
+                if(activity?.findViewById<FrameLayout>(R.id.item_detail_container) != null) replace(R.id.item_detail_container, addEpisodeFragment)
                 else replace(R.id.fragmentContainer, addEpisodeFragment)
 
                 commit()
@@ -131,4 +128,3 @@ class ShowFragment : Fragment() {
 
 
 }
-

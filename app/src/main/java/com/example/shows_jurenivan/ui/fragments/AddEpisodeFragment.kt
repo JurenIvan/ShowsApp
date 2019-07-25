@@ -1,6 +1,7 @@
 package com.example.shows_jurenivan.ui.fragments
 
 import android.Manifest
+import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,7 +12,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
@@ -27,10 +27,9 @@ import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.viewModels.EpisodesViewModel
 import kotlinx.android.synthetic.main.fragment_add_episode.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import java.io.File
 
-class AddEpisodeFragment : Fragment(), BackKeyInterface{
+class AddEpisodeFragment : BaseFragment(), BackKeyInterface{
 
 
     companion object {
@@ -57,7 +56,7 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface{
 
     private var showId = 0
     private lateinit var viewModel: EpisodesViewModel
-    
+
 
     fun setShow(showId: Int) {
         this.showId = showId
@@ -85,7 +84,31 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface{
         viewModel.setShow(showId)
 
         seasonEpisodeNumberSelector.setOnClickListener {
-            seasonEpisodeNumberListener
+            val builder =  context?.let { AlertDialog.Builder(it) }
+            val view = layoutInflater.inflate(R.layout.number_picker, null)
+
+            val snp = view.findViewById(R.id.seasonNumberPicker) as NumberPicker
+            val enp = view.findViewById(R.id.episodeNumberPicker) as NumberPicker
+            val btn = view.findViewById(R.id.saveButton) as Button
+
+            snp.maxValue = MAX_SEASON_NUM
+            snp.minValue = MIN_SEASON_NUM
+            enp.maxValue = MAX_EPISODE_NUM
+            enp.minValue = MIN_EPISODE_NUM
+
+            if (seasonNum != 1) snp.value = seasonNum
+            if (episodeNum != 1) enp.value = episodeNum
+
+            builder?.setView(view)
+            val dialog = builder?.create()
+
+            btn.setOnClickListener {
+                episodeNum = enp.value
+                seasonNum = snp.value
+                seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", seasonNum, episodeNum)
+                dialog?.dismiss()
+            }
+            dialog?.show()
         }
 
         pictureBackground.setOnClickListener { selectPictureDialog() }
@@ -131,31 +154,7 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface{
 
 
     private val seasonEpisodeNumberListener = {
-        val builder = context?.let { AlertDialog.Builder(it) }
-        val view = layoutInflater.inflate(R.layout.number_picker, null)
 
-        val snp = view.findViewById(R.id.seasonNumberPicker) as NumberPicker
-        val enp = view.findViewById(R.id.episodeNumberPicker) as NumberPicker
-        val btn = view.findViewById(R.id.saveButton) as Button
-
-        snp.maxValue = MAX_SEASON_NUM
-        snp.minValue = MIN_SEASON_NUM
-        enp.maxValue = MAX_EPISODE_NUM
-        enp.minValue = MIN_EPISODE_NUM
-
-        if (seasonNum != 1) snp.value = seasonNum
-        if (episodeNum != 1) enp.value = episodeNum
-
-        builder?.setView(view)
-        val dialog = builder?.create()
-
-        btn.setOnClickListener {
-            episodeNum = enp.value
-            seasonNum = snp.value
-            seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", seasonNum, episodeNum)
-            dialog?.dismiss()
-        }
-        dialog?.show()
     }
 
 
@@ -290,6 +289,26 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface{
         private fun checkAllTextBoxConditions(textBox: TextInputEditText?): Boolean {
             return textBox?.text?.length?.let { len -> len >= 1 } ?: false
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                TAKE_PHOTO -> image.setImageURI(fileURL)
+                PICK_PHOTO -> {
+                    fileURL = data!!.data
+                    image.setImageURI(fileURL)
+                }
+            }
+            changeVisibility()
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun changeVisibility() {
+        uploadPhoto.visibility = View.GONE
+        changePhoto.visibility = View.VISIBLE
     }
 
 
