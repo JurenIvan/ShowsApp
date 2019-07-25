@@ -29,7 +29,7 @@ import com.example.shows_jurenivan.data.viewModels.EpisodesViewModel
 import kotlinx.android.synthetic.main.fragment_add_episode.*
 import java.io.File
 
-class AddEpisodeFragment : BaseFragment(), BackKeyInterface{
+class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
 
 
     companion object {
@@ -84,7 +84,7 @@ class AddEpisodeFragment : BaseFragment(), BackKeyInterface{
         viewModel.setShow(showId)
 
         seasonEpisodeNumberSelector.setOnClickListener {
-            val builder =  context?.let { AlertDialog.Builder(it) }
+            val builder = context?.let { AlertDialog.Builder(it) }
             val view = layoutInflater.inflate(R.layout.number_picker, null)
 
             val snp = view.findViewById(R.id.seasonNumberPicker) as NumberPicker

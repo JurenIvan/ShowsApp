@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.res.Configuration
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -42,13 +41,11 @@ class HomeFragment : BaseFragment() {
         adapter = ShowsAdapter { position ->
             activity?.supportFragmentManager?.beginTransaction()?.apply {
                 var showFragment = ShowFragment()
-                showFragment.setShow( position)
-                if(twoPane)  {
+                showFragment.setShow(position)
+                if (twoPane) {
 
                     replace(R.id.item_detail_container, showFragment)
-                }
-
-                else     replace(R.id.fragmentContainer, showFragment)
+                } else replace(R.id.fragmentContainer, showFragment)
                 addToBackStack("ShowDisplay")
                 commit()
             }

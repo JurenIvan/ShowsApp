@@ -1,7 +1,6 @@
 package com.example.shows_jurenivan.ui
 
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -47,7 +46,7 @@ class ShowsContainerActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        var e = supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount-1)
+        var e = supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1)
         if (e is BackKeyInterface) e.backKeyPressed()
         else super.onBackPressed()
 
