@@ -4,12 +4,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.example.shows_jurenivan.R
-import com.example.shows_jurenivan.activities.ShowActivity
 import com.example.shows_jurenivan.data.dataStructures.Episode
+import kotlinx.android.synthetic.main.item_episode.view.*
 
-class EpisodeAdapter(private val activityHome: ShowActivity) :
+class EpisodeAdapter :
     RecyclerView.Adapter<EpisodeAdapter.ViewHolder>() {
 
     private var episodes = listOf<Episode>()
@@ -30,17 +29,15 @@ class EpisodeAdapter(private val activityHome: ShowActivity) :
 
     override fun getItemCount(): Int = episodes.size
 
-    override fun onBindViewHolder(holder: ViewHolder, episodeId: Int) {
-        val entry: Episode = episodes[episodeId]
-        holder.episodeTitle.text = entry.title
-        holder.seasonAndEpisode.text = String.format("S%02d E%02d", entry.seasonNumber, entry.episodeNumber)
+    override fun onBindViewHolder(holder: ViewHolder, episodeId: Int) = holder.bind(episodes[episodeId])
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        fun bind(episode: Episode) {
+            with(itemView) {
+                seasonAndEpisode.text = String.format("S%02d E%02d", episode.seasonNumber, episode.episodeNumber)
+                episodeTitle.text = episode.title
+            }
+        }
     }
-
-
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val seasonAndEpisode = itemView.findViewById(R.id.seasonAndEpisode) as TextView
-        val episodeTitle = itemView.findViewById(R.id.episodeTitle) as TextView
-    }
-
-
 }

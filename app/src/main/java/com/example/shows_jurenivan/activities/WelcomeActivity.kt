@@ -6,6 +6,7 @@ import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.activities.ActivityLogin.Companion.USERNAME
+import com.example.shows_jurenivan.ui.ShowsContainerActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 
@@ -36,7 +37,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun postDelayed() {
         handler.postDelayed({
-            val intent = Intent(this, HomeActivity::class.java)
+            val intent = Intent(this, ShowsContainerActivity::class.java)
             startActivity(intent)
             finish()
         }, 1000)
