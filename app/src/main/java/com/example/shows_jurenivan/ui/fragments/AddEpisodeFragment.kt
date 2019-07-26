@@ -26,6 +26,7 @@ import android.widget.NumberPicker
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.viewModels.EpisodesViewModel
+import com.example.shows_jurenivan.ui.BaseFragment
 import kotlinx.android.synthetic.main.fragment_add_episode.*
 import java.io.File
 
@@ -324,14 +325,12 @@ class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
             builder.setTitle("Confirm back")
             builder.setMessage("Are you sure you want to discard all changes?")
             builder.setPositiveButton("Yes") { dialog, _ ->
-                activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
                 dialog.dismiss()
+                activity?.supportFragmentManager?.popBackStack()
             }
-            builder.setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
+            builder.setNegativeButton("No") { dialog, _ -> dialog.dismiss(); }
 
             builder.create().show()
-        } else {
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
         }
     }
 

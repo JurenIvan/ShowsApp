@@ -1,4 +1,4 @@
-package com.example.shows_jurenivan.ui.fragments
+package com.example.shows_jurenivan.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

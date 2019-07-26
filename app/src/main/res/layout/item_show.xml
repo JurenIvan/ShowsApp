@@ -9,6 +9,7 @@
         android:paddingEnd="10dp"
         android:orientation="horizontal"
         android:id="@+id/showListID"
+
 >
 
     <ImageView

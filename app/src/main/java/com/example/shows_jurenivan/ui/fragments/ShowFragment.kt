@@ -15,6 +15,7 @@ import com.example.shows_jurenivan.adapters.EpisodeAdapter
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.dataStructures.Show
 import com.example.shows_jurenivan.data.viewModels.EpisodesViewModel
+import com.example.shows_jurenivan.ui.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_show.*
 import kotlinx.android.synthetic.main.show_details.*
@@ -27,20 +28,16 @@ import kotlinx.android.synthetic.main.show_details.showDescription
 
 class ShowFragment : BaseFragment() {
 
-
     private lateinit var viewModel: EpisodesViewModel
     private lateinit var adapter: EpisodeAdapter
 
     private var showId = 0
     private lateinit var show: Show
 
-
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
     }
-
-    private var twoPane: Boolean = false
 
     fun setShow(showId: Int) {
         this.showId = showId
@@ -53,23 +50,16 @@ class ShowFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (item_detail_container != null) {
-            twoPane = true
-        }
-
         viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
         viewModel.setShow(showId)
 
-
         setHasOptionsMenu(true)
-
 
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow_light)
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
-
 
         adapter = EpisodeAdapter()
         recyclerViewEpisodes.layoutManager = LinearLayoutManager(requireContext())
@@ -88,12 +78,9 @@ class ShowFragment : BaseFragment() {
             if (it != null) {
                 this.show = it
                 showDescription.text = show.showDescription
-
                 imgPlaceholder.setImageResource(show.image)
                 activity?.colappsingtoolbar?.title = show.name
-
                 activity?.colappsingtoolbarImage?.setImageResource(show.image)
-
             }
         })
 
