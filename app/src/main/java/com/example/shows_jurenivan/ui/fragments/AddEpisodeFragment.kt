@@ -331,7 +331,7 @@ class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
             builder.setNegativeButton("No") { dialog, _ -> dialog.dismiss(); }
 
             builder.create().show()
-        }
+        }else{ activity?.supportFragmentManager?.popBackStack()}
     }
 
 }

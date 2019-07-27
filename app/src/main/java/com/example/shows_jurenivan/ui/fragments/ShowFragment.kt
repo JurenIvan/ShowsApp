@@ -89,13 +89,7 @@ class ShowFragment : BaseFragment() {
                 var addEpisodeFragment = AddEpisodeFragment()
                 addEpisodeFragment.setShow(showId)
                 addToBackStack("ShowDetails")
-
-                if (activity?.findViewById<FrameLayout>(R.id.item_detail_container) != null) replace(
-                    R.id.item_detail_container,
-                    addEpisodeFragment
-                )
-                else replace(R.id.fragmentContainer, addEpisodeFragment)
-
+                replace(R.id.item_detail_container, addEpisodeFragment)
                 commit()
             }
         }
