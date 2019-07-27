@@ -12,6 +12,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
@@ -26,14 +27,20 @@ import android.widget.NumberPicker
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.viewModels.EpisodesViewModel
-import com.example.shows_jurenivan.ui.BaseFragment
+import com.example.shows_jurenivan.ui.BackKeyInterface
 import kotlinx.android.synthetic.main.fragment_add_episode.*
 import java.io.File
 
-class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
-
+class AddEpisodeFragment : Fragment(), BackKeyInterface {
 
     companion object {
+
+        const val SHOWID_KEY = "ShowID"
+        fun newInstance(showId: Int) = AddEpisodeFragment().apply {
+            val args = Bundle()
+            args.putInt(SHOWID_KEY, showId)
+            arguments = args
+        }
 
         const val MAX_SEASON_NUM = 20
         const val MIN_SEASON_NUM = 1
@@ -55,12 +62,12 @@ class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
     private var episodeNum = 1
     private var fileURL: Uri? = null
 
-    private var showId = 0
+    private var showId = -1
     private lateinit var viewModel: EpisodesViewModel
 
-
-    fun setShow(showId: Int) {
-        this.showId = showId
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.showId = arguments?.getInt(SHOWID_KEY) ?: -1
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -74,10 +81,7 @@ class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
         setHasOptionsMenu(true)
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow_light)
-        toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
-        }
-
+        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
 
         image.setImageResource(R.drawable.ic_camera)
 
@@ -88,24 +92,24 @@ class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
             val builder = context?.let { AlertDialog.Builder(it) }
             val view = layoutInflater.inflate(R.layout.number_picker, null)
 
-            val snp = view.findViewById(R.id.seasonNumberPicker) as NumberPicker
-            val enp = view.findViewById(R.id.episodeNumberPicker) as NumberPicker
-            val btn = view.findViewById(R.id.saveButton) as Button
+            val seasonNumberPicker = view.findViewById(R.id.seasonNumberPicker) as NumberPicker
+            val episodeNumberPicker = view.findViewById(R.id.episodeNumberPicker) as NumberPicker
+            val saveButton = view.findViewById(R.id.saveButton) as Button
 
-            snp.maxValue = MAX_SEASON_NUM
-            snp.minValue = MIN_SEASON_NUM
-            enp.maxValue = MAX_EPISODE_NUM
-            enp.minValue = MIN_EPISODE_NUM
+            seasonNumberPicker.maxValue = MAX_SEASON_NUM
+            seasonNumberPicker.minValue = MIN_SEASON_NUM
+            episodeNumberPicker.maxValue = MAX_EPISODE_NUM
+            episodeNumberPicker.minValue = MIN_EPISODE_NUM
 
-            if (seasonNum != 1) snp.value = seasonNum
-            if (episodeNum != 1) enp.value = episodeNum
+            if (seasonNum != 1) seasonNumberPicker.value = seasonNum
+            if (episodeNum != 1) episodeNumberPicker.value = episodeNum
 
             builder?.setView(view)
             val dialog = builder?.create()
 
-            btn.setOnClickListener {
-                episodeNum = enp.value
-                seasonNum = snp.value
+            saveButton.setOnClickListener {
+                episodeNum = episodeNumberPicker.value
+                seasonNum = seasonNumberPicker.value
                 seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", seasonNum, episodeNum)
                 dialog?.dismiss()
             }
@@ -128,16 +132,17 @@ class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
                 episodeDescription.text.toString(),
                 episodeTitle.text.toString()
             )
+
             viewModel.addEpisode(episode)
-            activity?.onBackPressed()
+            activity?.supportFragmentManager?.popBackStack()
         }
 
         if (savedInstanceState != null) {
             seasonNum = savedInstanceState.getInt(SAVED_INSTANCE_SEASON)
             episodeNum = savedInstanceState.getInt(SAVED_INSTANCE_EPISODE)
+
             val uri = savedInstanceState.getString(SAVED_INSTANCE_FILEURI)
-            if (uri != null)
-                fileURL = Uri.parse(uri)
+            if (uri != null) fileURL = Uri.parse(uri)
 
             seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", seasonNum, episodeNum)
             image.setImageURI(fileURL)
@@ -152,12 +157,6 @@ class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
         }
         return super.onOptionsItemSelected(item)
     }
-
-
-    private val seasonEpisodeNumberListener = {
-
-    }
-
 
     private fun selectPictureDialog() {
         val options = arrayOf("Camera", "Gallery")
@@ -272,9 +271,9 @@ class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
 
     private fun explainEnablePermission(whichPermission: String) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Permission needed!")
-        builder.setMessage("$whichPermission permission is needed for this action, please enable it.")
-        builder.setNeutralButton("OK") { dialog, _ -> dialog.dismiss() }
+        builder.setTitle(R.string.premissionNeeded)
+        builder.setMessage(whichPermission + R.string.whichPermission)
+        builder.setNeutralButton(R.string.OK) { dialog, _ -> dialog.dismiss() }
         builder.show()
     }
 
@@ -322,21 +321,18 @@ class AddEpisodeFragment : BaseFragment(), BackKeyInterface {
         ) {
 
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Confirm back")
-            builder.setMessage("Are you sure you want to discard all changes?")
-            builder.setPositiveButton("Yes") { dialog, _ ->
+            builder.setTitle(R.string.confirmBack)
+            builder.setMessage(R.string.discardChanges)
+            builder.setPositiveButton(R.string.yes) { dialog, _ ->
                 dialog.dismiss()
                 activity?.supportFragmentManager?.popBackStack()
             }
-            builder.setNegativeButton("No") { dialog, _ -> dialog.dismiss(); }
+            builder.setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss(); }
 
             builder.create().show()
-        }else{ activity?.supportFragmentManager?.popBackStack()}
+        } else {
+            activity?.supportFragmentManager?.popBackStack()
+        }
     }
-
 }
 
-
-interface BackKeyInterface {
-    fun backKeyPressed()
-}

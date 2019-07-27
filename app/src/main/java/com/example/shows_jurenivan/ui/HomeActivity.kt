@@ -10,33 +10,24 @@ import android.view.MenuItem
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.adapters.ShowsAdapter
 import com.example.shows_jurenivan.data.viewModels.ShowsViewModel
-import com.example.shows_jurenivan.ui.fragments.BackKeyInterface
 import com.example.shows_jurenivan.ui.fragments.ShowFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_show.*
 
 class HomeActivity : AppCompatActivity() {
 
-    private var twoPane: Boolean = false
-
     private lateinit var viewModel: ShowsViewModel
     private lateinit var adapter: ShowsAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_home)
 
         setSupportActionBar(toolbar)
-        supportActionBar?.title = ""
 
         adapter = ShowsAdapter { position ->
             supportFragmentManager?.beginTransaction()?.apply {
-                var showFragment = ShowFragment()
-                showFragment.setShow(position)
-
-                replace(R.id.item_detail_container, showFragment)
-
+                replace(R.id.item_detail_container, ShowFragment.newInstance(position))
                 addToBackStack("ShowDisplay")
                 commit()
             }
@@ -57,14 +48,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        val e: Fragment? = supportFragmentManager.findFragmentById(R.id.item_detail_container)
 
-        var e: Fragment? = supportFragmentManager.findFragmentById(R.id.item_detail_container)
-        if (e is BackKeyInterface){
-            e.backKeyPressed()
-        }else
-
-        super.onBackPressed()
-
+        if (e is BackKeyInterface) e.backKeyPressed()
+        else super.onBackPressed()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -75,4 +62,8 @@ class HomeActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+}
+
+interface BackKeyInterface {
+    fun backKeyPressed()
 }
