@@ -23,25 +23,25 @@ object EpisodesRepository {
     fun getLiveData(): LiveData<List<Episode>> =
         episodesLiveData
 
-    fun setEpisodes(showId: Int) {
+    fun setEpisodes(showId: String) {
         episodesList = readEpisodes(showId)
         episodesLiveData.value = episodesList
     }
 
-    fun addEpisodeToShow(episode: Episode, showId: Int) {
+    fun addEpisodeToShow(episode: Episode, showId: String) {
         episodesList = readEpisodes(showId)
         episodesList.add(episode)
-        episodesList.sortWith(compareBy({ it.seasonNumber }, { it.episodeNumber }))
+        episodesList.sortWith(compareBy({ it.season }, { it.episode }))
         episodesLiveData.value = episodesList
 
-        ObjectOutputStream(MyShowsApp.instance.openFileOutput("$FILENAME$showId", Context.MODE_PRIVATE)).use {
+        ObjectOutputStream(MyShowsApp.instance.openFileOutput(FILENAME + showId, Context.MODE_PRIVATE)).use {
             it.writeObject(episodesList as List<Serializable>)
         }
     }
 
-    private fun readEpisodes(showId: Int): MutableList<Episode> {
+    private fun readEpisodes(showId: String): MutableList<Episode> {
         return try {
-            ObjectInputStream(MyShowsApp.instance.openFileInput("$FILENAME$showId")).use {
+            ObjectInputStream(MyShowsApp.instance.openFileInput(FILENAME + showId)).use {
                 it.readObject() as MutableList<Episode>
             }
         } catch (e: Exception) {

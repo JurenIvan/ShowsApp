@@ -1,14 +1,22 @@
 package com.example.shows_jurenivan.data.dataStructures
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-import java.io.Serializable
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-@Parcelize
+@JsonClass(generateAdapter = true)
 data class Episode(
-    val image: String?,
-    val episodeNumber: Int,
-    val seasonNumber: Int,
-    var description: String,
-    var title: String
-) : Parcelable, Serializable
+    @Json(name = "_id")
+    val episodeId: String,
+
+    @Json(name = "title")
+    val title: String,
+
+    @Json(name = "description")
+    val description: String,
+
+    @Json(name = "season")
+    var season: String,
+
+    @Json(name = "episodeNumber")
+    var episode: String
+)

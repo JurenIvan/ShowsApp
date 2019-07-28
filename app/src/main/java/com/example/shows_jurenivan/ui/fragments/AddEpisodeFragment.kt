@@ -26,8 +26,8 @@ import android.widget.Button
 import android.widget.NumberPicker
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.Episode
-import com.example.shows_jurenivan.data.viewModels.EpisodesViewModel
-import com.example.shows_jurenivan.ui.BackKeyInterface
+import com.example.shows_jurenivan.data.viewModels.ShowViewModel
+import com.example.shows_jurenivan.ui.activities.BackKeyInterface
 import kotlinx.android.synthetic.main.fragment_add_episode.*
 import java.io.File
 
@@ -36,9 +36,9 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
     companion object {
 
         const val SHOWID_KEY = "ShowID"
-        fun newInstance(showId: Int) = AddEpisodeFragment().apply {
+        fun newInstance(showId: String) = AddEpisodeFragment().apply {
             val args = Bundle()
-            args.putInt(SHOWID_KEY, showId)
+            args.putString(SHOWID_KEY, showId)
             arguments = args
         }
 
@@ -58,16 +58,16 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         private const val SAVED_INSTANCE_FILEURI = "FILE"
     }
 
-    private var seasonNum = 1
-    private var episodeNum = 1
+    private var seasonNum: String = "01"
+    private var episodeNum: String = "01"
     private var fileURL: Uri? = null
 
-    private var showId = -1
-    private lateinit var viewModel: EpisodesViewModel
+    private var showId: String? = null
+    private lateinit var viewModel: ShowViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.showId = arguments?.getInt(SHOWID_KEY) ?: -1
+        this.showId = arguments?.getString(SHOWID_KEY)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -85,8 +85,8 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
 
         image.setImageResource(R.drawable.ic_camera)
 
-        viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
-        viewModel.setShow(showId)
+        viewModel = ViewModelProviders.of(this).get(ShowViewModel::class.java)
+        showId?.let { viewModel.setShow(it) }
 
         seasonEpisodeNumberSelector.setOnClickListener {
             val builder = context?.let { AlertDialog.Builder(it) }
@@ -101,16 +101,19 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
             episodeNumberPicker.maxValue = MAX_EPISODE_NUM
             episodeNumberPicker.minValue = MIN_EPISODE_NUM
 
-            if (seasonNum != 1) seasonNumberPicker.value = seasonNum
-            if (episodeNum != 1) episodeNumberPicker.value = episodeNum
+            //   if (seasonNum != null)
+            seasonNumberPicker.value = Integer.parseInt(seasonNum)
+            //  if (episodeNum != null)
+            episodeNumberPicker.value = Integer.parseInt(episodeNum)
 
             builder?.setView(view)
             val dialog = builder?.create()
 
             saveButton.setOnClickListener {
-                episodeNum = episodeNumberPicker.value
-                seasonNum = seasonNumberPicker.value
-                seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", seasonNum, episodeNum)
+                episodeNum = episodeNumberPicker.value.toString()
+                seasonNum = seasonNumberPicker.value.toString()
+                seasonEpisodeNumberSelector.text =
+                    String.format("S%02d E%02d", Integer.parseInt(seasonNum), Integer.parseInt(episodeNum))
                 dialog?.dismiss()
             }
             dialog?.show()
@@ -138,8 +141,8 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         }
 
         if (savedInstanceState != null) {
-            seasonNum = savedInstanceState.getInt(SAVED_INSTANCE_SEASON)
-            episodeNum = savedInstanceState.getInt(SAVED_INSTANCE_EPISODE)
+            seasonNum = savedInstanceState.getString(SAVED_INSTANCE_SEASON) ?: "01"
+            episodeNum = savedInstanceState.getString(SAVED_INSTANCE_EPISODE) ?: "01"
 
             val uri = savedInstanceState.getString(SAVED_INSTANCE_FILEURI)
             if (uri != null) fileURL = Uri.parse(uri)
@@ -147,7 +150,6 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
             seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", seasonNum, episodeNum)
             image.setImageURI(fileURL)
         }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -316,8 +318,8 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         if (episodeDescription.text.toString().isNotBlank() ||
             episodeTitle.text.toString().isNotBlank() ||
             fileURL != null ||
-            seasonNum != MIN_SEASON_NUM ||
-            episodeNum != MIN_EPISODE_NUM
+            Integer.parseInt(seasonNum) != MIN_SEASON_NUM ||
+            Integer.parseInt(episodeNum) != MIN_EPISODE_NUM
         ) {
 
             val builder = AlertDialog.Builder(requireContext())

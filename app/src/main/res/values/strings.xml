@@ -33,4 +33,8 @@
     <string name="premissionNeeded">Permission needed!</string>
     <string name="whichPermission">permission is needed for this action, please enable it.</string>
     <string name="OK">OK</string>
+    <string name="passwordAgain">Password again</string>
+    <string name="register">Register</string>
+    <string name="or">or</string>
+    <string name="create_an_account">Create an account</string>
 </resources>

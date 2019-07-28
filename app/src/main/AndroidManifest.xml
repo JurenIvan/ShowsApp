@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <uses-feature
             android:name="android.hardware.camera"
@@ -29,11 +30,13 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/file_paths"/>
         </provider>
-        <activity android:name=".activities.WelcomeActivity"></activity>
-        <activity android:name=".ui.HomeActivity"
+
+        <activity android:name="com.example.shows_jurenivan.ui.activities.WelcomeActivity"></activity>
+        <activity android:name="com.example.shows_jurenivan.ui.activities.RegistrationActivity"></activity>
+        <activity android:name=".ui.activities.HomeActivity"
                   android:windowSoftInputMode="adjustPan|stateHidden"></activity>
 
-        <activity android:name=".activities.ActivityLogin">
+        <activity android:name="com.example.shows_jurenivan.ui.activities.ActivityLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

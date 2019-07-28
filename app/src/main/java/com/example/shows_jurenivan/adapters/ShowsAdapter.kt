@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.shows_jurenivan.R
+import com.example.shows_jurenivan.data.RetrofitClient
 import com.example.shows_jurenivan.data.dataStructures.Show
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_show.view.*
 
 
-class ShowsAdapter(val clickAction: ( Int) -> Unit = {}) :
+class ShowsAdapter(val clickAction: (Int) -> Unit = {}) :
     RecyclerView.Adapter<ShowsAdapter.ViewHolder>() {
 
     private var shows = listOf<Show>()
@@ -34,12 +36,13 @@ class ShowsAdapter(val clickAction: ( Int) -> Unit = {}) :
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(position:Int) {
-            var show=shows[position]
+        fun bind(position: Int) {
+            var show = shows[position]
             with(itemView) {
-                itemShowListTitle.text = show.name
-                itemShowListYears.text = show.airDate
-                imageViewPicture.setImageResource(show.image)
+                itemShowListTitle.text = show.title
+                Picasso.get().load(RetrofitClient.BASE_URL + show.imageURL)
+                    .placeholder(R.drawable.ic_img_placeholder_episodes).error(R.drawable.ic_img_placeholder_episodes)
+                    .into(imageViewPicture)
                 showListID.setOnClickListener { clickAction(position) }
             }
         }
