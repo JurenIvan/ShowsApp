@@ -23,8 +23,8 @@ class RegisterViewModel : ViewModel() {
     private var token: ResponseData<Token>? = ResponseData(isSuccessful = false)
 
     init {
-        registerMutableLiveData.value = user
-        tokenMutableLiveData.value = token
+    //    registerMutableLiveData.value = user
+    //    tokenMutableLiveData.value = token
 
         InternetRepository.getUserLiveData().observeForever {
             registerMutableLiveData.value = it

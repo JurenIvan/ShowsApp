@@ -50,7 +50,7 @@ class ActivityLogin : AppCompatActivity() {
 
         if (userName.isNullOrBlank().not() && token.isNullOrBlank().not()) {
             startActivity(HomeActivity.newInstance(this, userName, token))
-            finish()
+            finishAffinity()
         }
 
         passwordTextEditor.addTextChangedListener(textWatcher)
@@ -83,7 +83,7 @@ class ActivityLogin : AppCompatActivity() {
                 RegistrationActivity.newInstance(
                     this,
                     tvUsername.text.toString(),
-                    rememberMeCheckBox.isSelected
+                    rememberMeCheckBox.isChecked
                 )
             )
         }

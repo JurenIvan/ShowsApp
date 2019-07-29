@@ -147,7 +147,8 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
             val uri = savedInstanceState.getString(SAVED_INSTANCE_FILEURI)
             if (uri != null) fileURL = Uri.parse(uri)
 
-            seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", seasonNum, episodeNum)
+
+            seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", Integer.parseInt(seasonNum), Integer.parseInt(episodeNum))
             image.setImageURI(fileURL)
         }
     }
@@ -158,6 +159,15 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState?.putString(SAVED_INSTANCE_SEASON, seasonNum)
+        savedInstanceState?.putString(SAVED_INSTANCE_EPISODE, episodeNum)
+        if (fileURL != null) {
+            savedInstanceState?.putString(SAVED_INSTANCE_FILEURI, fileURL.toString())
+        }
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     private fun selectPictureDialog() {
@@ -273,9 +283,9 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
 
     private fun explainEnablePermission(whichPermission: String) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(R.string.premissionNeeded)
-        builder.setMessage(whichPermission + R.string.whichPermission)
-        builder.setNeutralButton(R.string.OK) { dialog, _ -> dialog.dismiss() }
+        builder.setTitle(getString(R.string.premissionNeeded))
+        builder.setMessage(whichPermission + getString(R.string.whichPermission))
+        builder.setNeutralButton(getString(R.string.OK)) { dialog, _ -> dialog.dismiss() }
         builder.show()
     }
 
@@ -323,13 +333,13 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         ) {
 
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(R.string.confirmBack)
-            builder.setMessage(R.string.discardChanges)
-            builder.setPositiveButton(R.string.yes) { dialog, _ ->
+            builder.setTitle(getString(R.string.confirmBack))
+            builder.setMessage(getString(R.string.discardChanges))
+            builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                 dialog.dismiss()
                 activity?.supportFragmentManager?.popBackStack()
             }
-            builder.setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss(); }
+            builder.setNegativeButton(getString(R.string.no)) { dialog, _ -> dialog.dismiss(); }
 
             builder.create().show()
         } else {

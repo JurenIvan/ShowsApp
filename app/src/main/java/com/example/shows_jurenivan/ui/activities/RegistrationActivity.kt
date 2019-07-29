@@ -26,7 +26,7 @@ class RegistrationActivity : AppCompatActivity() {
     companion object {
         private const val EMAIL_KEY = "Email"
         private const val REMEMBER_ME_CHECK = "remember"
-        private const val LOGIN = "LOGINSHAREDPREF"
+        const val LOGIN = "LOGINSHAREDPREF"
 
         fun newInstance(context: Context, email: String?, rememberMe: Boolean): Intent {
             val intent = Intent(context, RegistrationActivity::class.java)
@@ -74,22 +74,23 @@ class RegistrationActivity : AppCompatActivity() {
                     var userToLogIn = user.data!!
                     userToLogIn.password = password1.text.toString().trim()
                     viewModel.loginUser(userToLogIn)
-                } else {
-                    Toast.makeText(this, "Registration failed", Toast.LENGTH_SHORT).show()
                 }
-
             })
             viewModel.tokenLiveData.observe(this, Observer { token ->
                 if (token?.isSuccessful == true) {
                     var userEmail = viewModel.registerLiveData.value?.data?.email
                     if (userEmail.isNullOrBlank().not()){
                         if (intent.getBooleanExtra(REMEMBER_ME_CHECK,false)) {
-                            sharedPref.edit().putString(ActivityLogin.USERNAME, tvUsername.text.toString().trim()).apply()
-                            sharedPref.edit().putString(ActivityLogin.TOKEN, token.data.toString()).apply()
+                            sharedPref.edit()
+                                .putString(ActivityLogin.USERNAME, userEmail)
+                                .putString(ActivityLogin.TOKEN, token.data.toString())
+                                .apply()
                         }
                     startActivity(WelcomeActivity.newInstance(this, userEmail!!, token.data.toString()))
-                    finish()
+                    finishAffinity()
                     }
+                }else{
+                    Toast.makeText(this,"bposkfpsodfks",Toast.LENGTH_LONG).show()
                 }
             })
         }
