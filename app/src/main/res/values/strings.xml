@@ -26,4 +26,11 @@
     <string name="placeholder">Lorem Ipsum</string>
     <string name="changePhoto">Change Photo</string>
     <string name="rememberMe">Remember me</string>
+    <string name="confirmBack">Confirm back</string>
+    <string name="discardChanges">Do you want to discard all changes?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="premissionNeeded">Permission needed!</string>
+    <string name="whichPermission">permission is needed for this action, please enable it.</string>
+    <string name="OK">OK</string>
 </resources>

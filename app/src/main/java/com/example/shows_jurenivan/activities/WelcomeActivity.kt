@@ -6,6 +6,7 @@ import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.activities.ActivityLogin.Companion.USERNAME
+import com.example.shows_jurenivan.ui.HomeActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 
