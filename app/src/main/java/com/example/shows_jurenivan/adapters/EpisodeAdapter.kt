@@ -34,10 +34,35 @@ class EpisodeAdapter :
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(episode: Episode) {
-            with(itemView) {
-                seasonAndEpisode.text = String.format("S%02d E%02d", episode.seasonNumber, episode.episodeNumber)
-                episodeTitle.text = episode.title
+            if (checkParameters(episode)) {
+                with(itemView) {
+                    seasonAndEpisode.text =
+                        String.format(
+                            "S%02d E%02d",
+                            Integer.parseInt(episode.season),
+                            Integer.parseInt(episode.episode)
+                        )
+                    episodeTitle.text = episode.title
+                }
             }
+        }
+
+        private fun checkParameters(episode: Episode): Boolean {
+            if (episode.title.isBlank()) return false
+            if (episode.season.isNullOrBlank()) return false
+            if (episode.episode.isNullOrBlank()) return false
+            try {
+                if (checkValues(Integer.parseInt(episode.episode), 99)) return false
+                if (checkValues(Integer.parseInt(episode.season), 20)) return false
+            } catch (e: Exception) {
+                return false
+            }
+            return true
+        }
+
+        private fun checkValues(number: Int, upperLimit: Int): Boolean {
+            if (number < 1 || number > upperLimit) return true
+            return false
         }
     }
 }

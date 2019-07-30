@@ -1,16 +1,27 @@
-package com.example.shows_jurenivan.activities
+package com.example.shows_jurenivan.ui.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import com.example.shows_jurenivan.R
-import com.example.shows_jurenivan.activities.ActivityLogin.Companion.USERNAME
-import com.example.shows_jurenivan.ui.HomeActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 
 class WelcomeActivity : AppCompatActivity() {
+
+    companion object {
+        const val EMAIL_KEY = "user"
+        const val TOKEN = "token"
+
+        fun newInstance(context: Context, email: String, token: String): Intent {
+            val intent = Intent(context, HomeActivity::class.java)
+            intent.putExtra(EMAIL_KEY, email)
+            intent.putExtra(TOKEN, token)
+            return intent
+        }
+    }
 
     private val handler = Handler()
 
@@ -18,7 +29,7 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 
-        val username = intent.getStringExtra(USERNAME)
+        val username = intent.getStringExtra(EMAIL_KEY)
         welcome_user.text = "Welcome $username"
 
         postDelayed()
@@ -37,8 +48,13 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun postDelayed() {
         handler.postDelayed({
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+            startActivity(
+                HomeActivity.newInstance(
+                    this,
+                    intent.getStringExtra(EMAIL_KEY),
+                    intent.getStringExtra(TOKEN)
+                )
+            )
             finish()
         }, 1000)
     }

@@ -11,10 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.adapters.EpisodeAdapter
+import com.example.shows_jurenivan.data.RetrofitClient
 import com.example.shows_jurenivan.data.dataStructures.Episode
-import com.example.shows_jurenivan.data.viewModels.EpisodesViewModel
+import com.example.shows_jurenivan.data.dataStructures.ResponseData
+import com.example.shows_jurenivan.data.viewModels.ShowViewModel
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_show.*
-import kotlinx.android.synthetic.main.show_details.*
 import kotlinx.android.synthetic.main.show_details.colappsingtoolbar
 import kotlinx.android.synthetic.main.show_details.fab
 import kotlinx.android.synthetic.main.show_details.noEntriesLayout
@@ -27,22 +29,22 @@ class ShowFragment : Fragment() {
     companion object {
         const val SHOWID_KEY = "ShowID"
 
-        fun newInstance(showId: Int) = ShowFragment().apply {
+        fun newInstance(showId: String?) = ShowFragment().apply {
             val args = Bundle()
-            args.putInt(SHOWID_KEY, showId)
+            args.putString(SHOWID_KEY, showId)
             arguments = args
         }
     }
 
-
-    private lateinit var viewModel: EpisodesViewModel
+    private lateinit var viewModel: ShowViewModel
     private lateinit var adapter: EpisodeAdapter
-    private var showId = -1
+
+    private var showId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.showId = arguments?.getInt(SHOWID_KEY) ?: -1
-        viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
+        this.showId = arguments?.getString(SHOWID_KEY)
+        viewModel = ViewModelProviders.of(this).get(ShowViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -52,8 +54,7 @@ class ShowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
-        viewModel.setShow(showId)
+        showId?.let { viewModel.setShow(it) }
 
         setHasOptionsMenu(true)
 
@@ -66,7 +67,7 @@ class ShowFragment : Fragment() {
         recyclerViewEpisodes.adapter = adapter
 
         viewModel.episodesliveData.observe(this, Observer { episodes ->
-            if (episodes != null) adapter.setData(episodes)
+            if (episodes != null) episodes.data?.let { adapter.setData(it) }
             else adapter.setData(listOf())
 
             checkEmptiness(episodes)
@@ -74,25 +75,29 @@ class ShowFragment : Fragment() {
 
         viewModel.showliveData.observe(this, Observer {
             if (it != null) {
-                showDescription.text = it.showDescription
-                imgPlaceholder.setImageResource(it.image)
-                activity?.colappsingtoolbar?.title = it.name
-                activity?.colappsingtoolbarImage?.setImageResource(it.image)
+                showDescription.text = it.data?.description
+
+                Picasso.get().load(RetrofitClient.BASE_URL + it.data?.imageURL)
+                    .placeholder(R.drawable.ic_img_placeholder_episodes).error(android.R.drawable.stat_notify_error)
+                    .into(imgPlaceholder)
+
+                activity?.colappsingtoolbar?.title = it.data?.title
             }
         })
 
         fab.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()?.apply {
-
                 addToBackStack("AddEpisodeFragment")
-                replace(R.id.item_detail_container, AddEpisodeFragment.newInstance(showId))
+                if (showId != null) {
+                    replace(R.id.item_detail_container, AddEpisodeFragment.newInstance(showId!!))
+                }
                 commit()
             }
         }
     }
 
-    private fun checkEmptiness(episodes: List<Episode>?) {
-        if (episodes.isNullOrEmpty()) {
+    private fun checkEmptiness(episodes: ResponseData<List<Episode>>?) {
+        if (episodes?.data.isNullOrEmpty()) {
             noEntriesLayout.visibility = View.VISIBLE
             recyclerViewEpisodes.visibility = View.GONE
         } else {

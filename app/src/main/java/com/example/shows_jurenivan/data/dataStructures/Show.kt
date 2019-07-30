@@ -1,15 +1,24 @@
 package com.example.shows_jurenivan.data.dataStructures
 
-import android.os.Parcelable
-import android.support.annotation.DrawableRes
-import kotlinx.android.parcel.Parcelize
-import java.io.Serializable
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-@Parcelize
-data class Show(
-    @DrawableRes val image: Int,
-    val name: String,
-    val airDate: String,
-    val listOfEpisodes: MutableList<Episode>,
-    val showDescription: String
-) : Parcelable, Serializable
+@JsonClass(generateAdapter = true)
+class Show(
+
+    @Json(name = "_id")
+    val id: String?,
+
+    @Json(name = "title")
+    val title: String?,
+
+
+    @Json(name = "imageUrl")
+    val imageURL: String?,
+
+
+    @Json(name = "description")
+    val description: String?
+
+
+)
