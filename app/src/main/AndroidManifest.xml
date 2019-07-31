@@ -20,6 +20,13 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateVisible|adjustResize">
+        <activity android:name=".ui.activities.SplashActivity"  android:noHistory="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
 
         <provider
                 android:name="android.support.v4.content.FileProvider"
@@ -31,16 +38,13 @@
                     android:resource="@xml/file_paths"/>
         </provider>
 
-        <activity android:name="com.example.shows_jurenivan.ui.activities.WelcomeActivity"></activity>
-        <activity android:name="com.example.shows_jurenivan.ui.activities.RegistrationActivity"></activity>
-        <activity android:name=".ui.activities.HomeActivity"
-                  android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+        <activity android:name=".ui.activities.WelcomeActivity"/>
+        <activity android:name=".ui.activities.RegistrationActivity"/>
+        <activity
+                android:name=".ui.activities.HomeActivity"
+                android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".ui.activities.LoginActivity">
 
-        <activity android:name="com.example.shows_jurenivan.ui.activities.ActivityLogin">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 

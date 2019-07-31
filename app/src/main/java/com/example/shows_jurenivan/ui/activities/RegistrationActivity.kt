@@ -15,9 +15,8 @@ import android.widget.Toast
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.User
 import com.example.shows_jurenivan.data.viewModels.RegisterViewModel
-import com.example.shows_jurenivan.ui.activities.ActivityLogin.Companion.checkAllPasswordConditions
-import com.example.shows_jurenivan.ui.activities.ActivityLogin.Companion.checkAllUsernameConditions
-import kotlinx.android.synthetic.main.activity_login.*
+import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllPasswordConditions
+import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllUsernameConditions
 import kotlinx.android.synthetic.main.registration_activity.*
 
 
@@ -82,8 +81,8 @@ class RegistrationActivity : AppCompatActivity() {
                     if (userEmail.isNullOrBlank().not()){
                         if (intent.getBooleanExtra(REMEMBER_ME_CHECK,false)) {
                             sharedPref.edit()
-                                .putString(ActivityLogin.USERNAME, userEmail)
-                                .putString(ActivityLogin.TOKEN, token.data.toString())
+                                .putString(LoginActivity.USERNAME, userEmail)
+                                .putString(LoginActivity.TOKEN, token.data.toString())
                                 .apply()
                         }
                     startActivity(WelcomeActivity.newInstance(this, userEmail!!, token.data.toString()))
