@@ -17,7 +17,7 @@ import com.example.shows_jurenivan.data.viewModels.LoginViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class ActivityLogin : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     companion object {
         const val USERNAME = "username"
@@ -68,12 +68,15 @@ class ActivityLogin : AppCompatActivity() {
 
             viewModel.loginUser(user)
             Toast.makeText(this, "Connecting Servers", Toast.LENGTH_SHORT).show()
+            android_logo.startLoading()
         }
 
         viewModel.liveData.observe(this, Observer { user ->
             if (user?.isSuccessful == true) {
                 startWelcomeScreen(tvUsername.text.toString(), user.data.toString())
                 finish()
+            }else{
+                android_logo.endLoading()
             }
         })
 
