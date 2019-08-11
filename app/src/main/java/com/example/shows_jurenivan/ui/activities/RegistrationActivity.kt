@@ -17,7 +17,7 @@ import com.example.shows_jurenivan.data.dataStructures.User
 import com.example.shows_jurenivan.data.viewModels.RegisterViewModel
 import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllPasswordConditions
 import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllUsernameConditions
-import kotlinx.android.synthetic.main.registration_activity.*
+import kotlinx.android.synthetic.main.activity_registration.*
 
 
 class RegistrationActivity : AppCompatActivity() {
@@ -41,7 +41,7 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.registration_activity)
+        setContentView(R.layout.activity_registration)
         viewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
         sharedPref = getSharedPreferences(LOGIN, Context.MODE_PRIVATE)
 

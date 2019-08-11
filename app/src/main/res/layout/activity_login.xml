@@ -11,7 +11,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
         <com.example.shows_jurenivan.ui.CustomImageView
                 android:id="@+id/android_logo"
                 android:layout_width="wrap_content"
@@ -19,11 +18,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:src="@drawable/ic_img_logo_mark"
-                android:layout_marginTop="40dp"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"/>
-
+                android:layout_marginTop="32dp"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         <android.support.design.widget.TextInputLayout
                 android:id="@+id/userNameLayout"
@@ -31,13 +27,11 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/android_logo"
 
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="16dp"
 
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="32dp"
-
-                app:errorEnabled="true"
-        >
+                app:errorEnabled="true">
             <android.support.design.widget.TextInputEditText
                     android:id="@+id/tvUsername"
                     android:layout_height="wrap_content"
@@ -55,12 +49,11 @@
                 app:layout_constraintTop_toBottomOf="@id/userNameLayout"
                 app:passwordToggleEnabled="true"
                 app:passwordToggleDrawable="@drawable/ic_show_password_red"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="16dp"
                 app:errorEnabled="true"
-        >
-
+                app:passwordToggleTint="@color/colorAccent">
             <android.support.design.widget.TextInputEditText
                     android:id="@+id/passwordTextEditor"
                     android:layout_height="wrap_content"
@@ -77,15 +70,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/rememberMeCheckBox"
 
-                app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="20dp"
                 android:textSize="16sp"
                 android:textColor="#505050"
                 android:lineSpacingExtra="6sp"
 
                 android:checked="false"
-                android:layout_marginStart="16dp"/>
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
+                app:layout_constraintStart_toStartOf="parent"/>
 
         <Button
                 android:id="@+id/btnLogIn"
@@ -103,11 +96,11 @@
                 android:lineSpacingExtra="4sp"
                 android:textAlignment="center"
 
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="32dp"
                 android:enabled="false"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-        />
+                android:layout_marginLeft="48dp"
+                android:layout_marginRight="48dp"/>
+
         <TextView
 
                 android:text="@string/or"
@@ -117,13 +110,12 @@
 
                 android:textSize="14sp"
                 android:textColor="#505050"
-                android:lineSpacingExtra="8sp"
+                android:lineSpacingExtra="16sp"
                 android:gravity="center_horizontal"
 
                 app:layout_constraintTop_toBottomOf="@+id/btnLogIn"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-
                 android:layout_marginTop="16dp"/>
 
         <TextView
@@ -141,8 +133,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_bias="0.0"/>
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
 
 
     </android.support.constraint.ConstraintLayout>

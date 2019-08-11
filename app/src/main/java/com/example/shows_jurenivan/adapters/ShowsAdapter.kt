@@ -8,27 +8,39 @@ import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.RetrofitClient
 import com.example.shows_jurenivan.data.dataStructures.Show
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_show.view.*
+import kotlinx.android.synthetic.main.item_show_list.view.*
 
 
-class ShowsAdapter(val clickAction: (Int) -> Unit = {}) :
+class ShowsAdapter(gridActive2:Boolean,val clickAction: (Int) -> Unit = {}) :
     RecyclerView.Adapter<ShowsAdapter.ViewHolder>() {
 
     private var shows = listOf<Show>()
+    private var gridActive = gridActive2
 
     fun setData(shows: List<Show>) {
         this.shows = shows
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder =
-        ViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
+        if (gridActive) {
+            return ViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_show_list,
+                    parent,
+                    false
+                )
+            )
+        }
+        return ViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_show,
+                R.layout.item_show_grid,
                 parent,
                 false
             )
         )
+    }
+
 
     override fun getItemCount(): Int = shows.size
 
@@ -40,9 +52,11 @@ class ShowsAdapter(val clickAction: (Int) -> Unit = {}) :
             var show = shows[position]
             with(itemView) {
                 itemShowListTitle.text = show.title
+
                 Picasso.get().load(RetrofitClient.BASE_URL + show.imageURL)
                     .placeholder(R.drawable.ic_img_placeholder_episodes).error(R.drawable.ic_img_placeholder_episodes)
                     .into(imageViewPicture)
+
                 showListID.setOnClickListener { clickAction(position) }
             }
         }

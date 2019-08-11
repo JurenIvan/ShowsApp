@@ -90,6 +90,11 @@ class LoginActivity : AppCompatActivity() {
                 )
             )
         }
+
+        android_logo.setOnClickListener {
+            android_logo.startLoading()
+            android_logo.endLoading()
+        }
     }
 
     private val textWatcher = object : TextWatcher {
