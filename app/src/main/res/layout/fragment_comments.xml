@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+>
+
+    <android.support.design.widget.AppBarLayout
+            android:id="@+id/toolbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:navigationIcon="?attr/homeAsUpIndicator"/>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentTop="true"
+            app:layout_constraintTop_toBottomOf="@id/toolbarLayout"
+            android:layout_marginTop="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+    >
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+            <android.support.constraint.ConstraintLayout
+                    android:id="@+id/noComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <ImageView
+                        android:id="@+id/emptyImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_img_placehoder_comments"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                />
+
+                <TextView
+                        android:id="@+id/emptyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/emptyImage"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/sorry_we_don_t_have_comments_yet"
+                        android:textColor="@color/textLight"
+                        android:textSize="16sp" app:layout_constraintTop_toBottomOf="@+id/emptyImage"
+                        android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/emptyText"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/be_first_who_will_write_review"
+                        android:textColor="@color/textLight"
+                        android:textSize="16sp" android:id="@+id/textView7"
+                        app:layout_constraintTop_toBottomOf="@+id/emptyText" android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp"
+                        app:layout_constraintStart_toStartOf="parent"/>
+            </android.support.constraint.ConstraintLayout>
+
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="?attr/actionBarSize"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <EditText
+                android:id="@+id/commentInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/input_eclipse"
+                android:hint="@string/add_a_comment"
+                android:paddingStart="16dp"
+                android:inputType="textMultiLine"/>
+
+        <TextView
+                android:id="@+id/post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/post"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="32dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#a0a0a0"/>
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

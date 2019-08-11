@@ -38,4 +38,8 @@
     <string name="or">or</string>
     <string name="create_an_account">Create an account</string>
     <string name="shows_lowercase">shows</string>
+    <string name="sorry_we_don_t_have_comments_yet">Sorry, we don’t have comments yet.</string>
+    <string name="be_first_who_will_write_review">Be first who will write a review.</string>
+    <string name="add_a_comment">Add a comment</string>
+    <string name="post">Post</string>
 </resources>

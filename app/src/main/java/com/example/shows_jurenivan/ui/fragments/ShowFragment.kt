@@ -17,11 +17,11 @@ import com.example.shows_jurenivan.data.dataStructures.ResponseData
 import com.example.shows_jurenivan.data.viewModels.ShowViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_show.*
-import kotlinx.android.synthetic.main.show_details.colappsingtoolbar
-import kotlinx.android.synthetic.main.show_details.fab
-import kotlinx.android.synthetic.main.show_details.noEntriesLayout
-import kotlinx.android.synthetic.main.show_details.recyclerViewEpisodes
-import kotlinx.android.synthetic.main.show_details.showDescription
+import kotlinx.android.synthetic.main.fragment_show.colappsingtoolbar
+import kotlinx.android.synthetic.main.fragment_show.fab
+import kotlinx.android.synthetic.main.fragment_show.noEntriesLayout
+import kotlinx.android.synthetic.main.fragment_show.recyclerViewEpisodes
+import kotlinx.android.synthetic.main.fragment_show.showDescription
 
 
 class ShowFragment : Fragment() {
