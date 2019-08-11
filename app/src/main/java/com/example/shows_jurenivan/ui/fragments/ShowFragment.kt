@@ -94,6 +94,7 @@ class ShowFragment : Fragment() {
                 commit()
             }
         }
+
     }
 
     private fun checkEmptiness(episodes: ResponseData<List<Episode>>?) {

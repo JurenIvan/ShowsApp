@@ -17,13 +17,12 @@ import com.example.shows_jurenivan.data.dataStructures.Show
 import com.example.shows_jurenivan.data.viewModels.HomeViewModel
 import com.example.shows_jurenivan.ui.fragments.ShowFragment
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_show.*
 
 class HomeActivity : AppCompatActivity() {
 
     companion object {
-        const val HOME_GRID_LAYOUT="home"
+        const val HOME_GRID_LAYOUT = "home"
         const val EMAIL_KEY = "user"
         const val TOKEN = "token"
 
@@ -44,11 +43,17 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
         setSupportActionBar(toolbar)
 
         sharedPref = getSharedPreferences(HOME_GRID_LAYOUT, Context.MODE_PRIVATE)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+
+        logout.setOnClickListener {
+            sharedPref.edit().clear().apply()
+            startActivity(Intent(this@HomeActivity, LoginActivity::class.java))
+            finishAffinity()
+        }
+
         viewModel.liveData.observe(this, Observer { newData ->
             if (newData != null) {
                 if (newData.isSuccessful) {
@@ -67,13 +72,13 @@ class HomeActivity : AppCompatActivity() {
                 commit()
             }
         }
-        recyclerViewShows.layoutManager = GridLayoutManager(this,2)
+        recyclerViewShows.layoutManager = GridLayoutManager(this, 2)
         recyclerViewShows.adapter = adapter
 
 
-        viewPicker.setOnClickListener{
-            if(sharedPref.getBoolean(HOME_GRID_LAYOUT, true)){
-                recyclerViewShows.layoutManager = GridLayoutManager(this,2)
+        viewPicker.setOnClickListener {
+            if (sharedPref.getBoolean(HOME_GRID_LAYOUT, true)) {
+                recyclerViewShows.layoutManager = GridLayoutManager(this, 2)
                 sharedPref.edit().putBoolean(HOME_GRID_LAYOUT, false).apply()
                 viewPicker.setImageResource(R.drawable.ic_listview)
 
@@ -85,7 +90,7 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
 
-            }else{
+            } else {
                 recyclerViewShows.layoutManager = LinearLayoutManager(this)
                 sharedPref.edit().putBoolean(HOME_GRID_LAYOUT, true).apply()
                 viewPicker.setImageResource(R.drawable.ic_gridview_white)
@@ -100,6 +105,7 @@ class HomeActivity : AppCompatActivity() {
 
             }
         }
+
     }
 
     override fun onBackPressed() {
