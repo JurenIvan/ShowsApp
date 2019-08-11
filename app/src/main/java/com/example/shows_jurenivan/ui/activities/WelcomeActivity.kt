@@ -16,7 +16,7 @@ class WelcomeActivity : AppCompatActivity() {
         const val TOKEN = "token"
 
         fun newInstance(context: Context, email: String, token: String): Intent {
-            val intent = Intent(context, HomeActivity::class.java)
+            val intent = Intent(context, WelcomeActivity::class.java)
             intent.putExtra(EMAIL_KEY, email)
             intent.putExtra(TOKEN, token)
             return intent
@@ -29,7 +29,7 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 
-        val username = intent.getStringExtra(EMAIL_KEY)
+        val username = intent.getStringExtra(EMAIL_KEY).split("@")[0]
         welcome_user.text = "Welcome $username"
 
         postDelayed()
@@ -56,7 +56,7 @@ class WelcomeActivity : AppCompatActivity() {
                 )
             )
             finish()
-        }, 1000)
+        }, 2000)
     }
 
 

@@ -70,26 +70,26 @@ class RegistrationActivity : AppCompatActivity() {
 
             viewModel.registerLiveData.observe(this, Observer { user ->
                 if (user?.isSuccessful == true) {
-                    var userToLogIn = user.data!!
+                    val userToLogIn = user.data!!
                     userToLogIn.password = password1.text.toString().trim()
                     viewModel.loginUser(userToLogIn)
                 }
             })
             viewModel.tokenLiveData.observe(this, Observer { token ->
                 if (token?.isSuccessful == true) {
-                    var userEmail = viewModel.registerLiveData.value?.data?.email
-                    if (userEmail.isNullOrBlank().not()){
-                        if (intent.getBooleanExtra(REMEMBER_ME_CHECK,false)) {
+                    val userEmail = viewModel.registerLiveData.value?.data?.email
+                    if (userEmail.isNullOrBlank().not()) {
+                        if (intent.getBooleanExtra(REMEMBER_ME_CHECK, false)) {
                             sharedPref.edit()
                                 .putString(LoginActivity.USERNAME, userEmail)
                                 .putString(LoginActivity.TOKEN, token.data.toString())
                                 .apply()
                         }
-                    startActivity(WelcomeActivity.newInstance(this, userEmail!!, token.data.toString()))
-                    finishAffinity()
+                        startActivity(WelcomeActivity.newInstance(this, userEmail!!, token.data.toString()))
+                        finishAffinity()
                     }
-                }else{
-                    Toast.makeText(this,"bposkfpsodfks",Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "bposkfpsodfks", Toast.LENGTH_LONG).show()
                 }
             })
         }
