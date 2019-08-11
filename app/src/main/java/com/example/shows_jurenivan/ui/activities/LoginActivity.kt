@@ -49,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
         val userName = sharedPref.getString(USERNAME, "")
 
         if (userName.isNullOrBlank().not() && token.isNullOrBlank().not()) {
+            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
             startActivity(HomeActivity.newInstance(this, userName, token))
             finishAffinity()
         }

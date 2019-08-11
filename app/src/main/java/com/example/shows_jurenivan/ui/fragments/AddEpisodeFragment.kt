@@ -1,6 +1,7 @@
 package com.example.shows_jurenivan.ui.fragments
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -148,7 +149,8 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
             if (uri != null) fileURL = Uri.parse(uri)
 
 
-            seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", Integer.parseInt(seasonNum), Integer.parseInt(episodeNum))
+            seasonEpisodeNumberSelector.text =
+                String.format("S%02d E%02d", Integer.parseInt(seasonNum), Integer.parseInt(episodeNum))
             image.setImageURI(fileURL)
         }
     }
@@ -162,10 +164,10 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        savedInstanceState?.putString(SAVED_INSTANCE_SEASON, seasonNum)
-        savedInstanceState?.putString(SAVED_INSTANCE_EPISODE, episodeNum)
+        savedInstanceState.putString(SAVED_INSTANCE_SEASON, seasonNum)
+        savedInstanceState.putString(SAVED_INSTANCE_EPISODE, episodeNum)
         if (fileURL != null) {
-            savedInstanceState?.putString(SAVED_INSTANCE_FILEURI, fileURL.toString())
+            savedInstanceState.putString(SAVED_INSTANCE_FILEURI, fileURL.toString())
         }
         super.onSaveInstanceState(savedInstanceState)
     }
@@ -241,13 +243,15 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         val image = File.createTempFile("image", ".jpg", storageDir)
         fileURL = FileProvider.getUriForFile(requireContext(), "com.example.shows_jurenivan", image)
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(activity?.packageManager) != null) {
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileURL)
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            startActivityForResult(
-                intent,
-                TAKE_PHOTO
-            )
+        if (activity?.packageManager != null) {
+            if (intent.resolveActivity(activity?.packageManager) != null) {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileURL)
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                startActivityForResult(
+                    intent,
+                    TAKE_PHOTO
+                )
+            }
         }
     }
 
