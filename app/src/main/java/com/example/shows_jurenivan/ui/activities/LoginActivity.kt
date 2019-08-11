@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
         const val USERNAME = "username"
         const val TOKEN = "token"
         const val MIN_EMAIL_LEN = 1
-        const val MIN_PWD_LEN = 8
+        const val MIN_PWD_LEN = 5
         const val LOGIN = "LOGINSHAREDPREF"
 
         fun checkAllPasswordConditions(etPassword: EditText?): Boolean {
