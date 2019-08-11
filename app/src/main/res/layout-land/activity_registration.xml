@@ -23,7 +23,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/toolbar"
                     android:navigationIcon="?attr/homeAsUpIndicator"
-                    app:title="@string/register"/>
+                    app:title="@string/register"
+                    style="@style/MyToolbarTheme"/>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -83,7 +84,7 @@
                 app:errorEnabled="true"
                 app:passwordToggleEnabled="true"
                 app:passwordToggleDrawable="@drawable/ic_show_password_red"
-               app:passwordToggleTint="@color/colorAccent"
+                app:passwordToggleTint="@color/colorAccent"
                 android:layout_marginTop="16dp"
 
                 app:layout_constraintEnd_toEndOf="parent"

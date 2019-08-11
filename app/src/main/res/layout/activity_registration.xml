@@ -25,8 +25,7 @@
                     android:id="@+id/toolbar"
                     android:navigationIcon="?attr/homeAsUpIndicator"
                     app:title="@string/register"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
+                    style="@style/MyToolbarTheme"
             />
         </android.support.design.widget.AppBarLayout>
 

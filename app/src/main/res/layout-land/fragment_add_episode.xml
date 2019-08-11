@@ -24,6 +24,7 @@
                 android:id="@+id/toolbar"
                 android:navigationIcon="?attr/homeAsUpIndicator"
                 app:title="@string/addEpisode"
+                style="@style/MyToolbarTheme"
         />
     </android.support.design.widget.AppBarLayout>
 

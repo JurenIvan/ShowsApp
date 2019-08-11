@@ -31,14 +31,16 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="16dp"
 
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+
+                android:theme="@style/TextInputFields"
+        >
             <android.support.design.widget.TextInputEditText
                     android:id="@+id/tvUsername"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:hint="@string/userName"
                     android:inputType="text"
-                    style="@style/TextInputFields"
             />
         </android.support.design.widget.TextInputLayout>
 

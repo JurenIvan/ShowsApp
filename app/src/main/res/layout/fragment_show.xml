@@ -19,12 +19,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/colappsingtoolbar"
                 app:layout_scrollFlags="exitUntilCollapsed|scroll"
-                app:contentScrim="?attr/colorPrimary"
                 tools:title="Show Title"
                 app:expandedTitleMarginStart="48dp"
-                app:expandedTitleMarginEnd="64dp"
-
-        >
+                app:expandedTitleMarginEnd="64dp"        >
 
             <ImageView
                     android:layout_width="match_parent"
@@ -32,15 +29,13 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:id="@+id/imgPlaceholder"
                     android:scaleType="centerCrop"
-                    tools:src="@drawable/p220_2"
-            />
+                    tools:src="@drawable/p220_2"/>
 
             <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/gradient_rectangle"
-                    app:layout_constraintTop_toTopOf="parent"
-            />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             <android.support.v7.widget.Toolbar
                     android:layout_height="?attr/actionBarSize"
@@ -48,7 +43,8 @@
                     android:id="@+id/toolbar"
                     android:background="@drawable/gradient_rectangle_left"
                     android:theme="@style/MyToolbarTheme"
-                    app:navigationIcon="?attr/homeAsUpIndicator"/>
+                    app:navigationIcon="?attr/homeAsUpIndicator"
+            />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -158,7 +154,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/somebodyFallenAsleep"
-                        android:textColor="@color/showsTitleColor"
+                        android:textColor="@color/textLight"
                         android:gravity="center_horizontal"
                 />
 
@@ -166,7 +162,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dontWakeHimUp"
-                        android:textColor="@color/showsTitleColor"
+                        android:textColor="@color/textLight"
                         android:gravity="center_horizontal"/>
 
                 <TextView
