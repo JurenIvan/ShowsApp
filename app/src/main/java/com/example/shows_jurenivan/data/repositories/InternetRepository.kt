@@ -18,12 +18,15 @@ object InternetRepository {
     private val episodesLiveData = MutableLiveData<ResponseData<List<Episode>>>()
     private val userLiveData = MutableLiveData<ResponseData<User>>()
     private val tokenLiveData = MutableLiveData<ResponseData<Token>>()
+    private val episodeLiveData = MutableLiveData<ResponseData<Episode>>()
+
 
     fun getShowsLiveData(): LiveData<ResponseData<List<Show>>> = showsLiveData
     fun getShowLiveData(): LiveData<ResponseData<Show>> = showLiveData
     fun getEpisodesLiveData(): LiveData<ResponseData<List<Episode>>> = episodesLiveData
     fun getUserLiveData(): LiveData<ResponseData<User>> = userLiveData
     fun getTokenLiveData(): LiveData<ResponseData<Token>> = tokenLiveData
+    fun getEpisodeLiveData(): LiveData<ResponseData<Episode>> = episodeLiveData
 
 
     fun fetchShows() {
@@ -85,6 +88,26 @@ object InternetRepository {
         })
     }
 
+    fun fetchEpisode(episodeId: String) {
+        apiService?.getEpisode(episodeId)?.enqueue(object : retrofit2.Callback<ResponseData<Episode>> {
+
+            override fun onFailure(call: Call<ResponseData<Episode>>, t: Throwable) {
+                episodeLiveData.value = ResponseData(isSuccessful = false)
+            }
+
+            override fun onResponse(call: Call<ResponseData<Episode>>, response: Response<ResponseData<Episode>>) {
+                with(response) {
+                    if (isSuccessful && body() != null)
+                        episodeLiveData.value = ResponseData(isSuccessful = true, data = body()?.data)
+                    else
+                        episodeLiveData.value = ResponseData(isSuccessful = false)
+
+                }
+            }
+        })
+    }
+
+
     fun doLogin(user: User) {
         if (user.email == null) return
 
@@ -125,5 +148,6 @@ object InternetRepository {
             }
         })
     }
+
 
 }
