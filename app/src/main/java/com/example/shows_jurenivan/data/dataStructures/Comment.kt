@@ -16,6 +16,6 @@ data class Comment(
     val text: String,
 
     @Json(name = "userEmail")
-    val userEmail: String
+    var userEmail: String
 
 )

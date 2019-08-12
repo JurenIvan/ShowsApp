@@ -18,7 +18,8 @@ class Show(
 
 
     @Json(name = "description")
-    val description: String?
+    val description: String?,
 
-
+    @Json(name = "likesCount")
+    var likesCount:Int
 )

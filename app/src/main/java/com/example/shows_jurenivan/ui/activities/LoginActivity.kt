@@ -25,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
         const val MIN_EMAIL_LEN = 1
         const val MIN_PWD_LEN = 5
         const val LOGIN = "LOGINSHAREDPREF"
+        const val REMEMBER_ME = "RememberMe"
 
         fun checkAllPasswordConditions(etPassword: EditText?): Boolean {
             return etPassword?.text?.length?.let { len -> len >= MIN_PWD_LEN } ?: false
@@ -96,20 +97,26 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun startHomeScreen(userName: String, token: String) {
-        if (rememberMeCheckBox.isChecked)
-            sharedPref.edit().putString(USERNAME, tvUsername.text.toString().trim())
-                .putString(TOKEN, tvUsername.text.toString().trim()).apply()
-        startActivity(HomeActivity.newInstance(this, userName, token))
+
+        sharedPref.edit()
+            .putString(USERNAME, tvUsername.text.toString().trim())
+            .putString(TOKEN, token)
+            .putBoolean(REMEMBER_ME, rememberMeCheckBox.isChecked)
+            .apply()
+
+        startActivity(HomeActivity.newInstance(this))
         finish()
     }
 
     private fun launchHomeIfSharedPrefAvailable() {
+        val rememberMe = sharedPref.getBoolean(REMEMBER_ME, false)
         val token = sharedPref.getString(TOKEN, "")
         val userName = sharedPref.getString(USERNAME, "")
 
-        if (!(userName.isNullOrBlank() || token.isNullOrBlank())) {
+
+        if (rememberMe && !(userName.isNullOrBlank() || token.isNullOrBlank())) {
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-            startActivity(HomeActivity.newInstance(this, userName, token))
+            startActivity(HomeActivity.newInstance(this))
             finish()
         }
     }

@@ -52,6 +52,9 @@ class ShowsAdapter(gridActive2:Boolean,val clickAction: (Int) -> Unit = {}) :
             var show = shows[position]
             with(itemView) {
                 itemShowListTitle.text = show.title
+                if(itemLikeCount!=null){
+                    itemLikeCount.text=show.likesCount.toString()
+                }
 
                 Picasso.get().load(RetrofitClient.BASE_URL + show.imageURL)
                     .placeholder(R.drawable.ic_img_placeholder_episodes).error(R.drawable.ic_img_placeholder_episodes)

@@ -18,5 +18,8 @@ data class Episode(
     var season: String,
 
     @Json(name = "episodeNumber")
-    var episode: String
+    var episode: String,
+
+    @Json(name = "imageUrl")
+    var imageUrl: String?
 )

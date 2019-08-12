@@ -124,8 +124,8 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         uploadPhoto.setOnClickListener { selectPictureDialog() }
         changePhoto.setOnClickListener { selectPictureDialog() }
 
-        episodeTitle.addTextChangedListener(textWatcher)
-        episodeDescription.addTextChangedListener(textWatcher)
+        episodeTitle.addTextChangedListener(textWatcher(1))
+        episodeDescription.addTextChangedListener(textWatcher(50))
 
         btnSave.setOnClickListener {
 
@@ -134,7 +134,8 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
                 episodeNum,
                 seasonNum,
                 episodeDescription.text.toString(),
-                episodeTitle.text.toString()
+                episodeTitle.text.toString(),
+                null
             )
 
             viewModel.addEpisode(episode)
@@ -293,17 +294,20 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         builder.show()
     }
 
-    private val textWatcher = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            btnSave.isEnabled =
-                checkAllTextBoxConditions(episodeTitle) && checkAllTextBoxConditions(episodeDescription)
-        }
 
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+    private fun textWatcher(minLen:Int): TextWatcher {
+        return object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                btnSave.isEnabled =
+                    checkAllTextBoxConditions(episodeTitle) && checkAllTextBoxConditions(episodeDescription)
+            }
 
-        private fun checkAllTextBoxConditions(textBox: TextInputEditText?): Boolean {
-            return textBox?.text?.length?.let { len -> len >= 1 } ?: false
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+
+            private fun checkAllTextBoxConditions(textBox: TextInputEditText?): Boolean {
+                return textBox?.text?.length?.let { len -> len >= minLen } ?: false
+            }
         }
     }
 

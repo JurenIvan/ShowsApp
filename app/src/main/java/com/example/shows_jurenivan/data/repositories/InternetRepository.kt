@@ -6,6 +6,7 @@ import com.example.shows_jurenivan.data.Api
 import com.example.shows_jurenivan.data.RetrofitClient
 import com.example.shows_jurenivan.data.dataStructures.*
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 
@@ -19,6 +20,7 @@ object InternetRepository {
     private val userLiveData = MutableLiveData<ResponseData<User>>()
     private val tokenLiveData = MutableLiveData<ResponseData<Token>>()
     private val episodeLiveData = MutableLiveData<ResponseData<Episode>>()
+    private val commentsLiveData = MutableLiveData<ResponseData<List<Comment>>>()
 
 
     fun getShowsLiveData(): LiveData<ResponseData<List<Show>>> = showsLiveData
@@ -27,6 +29,7 @@ object InternetRepository {
     fun getUserLiveData(): LiveData<ResponseData<User>> = userLiveData
     fun getTokenLiveData(): LiveData<ResponseData<Token>> = tokenLiveData
     fun getEpisodeLiveData(): LiveData<ResponseData<Episode>> = episodeLiveData
+    fun getCommentsLiveData(): LiveData<ResponseData<List<Comment>>> = commentsLiveData
 
 
     fun fetchShows() {
@@ -105,6 +108,42 @@ object InternetRepository {
                 }
             }
         })
+    }
+
+    fun fetchComments(episodeId: String) {
+        apiService?.getComments(episodeId)?.enqueue(object : retrofit2.Callback<ResponseData<List<Comment>>> {
+            override fun onFailure(call: Call<ResponseData<List<Comment>>>, t: Throwable) {
+                commentsLiveData.value = ResponseData(isSuccessful = false)
+            }
+
+            override fun onResponse(
+                call: Call<ResponseData<List<Comment>>>,
+                response: Response<ResponseData<List<Comment>>>
+            ) {
+                with(response) {
+                    if (isSuccessful && body() != null)
+                        commentsLiveData.value = ResponseData(isSuccessful = true, data = body()?.data)
+                    else
+                        commentsLiveData.value = ResponseData(isSuccessful = false)
+                }
+            }
+        })
+    }
+
+    fun postComment(comment: Comment, token: String) {
+        apiService?.postComment(token, comment)?.enqueue(object : Callback<Void> {
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                return
+            }
+
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                fetchComments(comment.episodeId)
+
+            }
+
+        })
+
     }
 
 

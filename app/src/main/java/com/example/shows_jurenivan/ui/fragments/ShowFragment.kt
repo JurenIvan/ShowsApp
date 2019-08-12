@@ -17,11 +17,6 @@ import com.example.shows_jurenivan.data.dataStructures.ResponseData
 import com.example.shows_jurenivan.data.viewModels.ShowViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_show.*
-import kotlinx.android.synthetic.main.fragment_show.colappsingtoolbar
-import kotlinx.android.synthetic.main.fragment_show.fab
-import kotlinx.android.synthetic.main.fragment_show.noEntriesLayout
-import kotlinx.android.synthetic.main.fragment_show.recyclerViewEpisodes
-import kotlinx.android.synthetic.main.fragment_show.showDescription
 
 
 class ShowFragment : Fragment() {
@@ -38,6 +33,7 @@ class ShowFragment : Fragment() {
 
     private lateinit var viewModel: ShowViewModel
     private lateinit var adapter: EpisodeAdapter
+    private var episodeList: List<Episode> = listOf()
 
     private var showId: String? = null
 
@@ -62,12 +58,22 @@ class ShowFragment : Fragment() {
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow_light)
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
 
-        adapter = EpisodeAdapter()
+        adapter = EpisodeAdapter { position: Int ->
+            activity?.supportFragmentManager?.beginTransaction()?.apply {
+                replace(R.id.item_detail_container, EpisodeFragment.newInstance(episodeList[position].episodeId))
+                addToBackStack("EpisodeDisplay")
+                commit()
+            }
+        }
+
         recyclerViewEpisodes.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewEpisodes.adapter = adapter
 
         viewModel.episodesliveData.observe(this, Observer { episodes ->
-            if (episodes != null) episodes.data?.let { adapter.setData(it) }
+            if (episodes != null) episodes.data?.let {
+                adapter.setData(it)
+                episodeList = it
+            }
             else adapter.setData(listOf())
 
             checkEmptiness(episodes)
@@ -75,7 +81,7 @@ class ShowFragment : Fragment() {
 
         viewModel.showliveData.observe(this, Observer {
             if (it != null) {
-                showDescription.text = it.data?.description
+                episodeDescription.text = it.data?.description
 
                 Picasso.get().load(RetrofitClient.BASE_URL + it.data?.imageURL)
                     .placeholder(R.drawable.ic_img_placeholder_episodes).error(android.R.drawable.stat_notify_error)

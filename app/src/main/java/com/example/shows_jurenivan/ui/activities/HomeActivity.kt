@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
@@ -23,13 +24,8 @@ class HomeActivity : AppCompatActivity() {
 
     companion object {
         const val HOME_GRID_LAYOUT = "home"
-        const val EMAIL_KEY = "user"
-        const val TOKEN = "token"
-
-        fun newInstance(context: Context, email: String, token: String): Intent {
+        fun newInstance(context: Context): Intent {
             val intent = Intent(context, HomeActivity::class.java)
-            intent.putExtra(EMAIL_KEY, email)
-            intent.putExtra(TOKEN, token)
             return intent
         }
     }
@@ -49,9 +45,22 @@ class HomeActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
         logout.setOnClickListener {
-            sharedPref.edit().clear().apply()
-            startActivity(Intent(this@HomeActivity, LoginActivity::class.java))
-            finishAffinity()
+
+            val builder = AlertDialog.Builder(this)
+            builder
+                .setTitle("Shows")
+                .setMessage("Are you sure you want to logout?")
+                .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+                .setPositiveButton("Yes") { _, _ ->
+                    getSharedPreferences(LoginActivity.LOGIN, Context.MODE_PRIVATE).edit()
+                        .putString(LoginActivity.USERNAME, "")
+                        .putString(LoginActivity.TOKEN, "")
+                        .putBoolean(LoginActivity.REMEMBER_ME, false)
+                        .apply()
+                    startActivity(Intent(this@HomeActivity, LoginActivity::class.java))
+                    finishAffinity()
+                }
+            builder.show()
         }
 
         viewModel.liveData.observe(this, Observer { newData ->

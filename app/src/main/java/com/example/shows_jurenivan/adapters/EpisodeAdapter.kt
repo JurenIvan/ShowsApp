@@ -8,7 +8,7 @@ import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import kotlinx.android.synthetic.main.item_episode.view.*
 
-class EpisodeAdapter :
+class EpisodeAdapter(val clickAction: (Int) -> Unit = {}) :
     RecyclerView.Adapter<EpisodeAdapter.ViewHolder>() {
 
     private var episodes = listOf<Episode>()
@@ -29,20 +29,22 @@ class EpisodeAdapter :
 
     override fun getItemCount(): Int = episodes.size
 
-    override fun onBindViewHolder(holder: ViewHolder, episodeId: Int) = holder.bind(episodes[episodeId])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(episode: Episode) {
-            if (checkParameters(episode)) {
+        fun bind(position: Int) {
+            if (checkParameters(episodes[position])) {
                 with(itemView) {
                     seasonAndEpisode.text =
                         String.format(
                             "S%02d E%02d",
-                            Integer.parseInt(episode.season),
-                            Integer.parseInt(episode.episode)
+                            Integer.parseInt(episodes[position].season),
+                            Integer.parseInt(episodes[position].episode)
                         )
-                    episodeTitle.text = episode.title
+                    episodeTitle.text = episodes[position].title
+
+                    episodeListId.setOnClickListener{clickAction(position)}
                 }
             }
         }

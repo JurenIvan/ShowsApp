@@ -17,6 +17,7 @@ import com.example.shows_jurenivan.data.dataStructures.User
 import com.example.shows_jurenivan.data.viewModels.RegisterViewModel
 import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllPasswordConditions
 import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllUsernameConditions
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_registration.*
 
 
@@ -73,23 +74,25 @@ class RegistrationActivity : AppCompatActivity() {
                     val userToLogIn = user.data!!
                     userToLogIn.password = password1.text.toString().trim()
                     viewModel.loginUser(userToLogIn)
+                    viewModel.registerLiveData.removeObservers(this)
                 }
             })
             viewModel.tokenLiveData.observe(this, Observer { token ->
                 if (token?.isSuccessful == true) {
                     val userEmail = viewModel.registerLiveData.value?.data?.email
                     if (userEmail.isNullOrBlank().not()) {
-                        if (intent.getBooleanExtra(REMEMBER_ME_CHECK, false)) {
-                            sharedPref.edit()
-                                .putString(LoginActivity.USERNAME, userEmail)
-                                .putString(LoginActivity.TOKEN, token.data.toString())
-                                .apply()
-                        }
-                        startActivity(WelcomeActivity.newInstance(this, userEmail!!, token.data.toString()))
+
+                        sharedPref.edit()
+                            .putString(LoginActivity.USERNAME, userEmail)
+                            .putString(LoginActivity.TOKEN, token.data.toString())
+                            .putBoolean(LoginActivity.REMEMBER_ME, intent.getBooleanExtra(REMEMBER_ME_CHECK, false))
+                            .apply()
+
+                        startActivity(userEmail?.let { it1 -> WelcomeActivity.newInstance(this, userEmail) })
                         finishAffinity()
                     }
                 } else {
-                    Toast.makeText(this, "bposkfpsodfks", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
                 }
             })
         }

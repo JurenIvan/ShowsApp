@@ -13,12 +13,11 @@ class WelcomeActivity : AppCompatActivity() {
 
     companion object {
         const val EMAIL_KEY = "user"
-        const val TOKEN = "token"
 
-        fun newInstance(context: Context, email: String, token: String): Intent {
+        fun newInstance(context: Context, email: String): Intent {
             val intent = Intent(context, WelcomeActivity::class.java)
             intent.putExtra(EMAIL_KEY, email)
-            intent.putExtra(TOKEN, token)
+
             return intent
         }
     }
@@ -48,13 +47,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun postDelayed() {
         handler.postDelayed({
-            startActivity(
-                HomeActivity.newInstance(
-                    this,
-                    intent.getStringExtra(EMAIL_KEY),
-                    intent.getStringExtra(TOKEN)
-                )
-            )
+            startActivity(HomeActivity.newInstance(this))
             finish()
         }, 2000)
     }
