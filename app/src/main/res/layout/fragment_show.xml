@@ -84,10 +84,12 @@
                         app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
-                        android:id="@+id/likeStatus"
+                        android:id="@+id/likeStatusNumberCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="123123"
+                        android:textSize="16sp"
+                        android:textColor="#de000000"
+                        tools:text="128"
 
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"

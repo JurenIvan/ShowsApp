@@ -77,6 +77,52 @@
                     android:orientation="vertical"
             >
 
+                <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <ImageView
+                            android:id="@+id/dislikeImg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/dislike_button_selector"
+
+                            android:layout_marginEnd="8dp"
+
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/likeStatus"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                            android:id="@+id/likeStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="#de000000"
+                            tools:text="128"
+
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageView
+                            android:id="@+id/likeImg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/like_button_selector"
+
+                            android:layout_marginStart="8dp"
+
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/likeStatus"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                </android.support.constraint.ConstraintLayout>
+
                 <android.support.v4.widget.NestedScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -88,6 +88,8 @@ class ShowFragment : Fragment() {
                     .into(imgPlaceholder)
 
                 activity?.colappsingtoolbar?.title = it.data?.title
+
+                likeStatusNumberCount.text=it.data?.likesCount.toString()
             }
         })
 
