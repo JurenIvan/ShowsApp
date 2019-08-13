@@ -5,11 +5,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/showListID2">
+        android:id="@+id/showListID"
+android:layout_margin="16dp"
+>
 
     <ImageView
             android:id="@+id/imageViewPicture"
-            android:layout_width="160dp"
+            android:layout_width="200dp"
             android:layout_height="240dp"
             android:scaleType="centerCrop"
             tools:src="@drawable/show_placeholder"
@@ -19,7 +21,7 @@
             android:id="@+id/itemShowListTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:gravity="center"
             android:textSize="20sp"
             tools:text="@string/placeholder"
             android:layout_marginTop="8dp"

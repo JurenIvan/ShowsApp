@@ -31,7 +31,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: HomeViewModel
-    private lateinit var adapter: ShowsAdapter
+    private  val adapterList=showsAdapterFactory(false)
+    private  val adapterGrid=showsAdapterFactory(true)
+
     private lateinit var sharedPref: SharedPreferences
 
     private var shows: List<Show> = listOf()
@@ -44,45 +46,22 @@ class HomeActivity : AppCompatActivity() {
         sharedPref = getSharedPreferences(HOME_GRID_LAYOUT, Context.MODE_PRIVATE)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
-        logout.setOnClickListener {
-
-            val builder = AlertDialog.Builder(this)
-            builder
-                .setTitle("Shows")
-                .setMessage("Are you sure you want to logout?")
-                .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
-                .setPositiveButton("Yes") { _, _ ->
-                    getSharedPreferences(LoginActivity.LOGIN, Context.MODE_PRIVATE).edit()
-                        .putString(LoginActivity.USERNAME, "")
-                        .putString(LoginActivity.TOKEN, "")
-                        .putBoolean(LoginActivity.REMEMBER_ME, false)
-                        .apply()
-                    startActivity(Intent(this@HomeActivity, LoginActivity::class.java))
-                    finishAffinity()
-                }
-            builder.show()
-        }
+        logout.setOnClickListener { confirmLogout() }
 
         viewModel.liveData.observe(this, Observer { newData ->
             if (newData != null) {
                 if (newData.isSuccessful) {
                     newData.data?.let {
-                        adapter.setData(it)
+                        adapterList.setData(it)
+                        adapterGrid.setData(it)
                         shows = it
                     }
                 }
             }
         })
 
-        adapter = ShowsAdapter(true) { position ->
-            supportFragmentManager?.beginTransaction()?.apply {
-                replace(R.id.item_detail_container, ShowFragment.newInstance(shows[position].id))
-                addToBackStack("ShowDisplay")
-                commit()
-            }
-        }
         recyclerViewShows.layoutManager = GridLayoutManager(this, 2)
-        recyclerViewShows.adapter = adapter
+        recyclerViewShows.adapter = adapterGrid
 
 
         viewPicker.setOnClickListener {
@@ -90,31 +69,42 @@ class HomeActivity : AppCompatActivity() {
                 recyclerViewShows.layoutManager = GridLayoutManager(this, 2)
                 sharedPref.edit().putBoolean(HOME_GRID_LAYOUT, false).apply()
                 viewPicker.setImageResource(R.drawable.ic_listview)
-
-                adapter = ShowsAdapter(true) { position ->
-                    supportFragmentManager?.beginTransaction()?.apply {
-                        replace(R.id.item_detail_container, ShowFragment.newInstance(shows[position].id))
-                        addToBackStack("ShowDisplay")
-                        commit()
-                    }
-                }
-
+                recyclerViewShows.adapter = adapterGrid
             } else {
                 recyclerViewShows.layoutManager = LinearLayoutManager(this)
                 sharedPref.edit().putBoolean(HOME_GRID_LAYOUT, true).apply()
                 viewPicker.setImageResource(R.drawable.ic_gridview_white)
-
-                adapter = ShowsAdapter(false) { position ->
-                    supportFragmentManager?.beginTransaction()?.apply {
-                        replace(R.id.item_detail_container, ShowFragment.newInstance(shows[position].id))
-                        addToBackStack("ShowDisplay")
-                        commit()
-                    }
-                }
-
+                recyclerViewShows.adapter = adapterList
             }
         }
 
+    }
+
+    private fun showsAdapterFactory(isGrid: Boolean): ShowsAdapter {
+        return ShowsAdapter(isGrid) { position ->
+            supportFragmentManager?.beginTransaction()?.apply {
+                replace(R.id.item_detail_container, ShowFragment.newInstance(shows[position].id))
+                addToBackStack("ShowDisplay")
+                commit()
+            }
+        }
+    }
+
+    private fun confirmLogout() {
+        AlertDialog.Builder(this)
+            .setTitle("Shows")
+            .setMessage("Are you sure you want to logout?")
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .setPositiveButton("Yes") { _, _ ->
+                getSharedPreferences(LoginActivity.LOGIN, Context.MODE_PRIVATE).edit()
+                    .putString(LoginActivity.USERNAME, "")
+                    .putString(LoginActivity.TOKEN, "")
+                    .putBoolean(LoginActivity.REMEMBER_ME, false)
+                    .apply()
+                startActivity(Intent(this@HomeActivity, LoginActivity::class.java))
+                finishAffinity()
+            }
+            .show()
     }
 
     override fun onBackPressed() {

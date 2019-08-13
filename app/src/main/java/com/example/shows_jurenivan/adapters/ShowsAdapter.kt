@@ -11,11 +11,10 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_show_list.view.*
 
 
-class ShowsAdapter(gridActive2:Boolean,val clickAction: (Int) -> Unit = {}) :
+class ShowsAdapter(private val gridActive:Boolean,val clickAction: (Int) -> Unit = {}) :
     RecyclerView.Adapter<ShowsAdapter.ViewHolder>() {
 
     private var shows = listOf<Show>()
-    private var gridActive = gridActive2
 
     fun setData(shows: List<Show>) {
         this.shows = shows
@@ -26,7 +25,7 @@ class ShowsAdapter(gridActive2:Boolean,val clickAction: (Int) -> Unit = {}) :
         if (gridActive) {
             return ViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_show_list,
+                    R.layout.item_show_grid,
                     parent,
                     false
                 )
@@ -34,7 +33,7 @@ class ShowsAdapter(gridActive2:Boolean,val clickAction: (Int) -> Unit = {}) :
         }
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_show_grid,
+                R.layout.item_show_list,
                 parent,
                 false
             )
