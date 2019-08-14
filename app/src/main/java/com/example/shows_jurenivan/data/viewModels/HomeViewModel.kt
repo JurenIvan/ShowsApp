@@ -22,10 +22,4 @@ class HomeViewModel : ViewModel() {
         InternetRepository.getShowsLiveData().observeForever { showsLiveData.value = it }
     }
 
-    override fun onCleared() {
-        InternetRepository.run {
-            getShowsLiveData().removeObserver { showsLiveData.value = it }
-        }
-    }
-
 }

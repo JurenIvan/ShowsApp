@@ -52,8 +52,8 @@ class EpisodeAdapter(val clickAction: (Int) -> Unit = {}) :
 
         private fun checkParameters(episode: Episode): Boolean {
             if (episode.title.isBlank()) return false
-            if (episode.season.isNullOrBlank()) return false
-            if (episode.episode.isNullOrBlank()) return false
+            if (episode.season.isBlank()) return false
+            if (episode.episode.isBlank()) return false
             try {
                 if (checkValues(Integer.parseInt(episode.episode), 99)) return false
                 if (checkValues(Integer.parseInt(episode.season), 20)) return false
