@@ -66,7 +66,7 @@ class CommentsFragment : Fragment() {
         post.setOnClickListener {
 
             if (!commentInput.text.isNullOrBlank()) {
-                episodeId?.let { it1 -> Comment("", it1, commentInput.text.toString(), "") }
+                episodeId?.let { it1 -> Comment(commentInput.text.toString(), it1, null, null) }
                     ?.let { it2 -> viewModel.postComment(it2) }
             }
 

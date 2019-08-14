@@ -5,9 +5,12 @@ import android.arch.lifecycle.MutableLiveData
 import com.example.shows_jurenivan.data.Api
 import com.example.shows_jurenivan.data.RetrofitClient
 import com.example.shows_jurenivan.data.dataStructures.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 
 object InternetRepository {
@@ -33,7 +36,7 @@ object InternetRepository {
 
 
     fun fetchShows() {
-        apiService?.getShows()?.enqueue(object : retrofit2.Callback<ResponseData<List<Show>>> {
+        apiService?.getShows()?.enqueue(object : Callback<ResponseData<List<Show>>> {
             override fun onFailure(call: Call<ResponseData<List<Show>>>, t: Throwable) {
                 showsLiveData.value = ResponseData(isSuccessful = false)
             }
@@ -53,7 +56,7 @@ object InternetRepository {
     }
 
     fun fetchShow(showId: String) {
-        apiService?.getShow(showId)?.enqueue(object : retrofit2.Callback<ResponseData<Show>> {
+        apiService?.getShow(showId)?.enqueue(object : Callback<ResponseData<Show>> {
 
             override fun onFailure(call: Call<ResponseData<Show>>, t: Throwable) {
                 showLiveData.value = ResponseData(isSuccessful = false)
@@ -71,7 +74,7 @@ object InternetRepository {
     }
 
     fun fetchEpisodes(showId: String) {
-        apiService?.getEpisodes(showId)?.enqueue(object : retrofit2.Callback<ResponseData<List<Episode>>> {
+        apiService?.getEpisodes(showId)?.enqueue(object : Callback<ResponseData<List<Episode>>> {
 
             override fun onFailure(call: Call<ResponseData<List<Episode>>>, t: Throwable) {
                 episodesLiveData.value = ResponseData(isSuccessful = false)
@@ -92,7 +95,7 @@ object InternetRepository {
     }
 
     fun fetchEpisode(episodeId: String) {
-        apiService?.getEpisode(episodeId)?.enqueue(object : retrofit2.Callback<ResponseData<Episode>> {
+        apiService?.getEpisode(episodeId)?.enqueue(object : Callback<ResponseData<Episode>> {
 
             override fun onFailure(call: Call<ResponseData<Episode>>, t: Throwable) {
                 episodeLiveData.value = ResponseData(isSuccessful = false)
@@ -111,7 +114,7 @@ object InternetRepository {
     }
 
     fun fetchComments(episodeId: String) {
-        apiService?.getComments(episodeId)?.enqueue(object : retrofit2.Callback<ResponseData<List<Comment>>> {
+        apiService?.getComments(episodeId)?.enqueue(object : Callback<ResponseData<List<Comment>>> {
             override fun onFailure(call: Call<ResponseData<List<Comment>>>, t: Throwable) {
                 commentsLiveData.value = ResponseData(isSuccessful = false)
             }
@@ -132,18 +135,62 @@ object InternetRepository {
 
     fun postComment(comment: Comment, token: String) {
         apiService?.postComment(token, comment)?.enqueue(object : Callback<Void> {
+            override fun onFailure(call: Call<Void>, t: Throwable) {}
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {}
+        })
+    }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                return
-            }
+    fun postEpisode(episode: Episode, token: String) {
 
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                fetchComments(comment.episodeId)
+        if (episode.imageUrl.isNullOrBlank().not()) {
 
-            }
+            apiService?.uploadMedia(token, RequestBody.create(MediaType.parse("image/jpg"), File(episode.imageUrl)))
+                ?.enqueue(object : Callback<ResponseData<MediaResponse>> {
+
+                    override fun onFailure(call: Call<ResponseData<MediaResponse>>, t: Throwable) {
+                        return
+
+                    }
+                    override fun onResponse(
+                        call: Call<ResponseData<MediaResponse>>,
+                        response: Response<ResponseData<MediaResponse>>
+                    ) {
+                        episode.imageUrl = response.body()?.data?.path
+                        episode.mediaId = response.body()?.data?._id
+
+                        uploadEpisode(token, episode)
+                    }
+                })
+        }else{
+            uploadEpisode(token, episode)
+        }
+
+
+
+    }
+
+    private fun uploadEpisode(token: String, episode: Episode) {
+        apiService?.postEpisode(token, episode)?.enqueue(object : Callback<Void> {
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {}
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {}
 
         })
+    }
 
+
+    fun postMedia(comment: Comment, token: String) {
+        apiService?.postComment(token, comment)?.enqueue(object : Callback<Void> {
+            override fun onFailure(call: Call<Void>, t: Throwable) {}
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {}
+        })
+    }
+
+    fun postComment2(comment: Comment, token: String) {
+        apiService?.postComment(token, comment)?.enqueue(object : Callback<Void> {
+            override fun onFailure(call: Call<Void>, t: Throwable) {}
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {}
+        })
     }
 
 

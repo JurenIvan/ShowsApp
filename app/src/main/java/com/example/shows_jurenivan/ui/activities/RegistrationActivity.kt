@@ -84,7 +84,7 @@ class RegistrationActivity : AppCompatActivity() {
 
                         sharedPref.edit()
                             .putString(LoginActivity.USERNAME, userEmail)
-                            .putString(LoginActivity.TOKEN, token.data.toString())
+                            .putString(LoginActivity.TOKEN, token.data?.token)
                             .putBoolean(LoginActivity.REMEMBER_ME, intent.getBooleanExtra(REMEMBER_ME_CHECK, false))
                             .apply()
 

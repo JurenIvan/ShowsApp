@@ -33,11 +33,7 @@ class CommentsViewModel : ViewModel() {
     }
 
     fun postComment(comment: Comment) {
-
         val sharedPreferences = MyShowsApp.instance.getSharedPreferences(LoginActivity.LOGIN, Context.MODE_PRIVATE)
-
-        comment.userEmail = sharedPreferences.getString(LoginActivity.USERNAME,"")
-
         InternetRepository.postComment(comment, sharedPreferences.getString(LoginActivity.TOKEN, ""))
     }
 }

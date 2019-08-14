@@ -34,7 +34,8 @@ class EpisodeAdapter(val clickAction: (Int) -> Unit = {}) :
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(position: Int) {
-            if (checkParameters(episodes[position])) {
+            if (checkParameters(episodes[position])
+            ) {
                 with(itemView) {
                     seasonAndEpisode.text =
                         String.format(

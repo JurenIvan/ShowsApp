@@ -70,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
             viewModel.liveData.observe(this, Observer { user ->
                 if (switch) {
                     if (user?.isSuccessful == true) {
-                        startHomeScreen(tvUsername.text.toString(), user.data.toString())
+                        user.data?.token?.let { it1 -> startHomeScreen(tvUsername.text.toString(), it1) }
                         finish()
                         switch = false
                     } else {

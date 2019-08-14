@@ -3,11 +3,13 @@ package com.example.shows_jurenivan.data.viewModels
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.content.Context
+import com.example.shows_jurenivan.MyShowsApp
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.dataStructures.ResponseData
 import com.example.shows_jurenivan.data.dataStructures.Show
-import com.example.shows_jurenivan.data.repositories.EpisodesRepository
 import com.example.shows_jurenivan.data.repositories.InternetRepository
+import com.example.shows_jurenivan.ui.activities.LoginActivity
 
 class ShowViewModel : ViewModel() {
 
@@ -41,8 +43,11 @@ class ShowViewModel : ViewModel() {
         InternetRepository.fetchEpisodes(showId)
     }
 
-    fun addEpisode(episode: Episode) {
-        showData.data?.id?.let { EpisodesRepository.addEpisodeToShow(episode, it) }
+    fun postEpisode(episode: Episode, photoPath: String?) {
+        val sharedPreferences = MyShowsApp.instance.getSharedPreferences(LoginActivity.LOGIN, Context.MODE_PRIVATE)
+        episode.imageUrl = photoPath
+        InternetRepository.postEpisode(episode, sharedPreferences.getString(LoginActivity.TOKEN, ""))
     }
+
 
 }
