@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
@@ -23,30 +22,29 @@ import kotlinx.android.synthetic.main.fragment_show.*
 class HomeActivity : AppCompatActivity() {
 
     companion object {
-        const val HOME_GRID_LAYOUT = "home"
         fun newInstance(context: Context): Intent {
             val intent = Intent(context, HomeActivity::class.java)
             return intent
         }
+
+        private const val IS_GRID = "IsGrid"
     }
 
     private lateinit var viewModel: HomeViewModel
-    private  val adapterList=showsAdapterFactory(false)
-    private  val adapterGrid=showsAdapterFactory(true)
-
-    private lateinit var sharedPref: SharedPreferences
+    private val adapterList = showsAdapterFactory(false)
+    private val adapterGrid = showsAdapterFactory(true)
 
     private var shows: List<Show> = listOf()
+    private var isGrid: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isGrid = savedInstanceState?.getBoolean(IS_GRID) ?: true
+
         setContentView(R.layout.activity_home)
         setSupportActionBar(toolbar)
 
-        sharedPref = getSharedPreferences(HOME_GRID_LAYOUT, Context.MODE_PRIVATE)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
-
-        logout.setOnClickListener { confirmLogout() }
 
         viewModel.liveData.observe(this, Observer { newData ->
             if (newData != null) {
@@ -60,24 +58,26 @@ class HomeActivity : AppCompatActivity() {
             }
         })
 
-        recyclerViewShows.layoutManager = GridLayoutManager(this, 2)
-        recyclerViewShows.adapter = adapterGrid
-
+        logout.setOnClickListener { confirmLogout() }
+        setAdapterAndLayoutManager()
 
         viewPicker.setOnClickListener {
-            if (sharedPref.getBoolean(HOME_GRID_LAYOUT, true)) {
-                recyclerViewShows.layoutManager = GridLayoutManager(this, 2)
-                sharedPref.edit().putBoolean(HOME_GRID_LAYOUT, false).apply()
-                viewPicker.setImageResource(R.drawable.ic_listview)
-                recyclerViewShows.adapter = adapterGrid
-            } else {
-                recyclerViewShows.layoutManager = LinearLayoutManager(this)
-                sharedPref.edit().putBoolean(HOME_GRID_LAYOUT, true).apply()
-                viewPicker.setImageResource(R.drawable.ic_gridview_white)
-                recyclerViewShows.adapter = adapterList
-            }
-        }
+            isGrid = !isGrid
+            setAdapterAndLayoutManager()
+            if (isGrid) viewPicker.setImageResource(R.drawable.ic_listview)
+            else viewPicker.setImageResource(R.drawable.ic_gridview_white)
 
+        }
+    }
+
+    private fun setAdapterAndLayoutManager() {
+        if (isGrid) {
+            recyclerViewShows.layoutManager = GridLayoutManager(this, 2)
+            recyclerViewShows.adapter = adapterGrid
+            return
+        }
+        recyclerViewShows.layoutManager = LinearLayoutManager(this)
+        recyclerViewShows.adapter = adapterList
     }
 
     private fun showsAdapterFactory(isGrid: Boolean): ShowsAdapter {
@@ -122,6 +122,10 @@ class HomeActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putBoolean(IS_GRID, isGrid)
+        super.onSaveInstanceState(outState)
+    }
 }
 
 interface BackKeyInterface {
