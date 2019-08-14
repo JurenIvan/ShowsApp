@@ -12,19 +12,19 @@ import com.example.shows_jurenivan.ui.activities.LoginActivity
 
 class CommentsViewModel : ViewModel() {
 
-    private val commentsLiveData = MutableLiveData<ResponseData<List<Comment>>>()
+    private val commentsMutableLiveData = MutableLiveData<ResponseData<List<Comment>>>()
     private var commentsData = ResponseData<List<Comment>>(isSuccessful = false)
 
     val commentsliveData: LiveData<ResponseData<List<Comment>>>
-        get() = commentsLiveData
+        get() = commentsMutableLiveData
 
     init {
-        commentsLiveData.value = this.commentsData
+        commentsMutableLiveData.value = this.commentsData
 
         InternetRepository.getCommentsLiveData().observeForever {
             if (!(it?.data == null || !it.isSuccessful)) {
-                commentsLiveData.value = ResponseData(data = it.data, isSuccessful = true)
-            } else commentsLiveData.value = ResponseData(data = null, isSuccessful = false)
+                commentsMutableLiveData.value = ResponseData(data = it.data, isSuccessful = true)
+            } else commentsMutableLiveData.value = ResponseData(data = null, isSuccessful = false)
         }
     }
 

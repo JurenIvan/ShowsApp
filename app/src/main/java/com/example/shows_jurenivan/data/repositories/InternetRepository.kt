@@ -136,22 +136,20 @@ object InternetRepository {
     fun postComment(comment: Comment, token: String) {
         apiService?.postComment(token, comment)?.enqueue(object : Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {}
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {}
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                fetchComments(comment.episodeId)
+            }
         })
     }
 
     fun postEpisode(episode: Episode, token: String) {
-
         if (episode.imageUrl.isNullOrBlank().not()) {
 
             apiService?.uploadMedia(token, RequestBody.create(MediaType.parse("image/jpg"), File(episode.imageUrl)))
                 ?.enqueue(object : Callback<ResponseData<MediaResponse>> {
 
                     override fun onFailure(call: Call<ResponseData<MediaResponse>>, t: Throwable) {
-                        return
-
                     }
-
                     override fun onResponse(
                         call: Call<ResponseData<MediaResponse>>,
                         response: Response<ResponseData<MediaResponse>>
@@ -165,15 +163,14 @@ object InternetRepository {
         } else {
             uploadEpisode(token, episode)
         }
-
-
     }
 
     private fun uploadEpisode(token: String, episode: Episode) {
         apiService?.postEpisode(token, episode)?.enqueue(object : Callback<Void> {
-
             override fun onFailure(call: Call<Void>, t: Throwable) {}
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {}
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                episode.showId?.let { fetchEpisodes(it) }
+            }
 
         })
     }

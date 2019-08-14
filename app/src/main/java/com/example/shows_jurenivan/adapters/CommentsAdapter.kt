@@ -34,6 +34,9 @@ class CommentsAdapter :
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(comment: Comment) {
+            if (comment.text.isNullOrBlank())
+                return
+
             with(itemView) {
 
                 comment.userEmail?.let { selectRandomUserImage(it) }?.let { image.setImageResource(it) }

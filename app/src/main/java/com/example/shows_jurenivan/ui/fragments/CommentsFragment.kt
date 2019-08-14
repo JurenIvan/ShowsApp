@@ -56,9 +56,9 @@ class CommentsFragment : Fragment() {
         recyclerView.adapter = adapter
 
         viewModel.commentsliveData.observe(this, Observer { comments ->
-            if (comments != null) comments.data?.let { adapter.setData(it) }
-            else adapter.setData(listOf())
-
+            if (comments != null)
+                comments.data?.let { adapter.setData(it) }
+            else{ adapter.setData(listOf()) }
             checkEmptiness(comments)
         })
 
@@ -69,6 +69,9 @@ class CommentsFragment : Fragment() {
                 episodeId?.let { it1 -> Comment(commentInput.text.toString(), it1, null, null) }
                     ?.let { it2 -> viewModel.postComment(it2) }
             }
+
+            recyclerView.invalidate()
+            (recyclerView.adapter as CommentsAdapter).notifyDataSetChanged()
 
         }
 

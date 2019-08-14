@@ -64,9 +64,6 @@ class HomeActivity : AppCompatActivity() {
         viewPicker.setOnClickListener {
             isGrid = !isGrid
             setAdapterAndLayoutManager()
-            if (isGrid) viewPicker.setImageResource(R.drawable.ic_listview)
-            else viewPicker.setImageResource(R.drawable.ic_gridview_white)
-
         }
     }
 
@@ -74,10 +71,12 @@ class HomeActivity : AppCompatActivity() {
         if (isGrid) {
             recyclerViewShows.layoutManager = GridLayoutManager(this, 2)
             recyclerViewShows.adapter = adapterGrid
+            viewPicker.setImageResource(R.drawable.ic_listview)
             return
         }
         recyclerViewShows.layoutManager = LinearLayoutManager(this)
         recyclerViewShows.adapter = adapterList
+        viewPicker.setImageResource(R.drawable.ic_gridview_white)
     }
 
     private fun showsAdapterFactory(isGrid: Boolean): ShowsAdapter {

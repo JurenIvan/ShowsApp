@@ -1,6 +1,7 @@
 package com.example.shows_jurenivan
 
 import android.app.Application
+import com.facebook.stetho.Stetho
 
 class MyShowsApp : Application() {
 
@@ -11,6 +12,7 @@ class MyShowsApp : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        Stetho.initializeWithDefaults(this);
     }
 
 }

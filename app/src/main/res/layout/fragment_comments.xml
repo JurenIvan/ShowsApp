@@ -123,23 +123,39 @@
                 app:layout_constraintBottom_toBottomOf="@id/commentContainer"
                 app:layout_constraintStart_toStartOf="@id/commentContainer"
 
-                app:layout_constraintEnd_toStartOf="@+id/post" android:layout_marginEnd="8dp"/>
+                app:layout_constraintEnd_toStartOf="@+id/postEnlarger" android:layout_marginEnd="8dp"
+                app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.0"/>
 
-        <TextView
-                android:id="@+id/post"
+        <LinearLayout
+                android:id="@+id/postEnlarger"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/post"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="32dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="12sp"
 
                 app:layout_constraintEnd_toEndOf="@id/commentContainer"
                 app:layout_constraintTop_toTopOf="@id/commentContainer"
                 app:layout_constraintBottom_toBottomOf="@id/commentContainer"
+        >
 
-        />
+            <TextView
+                    android:id="@+id/post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/post"
+                    android:layout_alignParentEnd="true"
+
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp"
+
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="16dp"
+
+
+            />
+
+        </LinearLayout>
+
 
 
     </android.support.constraint.ConstraintLayout>

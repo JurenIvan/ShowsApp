@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import com.example.shows_jurenivan.adapters.EpisodeAdapter
 import com.example.shows_jurenivan.data.RetrofitClient
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.dataStructures.ResponseData
+import com.example.shows_jurenivan.data.dataStructures.Show
+import com.example.shows_jurenivan.data.repositories.ShowsDatabaseRepositoryRepository
 import com.example.shows_jurenivan.data.viewModels.ShowViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_show.*
@@ -52,7 +55,6 @@ class ShowFragment : Fragment() {
         viewModel.setShow(showId)
 
         setHasOptionsMenu(true)
-
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow_light)
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
@@ -78,6 +80,10 @@ class ShowFragment : Fragment() {
             checkEmptiness(episodes)
         })
 
+        viewModel.likeStatusLiveData.observe(this, Observer {
+                updateLikeDislike(it)
+            })
+
         viewModel.showliveData.observe(this, Observer {
             if (it != null) {
                 episodeDescription.text = it.data?.description
@@ -101,14 +107,28 @@ class ShowFragment : Fragment() {
         }
 
         likeImg.setOnClickListener {
-            likeStatusNumberCount.text = (Integer.parseInt(likeStatusNumberCount.text.toString()) + 1).toString()
-            likeImg.isActivated =viewModel.likeShow(showId)
-
+            viewModel.likeShow(showId)
         }
         dislikeImg.setOnClickListener {
-            likeStatusNumberCount.text = (Integer.parseInt(likeStatusNumberCount.text.toString()) - 1).toString()
-            dislikeImg.isActivated =viewModel.disLikeShow(showId)
+            viewModel.disLikeShow(showId)
+        }
 
+    }
+
+    private fun updateLikeDislike(it: Int?) {
+        when (it) {
+            null, 0 -> {
+                likeImg.isActivated = false
+                dislikeImg.isActivated = false
+            }
+            1 -> {
+                likeImg.isActivated = true
+                dislikeImg.isActivated = false
+            }
+            -1 -> {
+                likeImg.isActivated = false
+                dislikeImg.isActivated = true
+            }
         }
     }
 
