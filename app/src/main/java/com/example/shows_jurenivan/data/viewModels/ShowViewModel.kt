@@ -31,7 +31,7 @@ class ShowViewModel : ViewModel() {
 
         InternetRepository.getEpisodesLiveData().observeForever {
             if (it != null && it.isSuccessful) {
-                var sortedData = it.data?.sortedWith(compareBy({ it.season }, { it.episode }))
+                val sortedData = it.data?.sortedWith(compareBy({ it.season }, { it.episode }))
                 episodesLiveData.value = ResponseData(sortedData, true)
             } else episodesLiveData.value = it
         }
@@ -44,10 +44,23 @@ class ShowViewModel : ViewModel() {
     }
 
     fun postEpisode(episode: Episode, photoPath: String?) {
-        val sharedPreferences = MyShowsApp.instance.getSharedPreferences(LoginActivity.LOGIN, Context.MODE_PRIVATE)
         episode.imageUrl = photoPath
-        InternetRepository.postEpisode(episode, sharedPreferences.getString(LoginActivity.TOKEN, ""))
+        InternetRepository.postEpisode(episode, getTokenFromSharedPref())
     }
 
+    fun likeShow(showId: String): Boolean {
+        InternetRepository.likeShow(showId, getTokenFromSharedPref())
+        return true
+    }
+
+    fun disLikeShow(showId: String): Boolean {
+        InternetRepository.disLikeShow(showId, getTokenFromSharedPref())
+        return true
+    }
+
+    private fun getTokenFromSharedPref() =
+        MyShowsApp.instance.getSharedPreferences(
+            LoginActivity.LOGIN, Context.MODE_PRIVATE
+        ).getString(LoginActivity.TOKEN, "")?:""
 
 }

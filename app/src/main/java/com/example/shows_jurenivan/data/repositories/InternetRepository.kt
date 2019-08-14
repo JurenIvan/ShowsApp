@@ -151,6 +151,7 @@ object InternetRepository {
                         return
 
                     }
+
                     override fun onResponse(
                         call: Call<ResponseData<MediaResponse>>,
                         response: Response<ResponseData<MediaResponse>>
@@ -161,10 +162,9 @@ object InternetRepository {
                         uploadEpisode(token, episode)
                     }
                 })
-        }else{
+        } else {
             uploadEpisode(token, episode)
         }
-
 
 
     }
@@ -178,16 +178,15 @@ object InternetRepository {
         })
     }
 
-
-    fun postMedia(comment: Comment, token: String) {
-        apiService?.postComment(token, comment)?.enqueue(object : Callback<Void> {
+    fun likeShow(showId: String, token: String) {
+        apiService?.likeShow(token, showId)?.enqueue(object : Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {}
             override fun onResponse(call: Call<Void>, response: Response<Void>) {}
         })
     }
 
-    fun postComment2(comment: Comment, token: String) {
-        apiService?.postComment(token, comment)?.enqueue(object : Callback<Void> {
+    fun disLikeShow(showId: String, token: String) {
+        apiService?.disLikeShow(token, showId)?.enqueue(object : Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {}
             override fun onResponse(call: Call<Void>, response: Response<Void>) {}
         })

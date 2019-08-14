@@ -35,11 +35,11 @@ class ShowFragment : Fragment() {
     private lateinit var adapter: EpisodeAdapter
     private var episodeList: List<Episode> = listOf()
 
-    private var showId: String? = null
+    private lateinit var showId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.showId = arguments?.getString(SHOWID_KEY)
+        this.showId = arguments?.getString(SHOWID_KEY) ?: ""
         viewModel = ViewModelProviders.of(this).get(ShowViewModel::class.java)
     }
 
@@ -49,8 +49,7 @@ class ShowFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        showId?.let { viewModel.setShow(it) }
+        viewModel.setShow(showId)
 
         setHasOptionsMenu(true)
 
@@ -89,18 +88,27 @@ class ShowFragment : Fragment() {
 
                 activity?.colappsingtoolbar?.title = it.data?.title
 
-                likeStatusNumberCount.text=it.data?.likesCount.toString()
+                likeStatusNumberCount.text = it.data?.likesCount.toString()
             }
         })
 
         fab.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()?.apply {
                 addToBackStack("AddEpisodeFragment")
-                if (showId != null) {
-                    replace(R.id.item_detail_container, AddEpisodeFragment.newInstance(showId!!))
-                }
+                replace(R.id.item_detail_container, AddEpisodeFragment.newInstance(showId))
                 commit()
             }
+        }
+
+        likeImg.setOnClickListener {
+            likeStatusNumberCount.text = (Integer.parseInt(likeStatusNumberCount.text.toString()) + 1).toString()
+            likeImg.isActivated =viewModel.likeShow(showId)
+
+        }
+        dislikeImg.setOnClickListener {
+            likeStatusNumberCount.text = (Integer.parseInt(likeStatusNumberCount.text.toString()) - 1).toString()
+            dislikeImg.isActivated =viewModel.disLikeShow(showId)
+
         }
     }
 

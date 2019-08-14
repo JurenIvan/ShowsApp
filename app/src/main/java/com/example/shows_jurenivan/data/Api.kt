@@ -45,7 +45,7 @@ interface Api {
     fun likeShow(@Header("Authorization") token: String, @Path("showId") showId: String): Call<Void>
 
     @POST("/api/shows/{showId}/dislike")
-    fun dislikeShow(@Header("Authorization") token: String, @Path("showId") showId: String): Call<Void>
+    fun disLikeShow(@Header("Authorization") token: String, @Path("showId") showId: String): Call<Void>
 
 
 }
