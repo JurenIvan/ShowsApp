@@ -49,7 +49,9 @@ class CommentsViewModel : ViewModel() {
     }
 
     fun setEpisode(episodeId: String) {
+        commentsMutableLiveData.value = ResponseData(data = null, isSuccessful = false)
         InternetRepository.fetchComments(episodeId)
+
     }
 
     fun postComment(comment: Comment) {
