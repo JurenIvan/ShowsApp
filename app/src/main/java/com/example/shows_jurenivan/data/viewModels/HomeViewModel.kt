@@ -12,6 +12,15 @@ class HomeViewModel : ViewModel() {
 
     private val showsLiveData = MutableLiveData<ResponseData<List<Show>>>()
 
+    private val loadingMutableLiveData = MutableLiveData<Boolean>()
+    private val errorMutableLiveData = MutableLiveData<String>()
+
+    val loadingLiveData: LiveData<Boolean>
+        get() = loadingMutableLiveData
+
+    val errorLiveData: LiveData<String>
+        get() = errorMutableLiveData
+
     val liveData: LiveData<ResponseData<List<Show>>>
         get() = showsLiveData
 
@@ -25,6 +34,18 @@ class HomeViewModel : ViewModel() {
             it?.data?.forEach { show ->
                 ShowsDatabaseRepositoryRepository.insertShow(show)
             }
+        }
+        loadingMutableLiveData.value = false
+        errorMutableLiveData.value = ""
+
+        InternetRepository.getErrorBooleanLiveData().observeForever {
+            if (it != null) {
+                loadingMutableLiveData.value = it>0
+            }
+        }
+
+        InternetRepository.getErrorStringLiveData().observeForever {
+            errorMutableLiveData.value = it
         }
     }
 

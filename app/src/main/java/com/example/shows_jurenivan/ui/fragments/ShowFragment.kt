@@ -1,20 +1,24 @@
 package com.example.shows_jurenivan.ui.fragments
 
+import android.app.ProgressDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.adapters.EpisodeAdapter
 import com.example.shows_jurenivan.data.RetrofitClient
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.dataStructures.ResponseData
 import com.example.shows_jurenivan.data.viewModels.ShowViewModel
+import com.example.shows_jurenivan.isNetworkAvailable
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_show.*
 
@@ -34,6 +38,7 @@ class ShowFragment : Fragment() {
     private lateinit var viewModel: ShowViewModel
     private lateinit var adapter: EpisodeAdapter
     private var episodeList: List<Episode> = listOf()
+    private var progressDialog: ProgressDialog? = null
 
     private lateinit var showId: String
 
@@ -86,12 +91,12 @@ class ShowFragment : Fragment() {
                 episodeDescription.text = it.data?.description
 
                 Picasso.get().load(RetrofitClient.BASE_URL + it.data?.imageURL)
-                    .placeholder(R.drawable.ic_img_placeholder_episodes).error(android.R.drawable.stat_notify_error)
+                    .placeholder(R.drawable.rc8j4).error(android.R.drawable.stat_notify_error)
                     .into(imgPlaceholder)
 
                 activity?.colappsingtoolbar?.title = it.data?.title
 
-                likeStatusNumberCount.text = it.data?.likesCount.toString()
+                likeStatusNumberCount.text = getNumberOfLikes(it.data?.likesCount)
             }
         })
 
@@ -110,6 +115,35 @@ class ShowFragment : Fragment() {
             viewModel.disLikeShow(showId)
         }
 
+        viewModel.errorLiveData.observe(this, Observer { errors ->
+            if (errors != null && errors.isNotBlank()) {
+                Toast.makeText(context, errors, Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.loadingLiveData.observe(this, Observer { loading ->
+            if (loading == null || !loading) {
+                progressDialog?.cancel()
+            } else {
+                if(progressDialog==null)
+                progressDialog = ProgressDialog.show(context, "Shows", "Loading", true, true)
+            }
+        })
+
+        context?.let {
+            if (!isNetworkAvailable(context = it)) {
+                AlertDialog.Builder(it)
+                    .setTitle("Info")
+                    .setMessage("Seems you have no internet connection. Functionality limited. :( ")
+                    .setPositiveButton("OK", null)
+                    .create()
+                    .show()
+            }
+        }
+    }
+
+    private fun getNumberOfLikes(numOfLikes: Int?): String {
+        return numOfLikes?.toString() ?: "0"
     }
 
     private fun updateLikeDislike(it: Int?) {
@@ -138,5 +172,4 @@ class ShowFragment : Fragment() {
             recyclerViewEpisodes.visibility = View.VISIBLE
         }
     }
-
 }

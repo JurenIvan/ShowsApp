@@ -18,7 +18,6 @@ class WelcomeActivity : AppCompatActivity() {
         fun newInstance(context: Context, email: String): Intent {
             val intent = Intent(context, WelcomeActivity::class.java)
             intent.putExtra(EMAIL_KEY, email)
-
             return intent
         }
     }
@@ -32,7 +31,7 @@ class WelcomeActivity : AppCompatActivity() {
 
         val username = intent.getStringExtra(EMAIL_KEY).split("@")[0]
         @SuppressLint("SetTextI18n")
-        welcome_user.text = getString(R.string.welcome) + username
+        welcome_user.text = getString(R.string.welcome)+ " " + username
 
         postDelayed()
     }
@@ -54,6 +53,4 @@ class WelcomeActivity : AppCompatActivity() {
             finish()
         }, 2000)
     }
-
-
 }

@@ -14,9 +14,11 @@ class EpisodeAdapter(val clickAction: (Int) -> Unit = {}) :
     private var episodes = listOf<Episode>()
 
     fun setData(list: List<Episode>) {
-        this.episodes = list
+        this.episodes = list?: listOf()
         notifyDataSetChanged()
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder =
         ViewHolder(
@@ -34,12 +36,10 @@ class EpisodeAdapter(val clickAction: (Int) -> Unit = {}) :
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(position: Int) {
-            if (checkParameters(episodes[position])) {
-                with(itemView) {
-                    seasonAndEpisode.text = getSeasonAndEpisodeFormatedText(position)
-                    episodeTitle.text = episodes[position].title
-                    episodeListId.setOnClickListener { clickAction(position) }
-                }
+            with(itemView) {
+                seasonAndEpisode.text = getSeasonAndEpisodeFormatedText(position)
+                episodeTitle.text = episodes[position].title
+                episodeListId.setOnClickListener { clickAction(position) }
             }
         }
 
@@ -49,24 +49,6 @@ class EpisodeAdapter(val clickAction: (Int) -> Unit = {}) :
                 Integer.parseInt(episodes[position].season),
                 Integer.parseInt(episodes[position].episode)
             )
-        }
-
-        private fun checkParameters(episode: Episode): Boolean {
-            if (episode.title.isBlank()) return false
-            if (episode.season.isBlank()) return false
-            if (episode.episode.isBlank()) return false
-            try {
-                if (checkValues(Integer.parseInt(episode.episode), 99)) return false
-                if (checkValues(Integer.parseInt(episode.season), 20)) return false
-            } catch (e: Exception) {
-                return false
-            }
-            return true
-        }
-
-        private fun checkValues(number: Int, upperLimit: Int): Boolean {
-            if (number < 1 || number > upperLimit) return true
-            return false
         }
     }
 }

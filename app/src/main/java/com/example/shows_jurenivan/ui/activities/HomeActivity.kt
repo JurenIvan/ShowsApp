@@ -1,5 +1,6 @@
 package com.example.shows_jurenivan.ui.activities
 
+import android.app.ProgressDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -10,14 +11,19 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.Toast
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.adapters.ShowsAdapter
 import com.example.shows_jurenivan.data.dataStructures.Show
 import com.example.shows_jurenivan.data.viewModels.HomeViewModel
+import com.example.shows_jurenivan.isNetworkAvailable
 import com.example.shows_jurenivan.ui.fragments.ShowFragment
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.fragment_show.*
+
 
 class HomeActivity : AppCompatActivity() {
 
@@ -25,6 +31,7 @@ class HomeActivity : AppCompatActivity() {
         fun newInstance(context: Context): Intent {
             return Intent(context, HomeActivity::class.java)
         }
+
         private const val IS_GRID = "IsGrid"
     }
 
@@ -40,16 +47,15 @@ class HomeActivity : AppCompatActivity() {
         isGrid = savedInstanceState?.getBoolean(IS_GRID) ?: true
 
         setContentView(R.layout.activity_home)
-        setSupportActionBar(toolbar)
-
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
-
         viewModel.liveData.observe(this, Observer { newData ->
             if (newData != null) {
                 if (newData.isSuccessful) {
                     newData.data?.let {
                         adapterList.setData(it)
                         adapterGrid.setData(it)
+                        adapterList.notifyDataSetChanged()
+                        adapterGrid.notifyDataSetChanged()
                         shows = it
                     }
                 }
@@ -63,6 +69,30 @@ class HomeActivity : AppCompatActivity() {
             isGrid = !isGrid
             setAdapterAndLayoutManager()
         }
+
+        viewModel.errorLiveData.observe(this, Observer { errors ->
+            if (errors != null && errors.isNotBlank()) {
+                Toast.makeText(this, errors, Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.loadingLiveData.observe(this, Observer { loading ->
+            if (loading == null || !loading) {
+                progressBar.visibility = View.GONE
+            } else {
+                progressBar.visibility = View.VISIBLE
+            }
+        })
+
+        if (!isNetworkAvailable(context = this)) {
+            AlertDialog.Builder(this)
+                .setTitle("Info")
+                .setMessage("Seems you have no internet connection. Functionality limited. :( ")
+                .setPositiveButton("OK", null)
+                .create()
+                .show()
+        }
+
     }
 
     private fun setAdapterAndLayoutManager() {

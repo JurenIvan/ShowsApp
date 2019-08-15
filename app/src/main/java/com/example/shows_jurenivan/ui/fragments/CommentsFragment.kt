@@ -1,20 +1,27 @@
 package com.example.shows_jurenivan.ui.fragments
 
+import android.app.ProgressDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.adapters.CommentsAdapter
 import com.example.shows_jurenivan.data.dataStructures.Comment
 import com.example.shows_jurenivan.data.dataStructures.ResponseData
 import com.example.shows_jurenivan.data.viewModels.CommentsViewModel
+import com.example.shows_jurenivan.isNetworkAvailable
+import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_comments.*
+import kotlinx.android.synthetic.main.fragment_comments.progressBar
+import kotlinx.android.synthetic.main.fragment_show.*
 
 class CommentsFragment : Fragment() {
 
@@ -30,6 +37,8 @@ class CommentsFragment : Fragment() {
     private lateinit var viewModel: CommentsViewModel
     private lateinit var adapter: CommentsAdapter
     private var episodeId: String? = null
+    private var progressDialog:ProgressDialog?=null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +79,32 @@ class CommentsFragment : Fragment() {
             if (!commentInput.text.isNullOrBlank()) {
                 episodeId?.let { it1 -> Comment(commentInput.text.toString(), it1, null, null) }
                     ?.let { it2 -> viewModel.postComment(it2) }
+            }
+        }
+
+        viewModel.errorLiveData.observe(this, Observer { errors ->
+            if (errors!=null && errors.isNotBlank()) {
+                Toast.makeText(context, errors, Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.loadingLiveData.observe(this, Observer { loading ->
+            if (loading == null || !loading) {
+                progressDialog?.cancel()
+            } else {
+                if(progressDialog==null)
+                    progressDialog = ProgressDialog.show(context, "Shows", "Loading", true, true)
+            }
+        })
+
+        context?.let {
+            if (!isNetworkAvailable(context = it)) {
+                AlertDialog.Builder(it)
+                    .setTitle("Info")
+                    .setMessage("Seems you have no internet connection. Functionality limited. :( ")
+                    .setPositiveButton("OK", null)
+                    .create()
+                    .show()
             }
         }
     }

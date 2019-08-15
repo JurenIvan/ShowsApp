@@ -13,6 +13,15 @@ class EpisodeViewModel : ViewModel() {
     private val episodeLiveData = MutableLiveData<ResponseData<Episode>>()
     private var episodeData = ResponseData<Episode>(isSuccessful = false)
 
+    private val loadingMutableLiveData = MutableLiveData<Boolean>()
+    private val errorMutableLiveData = MutableLiveData<String>()
+
+    val loadingLiveData: LiveData<Boolean>
+        get() = loadingMutableLiveData
+
+    val errorLiveData: LiveData<String>
+        get() = errorMutableLiveData
+
     val episodeliveData: LiveData<ResponseData<Episode>>
         get() = episodeLiveData
 
@@ -23,6 +32,16 @@ class EpisodeViewModel : ViewModel() {
             if (!(it == null || it.data == null || !it.isSuccessful)) {
                 episodeLiveData.value = ResponseData(data = it.data, isSuccessful = true)
             } else episodeLiveData.value = ResponseData(data = null, isSuccessful = false)
+        }
+
+        InternetRepository.getErrorBooleanLiveData().observeForever {
+            if (it != null) {
+                loadingMutableLiveData.value = it>0
+            }
+        }
+
+        InternetRepository.getErrorStringLiveData().observeForever {
+            errorMutableLiveData.value = it
         }
     }
 

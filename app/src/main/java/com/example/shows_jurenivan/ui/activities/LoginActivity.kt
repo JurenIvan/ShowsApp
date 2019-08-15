@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +15,7 @@ import android.widget.Toast
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.User
 import com.example.shows_jurenivan.data.viewModels.LoginViewModel
+import com.example.shows_jurenivan.isNetworkAvailable
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -65,7 +67,6 @@ class LoginActivity : AppCompatActivity() {
 
             viewModel.loginUser(user)
             Toast.makeText(this, "Connecting Servers", Toast.LENGTH_SHORT).show()
-            android_logo.startLoading()
 
             viewModel.liveData.observe(this, Observer { userResponse ->
                 if (switch) {
@@ -73,11 +74,24 @@ class LoginActivity : AppCompatActivity() {
                         userResponse.data?.token?.let { it1 -> startHomeScreen(it1) }
                         finish()
                         switch = false
-                    } else {
-                        android_logo.endLoading()
                     }
                 }
             })
+
+            viewModel.errorLiveData.observe(this, Observer { errors ->
+                if (errors != null && errors?.isNotEmpty()) {
+                    Toast.makeText(this, errors, Toast.LENGTH_SHORT).show()
+                }
+            })
+
+            viewModel.loadingLiveData.observe(this, Observer { loading ->
+                if (loading == null || !loading) {
+                    android_logo.endLoading()
+                } else {
+                    android_logo.startLoading()
+                }
+            })
+
         }
 
         createAccount.setOnClickListener {
@@ -94,6 +108,16 @@ class LoginActivity : AppCompatActivity() {
             android_logo.startLoading()
             android_logo.endLoading()
         }
+
+        if (!isNetworkAvailable(context = this)) {
+            AlertDialog.Builder(this)
+                .setTitle("Info")
+                .setMessage("Seems you have no internet connection. Functionality limited. :( ")
+                .setPositiveButton("OK", null)
+                .create()
+                .show()
+        }
+
     }
 
     private fun startHomeScreen(token: String) {

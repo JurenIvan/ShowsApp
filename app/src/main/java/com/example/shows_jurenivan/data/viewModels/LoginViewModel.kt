@@ -12,6 +12,15 @@ class LoginViewModel : ViewModel() {
 
     private val tokenLiveData = MutableLiveData<ResponseData<Token>>()
 
+    private val loadingMutableLiveData = MutableLiveData<Boolean>()
+    private val errorMutableLiveData = MutableLiveData<String>()
+
+    val loadingLiveData: LiveData<Boolean>
+        get() = loadingMutableLiveData
+
+    val errorLiveData: LiveData<String>
+        get() = errorMutableLiveData
+
     val liveData: LiveData<ResponseData<Token>>
         get() = tokenLiveData
 
@@ -21,6 +30,16 @@ class LoginViewModel : ViewModel() {
         tokenLiveData.value = token
         InternetRepository.getTokenLiveData().observeForever {
             tokenLiveData.value = it
+        }
+
+        InternetRepository.getErrorBooleanLiveData().observeForever {
+            if (it != null) {
+                loadingMutableLiveData.value = it>0
+            }
+        }
+
+        InternetRepository.getErrorStringLiveData().observeForever {
+            errorMutableLiveData.value = it
         }
     }
 

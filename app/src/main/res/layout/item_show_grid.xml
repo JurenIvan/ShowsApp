@@ -6,7 +6,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/showListID"
-android:layout_margin="16dp"
+        android:layout_margin="4dp"
+
 >
 
     <ImageView
@@ -24,7 +25,7 @@ android:layout_margin="16dp"
             android:gravity="center"
             android:textSize="20sp"
             tools:text="@string/placeholder"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
     />
 
 

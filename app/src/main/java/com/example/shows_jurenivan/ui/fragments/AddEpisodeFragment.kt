@@ -27,6 +27,7 @@ import android.widget.NumberPicker
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.viewModels.ShowViewModel
+import com.example.shows_jurenivan.isNetworkAvailable
 import com.example.shows_jurenivan.ui.activities.BackKeyInterface
 import kotlinx.android.synthetic.main.fragment_add_episode.*
 import java.io.File
@@ -109,6 +110,18 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
                 String.format("S%02d E%02d", Integer.parseInt(seasonNum), Integer.parseInt(episodeNum))
             image.setImageURI(fileURL)
         }
+
+        context?.let {
+            if (!isNetworkAvailable(context = it)) {
+                AlertDialog.Builder(it)
+                    .setTitle("Info")
+                    .setMessage("Seems you have no internet connection. Functionality limited. :( ")
+                    .setPositiveButton("OK", null)
+                    .create()
+                    .show()
+            }
+        }
+
     }
 
     private fun saveEpisode() {

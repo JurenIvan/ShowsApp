@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.Comment
 import kotlinx.android.synthetic.main.item_comment.view.*
+import kotlin.math.absoluteValue
 
 class CommentsAdapter :
     RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
@@ -46,14 +47,18 @@ class CommentsAdapter :
             }
         }
 
-        private fun getRandomTimeSincePost(comment:String): CharSequence? = arrayListOf(
+        private fun getRandomTimeSincePost(comment: String): CharSequence? = arrayListOf(
             "5 min", "10 h", "14 min", "8 min", "12 s",
             "6 h", "30 min", "12 min", "9 min", "7 min", "1d 5h", "12 h"
-        )[comment.hashCode()%12]
+        )[getHashedNum(comment, 12)]
+
+        private fun getHashedNum(comment: String, mod: Int): Int {
+            return (comment.hashCode() % mod).absoluteValue
+        }
 
 
         private fun selectRandomUserImage(userEmail: String): Int {
-            return when (userEmail.hashCode() % 3) {
+            return when (getHashedNum(userEmail, 12)) {
                 0 -> R.drawable.ic_img_placeholder_user_1
                 1 -> R.drawable.ic_img_placeholder_user_2
                 else -> R.drawable.ic_img_placeholder_user_3

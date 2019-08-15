@@ -47,7 +47,7 @@ class ShowsAdapter(private val gridActive:Boolean,val clickAction: (Int) -> Unit
                 }
 
                 Picasso.get().load(RetrofitClient.BASE_URL + show.imageURL)
-                    .placeholder(R.drawable.ic_img_placeholder_episodes).error(R.drawable.ic_img_placeholder_episodes)
+                    .placeholder(R.drawable.rc8j4).error(R.drawable.ic_img_placeholder_episodes)
                     .into(imageViewPicture)
 
                 showListID.setOnClickListener { clickAction(position) }

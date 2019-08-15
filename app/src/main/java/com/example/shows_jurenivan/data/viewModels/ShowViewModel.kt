@@ -18,6 +18,15 @@ class ShowViewModel : ViewModel() {
     private val showLiveData = MutableLiveData<ResponseData<Show>>()
     private val likeMutableStatusLiveData = MutableLiveData<Int>()
 
+    private val loadingMutableLiveData = MutableLiveData<Boolean>()
+    private val errorMutableLiveData = MutableLiveData<String>()
+
+    val loadingLiveData: LiveData<Boolean>
+        get() = loadingMutableLiveData
+
+    val errorLiveData: LiveData<String>
+        get() = errorMutableLiveData
+
     var episodeListData = ResponseData<List<Episode>>(isSuccessful = false)
     private var showData = ResponseData<Show>(isSuccessful = false)
 
@@ -34,10 +43,13 @@ class ShowViewModel : ViewModel() {
         episodesLiveData.value = episodeListData
         showLiveData.value = showData
 
-
         InternetRepository.getEpisodesLiveData().observeForever {
             if (it != null && it.isSuccessful) {
-                val sortedData = it.data?.sortedWith(compareBy({ it.season }, { it.episode }))
+
+                val filteredList = mutableListOf<Episode>()
+                it.data?.forEach { ep -> if (checkParameters(ep)) filteredList.add(ep) }
+
+                val sortedData = filteredList.sortedWith(compareBy({ ep -> ep.season }, { ep -> ep.episode }))
                 episodesLiveData.value = ResponseData(sortedData, true)
             } else episodesLiveData.value = it
         }
@@ -45,6 +57,35 @@ class ShowViewModel : ViewModel() {
             showLiveData.value = it
         }
 
+        InternetRepository.getErrorBooleanLiveData().observeForever {
+            if (it != null) {
+                loadingMutableLiveData.value = it > 0
+            }
+        }
+
+        InternetRepository.getErrorStringLiveData().observeForever {
+            errorMutableLiveData.value = it
+        }
+
+    }
+
+    private fun checkParameters(episode: Episode): Boolean {
+        if (episode.title.isBlank()) return false
+        if (episode.season.isBlank()) return false
+        if (episode.episode.isBlank()) return false
+        try {
+            if (checkValues(Integer.parseInt(episode.episode), 99)) return false
+            if (checkValues(Integer.parseInt(episode.season), 20)) return false
+        } catch (e: Exception) {
+            return false
+        }
+        return true
+    }
+
+
+    private fun checkValues(number: Int, upperLimit: Int): Boolean {
+        if (number < 1 || number > upperLimit) return true
+        return false
     }
 
     fun setShow(showId: String) {

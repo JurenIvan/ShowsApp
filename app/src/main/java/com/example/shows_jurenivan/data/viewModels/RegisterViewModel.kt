@@ -13,6 +13,15 @@ class RegisterViewModel : ViewModel() {
     private val registerMutableLiveData = MutableLiveData<ResponseData<User>>()
     private val tokenMutableLiveData = MutableLiveData<ResponseData<Token>>()
 
+    private val loadingMutableLiveData = MutableLiveData<Boolean>()
+    private val errorMutableLiveData = MutableLiveData<String>()
+
+    val loadingLiveData: LiveData<Boolean>
+        get() = loadingMutableLiveData
+
+    val errorLiveData: LiveData<String>
+        get() = errorMutableLiveData
+
     val registerLiveData: LiveData<ResponseData<User>>
         get() = registerMutableLiveData
     val tokenLiveData: LiveData<ResponseData<Token>>
@@ -28,6 +37,16 @@ class RegisterViewModel : ViewModel() {
         }
         InternetRepository.getTokenLiveData().observeForever {
             tokenMutableLiveData.value = it
+        }
+
+        InternetRepository.getErrorBooleanLiveData().observeForever {
+            if (it != null) {
+                loadingMutableLiveData.value = it>0
+            }
+        }
+
+        InternetRepository.getErrorStringLiveData().observeForever {
+            errorMutableLiveData.value = it
         }
     }
 
