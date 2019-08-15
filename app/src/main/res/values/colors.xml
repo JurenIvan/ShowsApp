@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ff758c</color>
     <color name="colorButtonDisabled">#ffccd5</color>
     <color name="showsYearsColor">#a0a0a0</color>
     <color name="textLight">#505050</color>
