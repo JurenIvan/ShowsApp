@@ -254,7 +254,8 @@ object InternetRepository {
         loadingProcessesMutableLiveData.value = loadingProcessesMutableLiveData.value?.plus(1)
         if (user.email == null) return
 
-        apiService?.loginUser(user)?.enqueue(object : retrofit2.Callback<ResponseData<Token>> {
+
+        apiService?.loginUser(user)?.enqueue(object : Callback<ResponseData<Token>> {
 
             override fun onFailure(call: Call<ResponseData<Token>>, t: Throwable) {
                 tokenLiveData.value = ResponseData(isSuccessful = false)
@@ -279,7 +280,7 @@ object InternetRepository {
         loadingProcessesMutableLiveData.value = loadingProcessesMutableLiveData.value?.plus(1)
         if (user.email == null) return
 
-        apiService?.registerUser(user)?.enqueue(object : retrofit2.Callback<ResponseData<User>> {
+        apiService?.registerUser(user)?.enqueue(object : Callback<ResponseData<User>> {
 
             override fun onFailure(call: Call<ResponseData<User>>, t: Throwable) {
                 userLiveData.value = ResponseData(isSuccessful = false)

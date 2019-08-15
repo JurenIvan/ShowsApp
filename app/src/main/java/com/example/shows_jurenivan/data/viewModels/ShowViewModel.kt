@@ -16,6 +16,7 @@ class ShowViewModel : ViewModel() {
 
     private val episodesLiveData = MutableLiveData<ResponseData<List<Episode>>>()
     private val showLiveData = MutableLiveData<ResponseData<Show>>()
+
     private val likeMutableStatusLiveData = MutableLiveData<Int>()
 
     private val loadingMutableLiveData = MutableLiveData<Boolean>()
@@ -53,6 +54,7 @@ class ShowViewModel : ViewModel() {
                 episodesLiveData.value = ResponseData(sortedData, true)
             } else episodesLiveData.value = it
         }
+
         InternetRepository.getShowLiveData().observeForever {
             showLiveData.value = it
         }
@@ -89,6 +91,10 @@ class ShowViewModel : ViewModel() {
     }
 
     fun setShow(showId: String) {
+
+        showLiveData.value= ResponseData(isSuccessful = false)
+        episodesLiveData.value=ResponseData(isSuccessful = false)
+
         InternetRepository.fetchShow(showId)
         InternetRepository.fetchEpisodes(showId)
         ShowsDatabaseRepositoryRepository.getShow(showId).observeForever {
