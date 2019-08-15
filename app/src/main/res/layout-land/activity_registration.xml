@@ -34,7 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/toolbar"
-                    android:navigationIcon="?attr/homeAsUpIndicator"
+                    android:navigationIcon="@drawable/ic_back_arrow_light"
                     app:title="@string/register"
                     style="@style/MyToolbarTheme"/>
 
