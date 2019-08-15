@@ -77,6 +77,7 @@ class CommentsFragment : Fragment() {
                 episodeId?.let { it1 -> Comment(commentInput.text.toString(), it1, null, null) }
                     ?.let { it2 -> viewModel.postComment(it2) }
             }
+            commentInput.text.clear()
         }
 
         viewModel.errorLiveData.observe(this, Observer { errors ->
