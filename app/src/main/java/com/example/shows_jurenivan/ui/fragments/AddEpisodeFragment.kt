@@ -93,8 +93,8 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         pictureBackground.setOnClickListener { selectPictureDialog() }
         uploadPhoto.setOnClickListener { selectPictureDialog() }
         changePhoto.setOnClickListener { selectPictureDialog() }
-        episodeTitle.addTextChangedListener(textWatcher(1, 20))
-        episodeDescription.addTextChangedListener(textWatcher(1, 20))
+        episodeTitle.addTextChangedListener(textWatcher(1, 50))
+        episodeDescription.addTextChangedListener(textWatcher(1, 50))
 
         btnSave.setOnClickListener { saveEpisode() }
 
