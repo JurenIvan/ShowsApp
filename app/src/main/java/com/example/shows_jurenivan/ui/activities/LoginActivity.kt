@@ -97,7 +97,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun startHomeScreen(userName: String, token: String) {
-
         sharedPref.edit()
             .putString(USERNAME, tvUsername.text.toString().trim())
             .putString(TOKEN, token)
@@ -125,7 +124,6 @@ class LoginActivity : AppCompatActivity() {
         override fun afterTextChanged(s: Editable?) {
             btnLogIn.isEnabled =
                 checkAllPasswordConditions(passwordTextEditor) && checkAllUsernameConditions(tvUsername)
-
         }
 
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -139,5 +137,4 @@ class LoginActivity : AppCompatActivity() {
     fun checkAllUsernameConditions(etUsername: EditText?): Boolean {
         return etUsername?.text?.length?.let { len -> len >= MIN_EMAIL_LEN } ?: false
     }
-
 }

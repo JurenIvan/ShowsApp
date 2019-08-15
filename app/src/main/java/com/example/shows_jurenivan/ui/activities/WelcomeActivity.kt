@@ -1,5 +1,6 @@
 package com.example.shows_jurenivan.ui.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,12 +25,14 @@ class WelcomeActivity : AppCompatActivity() {
 
     private val handler = Handler()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 
         val username = intent.getStringExtra(EMAIL_KEY).split("@")[0]
-        welcome_user.text = "Welcome $username"
+        @SuppressLint("SetTextI18n")
+        welcome_user.text = getString(R.string.welcome) + username
 
         postDelayed()
     }

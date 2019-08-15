@@ -23,20 +23,11 @@ class ShowsAdapter(private val gridActive:Boolean,val clickAction: (Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
         if (gridActive) {
-            return ViewHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_show_grid,
-                    parent,
-                    false
-                )
-            )
+            return ViewHolder(LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_show_grid, parent, false))
         }
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_show_list,
-                parent,
-                false
-            )
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(
+                R.layout.item_show_list, parent, false)
         )
     }
 

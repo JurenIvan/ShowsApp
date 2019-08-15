@@ -34,20 +34,21 @@ class EpisodeAdapter(val clickAction: (Int) -> Unit = {}) :
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(position: Int) {
-            if (checkParameters(episodes[position])
-            ) {
+            if (checkParameters(episodes[position])) {
                 with(itemView) {
-                    seasonAndEpisode.text =
-                        String.format(
-                            "S%02d E%02d",
-                            Integer.parseInt(episodes[position].season),
-                            Integer.parseInt(episodes[position].episode)
-                        )
+                    seasonAndEpisode.text = getSeasonAndEpisodeFormatedText(position)
                     episodeTitle.text = episodes[position].title
-
-                    episodeListId.setOnClickListener{clickAction(position)}
+                    episodeListId.setOnClickListener { clickAction(position) }
                 }
             }
+        }
+
+        private fun getSeasonAndEpisodeFormatedText(position: Int): String {
+            return String.format(
+                "S%02d E%02d",
+                Integer.parseInt(episodes[position].season),
+                Integer.parseInt(episodes[position].episode)
+            )
         }
 
         private fun checkParameters(episode: Episode): Boolean {

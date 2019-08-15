@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_comments.*
 class CommentsFragment : Fragment() {
 
     companion object {
-        const val EPISODEID_KEY = "EpisodeID"
+        private const val EPISODEID_KEY = "EpisodeID"
         fun newInstance(episodeId: String?) = CommentsFragment().apply {
             val args = Bundle()
             args.putString(EPISODEID_KEY, episodeId)
@@ -58,23 +58,20 @@ class CommentsFragment : Fragment() {
         viewModel.commentsliveData.observe(this, Observer { comments ->
             if (comments != null)
                 comments.data?.let { adapter.setData(it) }
-            else{ adapter.setData(listOf()) }
+            else {
+                adapter.setData(listOf())
+            }
+            adapter.notifyDataSetChanged()
             checkEmptiness(comments)
         })
 
 
         post.setOnClickListener {
-
             if (!commentInput.text.isNullOrBlank()) {
                 episodeId?.let { it1 -> Comment(commentInput.text.toString(), it1, null, null) }
                     ?.let { it2 -> viewModel.postComment(it2) }
             }
-
-            recyclerView.invalidate()
-            (recyclerView.adapter as CommentsAdapter).notifyDataSetChanged()
-
         }
-
     }
 
     private fun checkEmptiness(comments: ResponseData<List<Comment>>?) {

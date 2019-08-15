@@ -42,14 +42,14 @@ class CommentsAdapter :
                 comment.userEmail?.let { selectRandomUserImage(it) }?.let { image.setImageResource(it) }
                 userName.text = comment.userEmail?.split("@")?.get(0) ?: ""
                 text.text = comment.text
-                timeSincePost.text = getRandomTimeSincePost()
+                timeSincePost.text = getRandomTimeSincePost(comment.text)
             }
         }
 
-        private fun getRandomTimeSincePost(): CharSequence? = arrayListOf(
+        private fun getRandomTimeSincePost(comment:String): CharSequence? = arrayListOf(
             "5 min", "10 h", "14 min", "8 min", "12 s",
             "6 h", "30 min", "12 min", "9 min", "7 min", "1d 5h", "12 h"
-        )[(Math.random() * 12).toInt()]
+        )[comment.hashCode()%12]
 
 
         private fun selectRandomUserImage(userEmail: String): Int {

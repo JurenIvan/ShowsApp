@@ -29,7 +29,6 @@ interface Api {
     @GET("/api/episodes/{episodeId}")
     fun getEpisode(@Path("episodeId") episodeId: String): Call<ResponseData<Episode>>
 
-
     @GET("/api/episodes/{episodeId}/comments")
     fun getComments(@Path("episodeId") episodeId: String): Call<ResponseData<List<Comment>>>
 
@@ -39,7 +38,6 @@ interface Api {
     @POST("/api/media")
     @Multipart
     fun uploadMedia(@Header("Authorization") token: String, @Part("file\"; filename=\"image.jpg\"") request: RequestBody): Call<ResponseData<MediaResponse>>
-
 
     @POST("/api/shows/{showId}/like")
     fun likeShow(@Header("Authorization") token: String, @Path("showId") showId: String): Call<Void>

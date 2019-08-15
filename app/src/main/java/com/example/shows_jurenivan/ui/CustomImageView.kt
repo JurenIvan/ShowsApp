@@ -14,7 +14,7 @@ class CustomImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private var shouldStop:Boolean = false
+    private var shouldStop: Boolean = false
 
     init {
         View.inflate(context, R.layout.custom_image_view, this)
@@ -23,24 +23,25 @@ class CustomImageView @JvmOverloads constructor(
     }
 
     private fun updateView() {
-       rotator.setImageResource(R.drawable.ic_img_logo_mark)
+        rotator.setImageResource(R.drawable.ic_img_logo_mark)
     }
 
-    fun startLoading(){
-        this.shouldStop=false
+    fun startLoading() {
+        this.shouldStop = false
         rotatorLayout.animate()
-          .rotationBy(120f)
-          .setDuration(1000)
-          .setInterpolator(OvershootInterpolator(3f))
-          .setListener(object: AnimatorListenerAdapter() {
-              override fun onAnimationEnd(animation: Animator?) {
-                  if(!shouldStop) startLoading()
-              }})
-          .start()
+            .rotationBy(120f)
+            .setDuration(1000)
+            .setInterpolator(OvershootInterpolator(3f))
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    if (!shouldStop) startLoading()
+                }
+            })
+            .start()
     }
 
     fun endLoading() {
-        this.shouldStop=true
+        this.shouldStop = true
     }
 
 }

@@ -9,30 +9,17 @@ import java.util.concurrent.Executors
 
 object ShowsDatabaseRepositoryRepository {
 
-    private val database: ShowsDatabase = Room.databaseBuilder(
-        MyShowsApp.instance,
-        ShowsDatabase::class.java, "shows-database"
-    )
-        .fallbackToDestructiveMigration()
-        .build()
+    private val database: ShowsDatabase =
+        Room.databaseBuilder(MyShowsApp.instance, ShowsDatabase::class.java, "shows-database")
+            .fallbackToDestructiveMigration()
+            .build()
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    fun getShows(): LiveData<List<Show>> = database.showsDao().getAllShows()
-
     fun getShow(id: String): LiveData<Show> = database.showsDao().getShow(id)
 
-
-    fun updateShow(show: Show) {
-        executor.execute {
-            database.showsDao().updateShow(show)
-        }
-    }
-
     fun insertShow(show: Show) {
-        executor.execute {
-            database.showsDao().insertShow(show)
-        }
+        executor.execute { database.showsDao().insertShow(show) }
     }
 
 }

@@ -7,17 +7,10 @@ import com.example.shows_jurenivan.data.dataStructures.Show
 @Dao
 interface ShowsDao {
 
-    @Query("SELECT * from shows")
-    fun getAllShows(): LiveData<List<Show>>
-
     @Query("SELECT * from shows where id=:showId")
     fun getShow(showId: String): LiveData<Show>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertShow(vararg show: Show)
-
-
-    @Update
-    fun updateShow(show: Show)
 
 }

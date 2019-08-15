@@ -17,7 +17,6 @@ import com.example.shows_jurenivan.data.dataStructures.User
 import com.example.shows_jurenivan.data.viewModels.RegisterViewModel
 import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllPasswordConditions
 import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllUsernameConditions
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_registration.*
 
 
@@ -77,6 +76,7 @@ class RegistrationActivity : AppCompatActivity() {
                     viewModel.registerLiveData.removeObservers(this)
                 }
             })
+
             viewModel.tokenLiveData.observe(this, Observer { token ->
                 if (token?.isSuccessful == true) {
                     val userEmail = viewModel.registerLiveData.value?.data?.email

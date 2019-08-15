@@ -23,10 +23,8 @@ class HomeActivity : AppCompatActivity() {
 
     companion object {
         fun newInstance(context: Context): Intent {
-            val intent = Intent(context, HomeActivity::class.java)
-            return intent
+            return Intent(context, HomeActivity::class.java)
         }
-
         private const val IS_GRID = "IsGrid"
     }
 

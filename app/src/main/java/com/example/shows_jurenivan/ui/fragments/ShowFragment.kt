@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,6 @@ import com.example.shows_jurenivan.adapters.EpisodeAdapter
 import com.example.shows_jurenivan.data.RetrofitClient
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.dataStructures.ResponseData
-import com.example.shows_jurenivan.data.dataStructures.Show
-import com.example.shows_jurenivan.data.repositories.ShowsDatabaseRepositoryRepository
 import com.example.shows_jurenivan.data.viewModels.ShowViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_show.*
@@ -81,8 +78,8 @@ class ShowFragment : Fragment() {
         })
 
         viewModel.likeStatusLiveData.observe(this, Observer {
-                updateLikeDislike(it)
-            })
+            updateLikeDislike(it)
+        })
 
         viewModel.showliveData.observe(this, Observer {
             if (it != null) {

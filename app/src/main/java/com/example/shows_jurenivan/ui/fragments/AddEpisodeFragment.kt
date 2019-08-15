@@ -86,7 +86,7 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         image.setImageResource(R.drawable.ic_camera)
 
         viewModel = ViewModelProviders.of(this).get(ShowViewModel::class.java)
-        showId?.let { viewModel.setShow(it) }
+        viewModel.setShow(showId)
 
         seasonEpisodeNumberSelector.setOnClickListener { createNumberPicker() }
         pictureBackground.setOnClickListener { selectPictureDialog() }
@@ -333,10 +333,7 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         val selectedImage = data?.data ?: return null
         val cursor = context?.contentResolver?.query(
             selectedImage,
-            arrayOf(MediaStore.Images.ImageColumns.DATA),
-            null,
-            null,
-            null
+            arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null
         )
         cursor?.moveToFirst()
 

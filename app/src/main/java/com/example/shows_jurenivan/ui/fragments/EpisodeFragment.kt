@@ -55,7 +55,11 @@ class EpisodeFragment : Fragment() {
             if (it != null && it.isSuccessful) {
                 episodeDescription.text = it.data?.description
                 seasonAndEpisode.text =
-                    String.format("S%02d Ep%d", Integer.parseInt(it.data?.season ?:"0"), Integer.parseInt(it.data?.episode?:"0"))
+                    String.format(
+                        "S%02d Ep%d",
+                        Integer.parseInt(it.data?.season ?: "0"),
+                        Integer.parseInt(it.data?.episode ?: "0")
+                    )
                 episodeTitle.text = it.data?.title
 
                 Picasso.get().load(RetrofitClient.BASE_URL + it.data?.imageUrl)
