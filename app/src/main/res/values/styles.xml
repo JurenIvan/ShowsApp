@@ -21,6 +21,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">15dp</item>
         <item name="android:elevation">5dp</item>
+        <item name="android:colorAccent">#ff758c</item>
     </style>
 
     <style name="TextInputFields" parent="Widget.Design.TextInputLayout">
