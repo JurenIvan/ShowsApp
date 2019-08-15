@@ -88,7 +88,7 @@ class RegistrationActivity : AppCompatActivity() {
                             .putBoolean(LoginActivity.REMEMBER_ME, intent.getBooleanExtra(REMEMBER_ME_CHECK, false))
                             .apply()
 
-                        startActivity(userEmail?.let { it1 -> WelcomeActivity.newInstance(this, userEmail) })
+                        startActivity(userEmail?.let { _ -> WelcomeActivity.newInstance(this, userEmail) })
                         finishAffinity()
                     }
                 } else {

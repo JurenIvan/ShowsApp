@@ -86,7 +86,7 @@ class ShowViewModel : ViewModel() {
         show.likesCount = showLiveData.value?.data?.likesCount?.plus(change) ?: likeStatus
         show.description = showLiveData.value?.data?.description
         showLiveData.value = ResponseData(data = show, isSuccessful = true)
-        ShowsDatabaseRepositoryRepository.insertShow(show)
+        ShowsDatabaseRepositoryRepository.updateShow(show)
     }
 
     fun disLikeShow(showId: String) {

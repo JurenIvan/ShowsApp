@@ -67,10 +67,10 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Connecting Servers", Toast.LENGTH_SHORT).show()
             android_logo.startLoading()
 
-            viewModel.liveData.observe(this, Observer { user ->
+            viewModel.liveData.observe(this, Observer { userResponse ->
                 if (switch) {
-                    if (user?.isSuccessful == true) {
-                        user.data?.token?.let { it1 -> startHomeScreen(tvUsername.text.toString(), it1) }
+                    if (userResponse?.isSuccessful == true) {
+                        userResponse.data?.token?.let { it1 -> startHomeScreen(it1) }
                         finish()
                         switch = false
                     } else {
@@ -96,7 +96,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun startHomeScreen(userName: String, token: String) {
+    private fun startHomeScreen(token: String) {
         sharedPref.edit()
             .putString(USERNAME, tvUsername.text.toString().trim())
             .putString(TOKEN, token)

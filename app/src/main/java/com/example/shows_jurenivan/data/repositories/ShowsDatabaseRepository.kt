@@ -22,4 +22,8 @@ object ShowsDatabaseRepositoryRepository {
         executor.execute { database.showsDao().insertShow(show) }
     }
 
+    fun updateShow(show:Show){
+        executor.execute { database.showsDao().updateShow(show) }
+    }
+
 }
