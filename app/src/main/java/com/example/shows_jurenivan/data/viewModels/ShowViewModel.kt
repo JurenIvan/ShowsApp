@@ -63,59 +63,48 @@ class ShowViewModel : ViewModel() {
     fun likeShow(showId: String) {
         var flag = true
         ShowsDatabaseRepositoryRepository.getShow(showId).observeForever { show ->
-            if (flag) {
+            if (flag && show != null) {
                 flag = false
-                if (show?.likeStatus == null) {
-                    InternetRepository.likeShow(showId, getTokenFromSharedPref())
-                    if (show != null) {
-                        show.likeStatus = 1
-                        likeMutableStatusLiveData.value = 1
-                        show.likesCount = showLiveData.value?.data?.likesCount?.plus(1) ?: 1
-                        show.description = showLiveData.value?.data?.description
-                        showLiveData.value = ResponseData(data = show, isSuccessful = true)
-                        ShowsDatabaseRepositoryRepository.updateShow(show)
+                when (show.likeStatus) {
+                    null -> {
+                        InternetRepository.likeShow(showId, getTokenFromSharedPref())
+                        prepareShowAndData(show, 1, 1)
                     }
-                } else if (show?.likeStatus == -1) {
-                    InternetRepository.likeShow(showId, getTokenFromSharedPref())
-                    InternetRepository.likeShow(showId, getTokenFromSharedPref())
-                    if (show != null) {
-                        show.likeStatus = 1
-                        likeMutableStatusLiveData.value = 1
-                        show.likesCount = showLiveData.value?.data?.likesCount?.plus(2) ?: 1
-                        showLiveData.value = ResponseData(data = show, isSuccessful = true)
-                        ShowsDatabaseRepositoryRepository.updateShow(show)
+                    -1 -> {
+                        InternetRepository.likeShow(showId, getTokenFromSharedPref())
+                        InternetRepository.likeShow(showId, getTokenFromSharedPref())
+                        prepareShowAndData(show, 1, 2)
                     }
                 }
             }
         }
     }
 
+    private fun prepareShowAndData(show: Show, likeStatus: Int, change: Int) {
+        likeMutableStatusLiveData.value = likeStatus
+        show.likeStatus = likeStatus
+        show.likesCount = showLiveData.value?.data?.likesCount?.plus(change) ?: likeStatus
+        show.description = showLiveData.value?.data?.description
+        showLiveData.value = ResponseData(data = show, isSuccessful = true)
+        ShowsDatabaseRepositoryRepository.insertShow(show)
+    }
+
     fun disLikeShow(showId: String) {
         var flag = true
         ShowsDatabaseRepositoryRepository.getShow(showId).observeForever { show ->
-            if (flag) {
+            if (flag && show != null) {
                 flag = false
-                if (show?.likeStatus == null) {
-                    likeMutableStatusLiveData.value = -1
-                    InternetRepository.disLikeShow(showId, getTokenFromSharedPref())
-                    if (show != null) {
-                        show.likeStatus = -1
-                        show.likesCount = showLiveData.value?.data?.likesCount?.minus(1) ?: -1
-                        showLiveData.value = ResponseData(data = show, isSuccessful = true)
-                        ShowsDatabaseRepositoryRepository.updateShow(show)
+                when (show.likeStatus) {
+                    null -> {
+                        InternetRepository.disLikeShow(showId, getTokenFromSharedPref())
+                        prepareShowAndData(show, -1, -1)
                     }
-                } else
-                    if (show?.likeStatus == 1) {
-                        likeMutableStatusLiveData.value = -1
+                    1 -> {
                         InternetRepository.disLikeShow(showId, getTokenFromSharedPref())
                         InternetRepository.disLikeShow(showId, getTokenFromSharedPref())
-                        if (show != null) {
-                            show.likeStatus = -1
-                            show.likesCount = showLiveData.value?.data?.likesCount?.minus(2) ?: 1
-                            showLiveData.value = ResponseData(data = show, isSuccessful = true)
-                            ShowsDatabaseRepositoryRepository.updateShow(show)
-                        }
+                        prepareShowAndData(show, -1, -2)
                     }
+                }
             }
         }
     }
