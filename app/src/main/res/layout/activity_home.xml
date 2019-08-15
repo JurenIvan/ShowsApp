@@ -21,6 +21,7 @@
     />
 
     <TextView
+            android:fontFamily="@font/karla_bold"
             android:layout_margin="20dp"
             android:id="@+id/showsId"
             android:layout_width="wrap_content"

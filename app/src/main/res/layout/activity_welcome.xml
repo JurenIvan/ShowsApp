@@ -20,6 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
+            android:fontFamily="@font/karla_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/youreIn"
