@@ -53,7 +53,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:background="@drawable/logout_shape"
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="8dp"
+        />
 
 
         <android.support.v7.widget.RecyclerView
