@@ -16,10 +16,7 @@ import com.example.shows_jurenivan.data.RetrofitClient
 import com.example.shows_jurenivan.data.viewModels.EpisodeViewModel
 import com.example.shows_jurenivan.isNetworkAvailable
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_episode.*
-import kotlinx.android.synthetic.main.fragment_episode.progressBar
-import kotlinx.android.synthetic.main.fragment_show.*
 import kotlinx.android.synthetic.main.fragment_show.episodeDescription
 import kotlinx.android.synthetic.main.fragment_show.imgPlaceholder
 
@@ -37,7 +34,7 @@ class EpisodeFragment : Fragment() {
 
     private lateinit var viewModel: EpisodeViewModel
     private var episodeId: String? = null
-    private var progressDialog:ProgressDialog?=null
+    private var progressDialog: ProgressDialog? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +84,7 @@ class EpisodeFragment : Fragment() {
         }
 
         viewModel.errorLiveData.observe(this, Observer { errors ->
-            if (errors!=null && errors.isNotBlank()) {
+            if (errors != null && errors.isNotBlank()) {
                 Toast.makeText(context, errors, Toast.LENGTH_SHORT).show()
             }
         })
@@ -96,7 +93,7 @@ class EpisodeFragment : Fragment() {
             if (loading == null || !loading) {
                 progressDialog?.cancel()
             } else {
-                if(progressDialog==null)
+                if (progressDialog == null)
                     progressDialog = ProgressDialog.show(context, "Shows", "Loading", true, true)
             }
         })

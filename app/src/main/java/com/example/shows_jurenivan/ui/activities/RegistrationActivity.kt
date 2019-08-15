@@ -13,7 +13,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.User
@@ -21,11 +20,7 @@ import com.example.shows_jurenivan.data.viewModels.RegisterViewModel
 import com.example.shows_jurenivan.isNetworkAvailable
 import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllPasswordConditions
 import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllUsernameConditions
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_registration.*
-import kotlinx.android.synthetic.main.activity_registration.progressBar
-import kotlinx.android.synthetic.main.activity_registration.toolbar
-import kotlinx.android.synthetic.main.fragment_show.*
 
 
 class RegistrationActivity : AppCompatActivity() {
@@ -45,7 +40,7 @@ class RegistrationActivity : AppCompatActivity() {
 
     private lateinit var sharedPref: SharedPreferences
     private lateinit var viewModel: RegisterViewModel
-    private var progressDialog:ProgressDialog?=null
+    private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,7 +104,7 @@ class RegistrationActivity : AppCompatActivity() {
         password2.addTextChangedListener(textWatcher)
 
         viewModel.errorLiveData.observe(this, Observer { errors ->
-            if (errors!=null && errors.isNotBlank()) {
+            if (errors != null && errors.isNotBlank()) {
                 Toast.makeText(this, errors, Toast.LENGTH_SHORT).show()
             }
         })
@@ -118,7 +113,7 @@ class RegistrationActivity : AppCompatActivity() {
             if (loading == null || !loading) {
                 progressDialog?.cancel()
             } else {
-                if(progressDialog==null)
+                if (progressDialog == null)
                     progressDialog = ProgressDialog.show(this, "Shows", "Loading", true, true)
             }
         })
