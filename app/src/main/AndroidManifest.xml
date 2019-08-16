@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.shows_jurenivan">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -20,13 +21,21 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateVisible|adjustResize">
-        <activity android:name=".ui.activities.SplashActivity"  android:noHistory="true">
 
+        <activity
+                android:name=".ui.activities.SplashActivity"
+                android:noHistory="true"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.activities.WelcomeActivity"/>
+        <activity android:name=".ui.activities.RegistrationActivity"/>
+        <activity android:name=".ui.activities.HomeActivity"/>
+        <activity android:name=".ui.activities.LoginActivity"/>
 
         <provider
                 android:name="android.support.v4.content.FileProvider"
@@ -37,15 +46,6 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/file_paths"/>
         </provider>
-
-        <activity android:name=".ui.activities.WelcomeActivity"/>
-        <activity android:name=".ui.activities.RegistrationActivity"/>
-        <activity
-                android:name=".ui.activities.HomeActivity"
-                android:windowSoftInputMode="adjustPan|stateHidden"/>
-        <activity android:name=".ui.activities.LoginActivity">
-
-        </activity>
     </application>
 
 </manifest>

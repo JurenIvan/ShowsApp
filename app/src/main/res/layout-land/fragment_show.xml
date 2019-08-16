@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:background="@color/white"
+>
+    <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+    >
+
+        <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:id="@+id/appbar"
+        >
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/colappsingtoolbar"
+                    app:layout_scrollFlags="exitUntilCollapsed|scroll"
+                    tools:title="Show Title"
+                    app:expandedTitleMarginStart="48dp"
+                    app:expandedTitleMarginEnd="64dp"
+            >
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:id="@+id/imgPlaceholder"
+                        android:scaleType="centerCrop"
+                        tools:src="@drawable/p220_2"
+                />
+
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/gradient_rectangle"
+                        app:layout_constraintTop_toTopOf="parent"
+                />
+
+                <android.support.v7.widget.Toolbar
+                        android:layout_height="?attr/actionBarSize"
+                        android:layout_width="match_parent"
+                        android:id="@+id/toolbar"
+                        android:background="@drawable/gradient_rectangle_left"
+                        android:theme="@style/MyToolbarTheme"
+                        app:navigationIcon="?attr/homeAsUpIndicator"/>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+
+        <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/showDescriptionScrollView"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical"
+            >
+
+                <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            tools:visibility="visible"
+
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                    <ImageView
+                            android:id="@+id/dislikeImg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/dislike_button_selector"
+
+                            android:layout_marginEnd="8dp"
+
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/likeStatusNumberCount"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                            android:id="@+id/likeStatusNumberCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="#de000000"
+                            tools:text="128"
+
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageView
+                            android:id="@+id/likeImg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/like_button_selector"
+
+                            android:layout_marginStart="8dp"
+
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/likeStatusNumberCount"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.v4.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <TextView
+                            android:id="@+id/episodeDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#505050"
+                            android:textSize="16sp"
+                            android:lineSpacingExtra="8sp"
+                            tools:text="Description of Show"
+                    />
+
+                </android.support.v4.widget.NestedScrollView>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5">
+
+        <TextView
+                android:fontFamily="@font/karla_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/episodes"
+                android:textSize="20sp"
+                android:textColor="#2e2e2e"
+                android:id="@+id/textView2"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+        />
+
+        <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/recyclerViewEpisodes"
+                app:layout_constraintTop_toBottomOf="@id/textView2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+        />
+
+        <LinearLayout
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/noEntriesLayout"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+
+                app:layout_constraintTop_toBottomOf="@id/textView2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                android:layout_marginEnd="8dp">
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_img_placeholder_episodes"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/somebodyFallenAsleep"
+                    android:textColor="@color/textLight"
+                    android:gravity="center_horizontal"
+            />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dontWakeHimUp"
+                    android:textColor="@color/textLight"
+                    android:gravity="center_horizontal"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/addSomeEpisodes"
+                    android:textColor="@color/colorAccent"
+                    android:gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                style="@style/FloatingActionButton"
+                android:src="@drawable/ic_add"
+                app:fabSize="normal"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                app:layout_goneMarginEnd="20dp"
+                android:layout_marginEnd="16dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="16dp" app:layout_constraintBottom_toBottomOf="parent"
+
+        />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</LinearLayout>

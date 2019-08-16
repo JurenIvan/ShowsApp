@@ -27,6 +27,7 @@ import android.widget.NumberPicker
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.Episode
 import com.example.shows_jurenivan.data.viewModels.ShowViewModel
+import com.example.shows_jurenivan.isNetworkAvailable
 import com.example.shows_jurenivan.ui.activities.BackKeyInterface
 import kotlinx.android.synthetic.main.fragment_add_episode.*
 import java.io.File
@@ -61,13 +62,14 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
     private var seasonNum: String = "01"
     private var episodeNum: String = "01"
     private var fileURL: Uri? = null
+    private var photoPath: String? = null
 
-    private var showId: String? = null
+    private lateinit var showId: String
     private lateinit var viewModel: ShowViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.showId = arguments?.getString(SHOWID_KEY)
+        this.showId = arguments?.getString(SHOWID_KEY) ?: ""
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -76,9 +78,8 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         setHasOptionsMenu(true)
+
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow_light)
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
@@ -86,59 +87,16 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         image.setImageResource(R.drawable.ic_camera)
 
         viewModel = ViewModelProviders.of(this).get(ShowViewModel::class.java)
-        showId?.let { viewModel.setShow(it) }
+        viewModel.setShow(showId)
 
-        seasonEpisodeNumberSelector.setOnClickListener {
-            val builder = context?.let { AlertDialog.Builder(it) }
-            val view = layoutInflater.inflate(R.layout.number_picker, null)
-
-            val seasonNumberPicker = view.findViewById(R.id.seasonNumberPicker) as NumberPicker
-            val episodeNumberPicker = view.findViewById(R.id.episodeNumberPicker) as NumberPicker
-            val saveButton = view.findViewById(R.id.saveButton) as Button
-
-            seasonNumberPicker.maxValue = MAX_SEASON_NUM
-            seasonNumberPicker.minValue = MIN_SEASON_NUM
-            episodeNumberPicker.maxValue = MAX_EPISODE_NUM
-            episodeNumberPicker.minValue = MIN_EPISODE_NUM
-
-            //   if (seasonNum != null)
-            seasonNumberPicker.value = Integer.parseInt(seasonNum)
-            //  if (episodeNum != null)
-            episodeNumberPicker.value = Integer.parseInt(episodeNum)
-
-            builder?.setView(view)
-            val dialog = builder?.create()
-
-            saveButton.setOnClickListener {
-                episodeNum = episodeNumberPicker.value.toString()
-                seasonNum = seasonNumberPicker.value.toString()
-                seasonEpisodeNumberSelector.text =
-                    String.format("S%02d E%02d", Integer.parseInt(seasonNum), Integer.parseInt(episodeNum))
-                dialog?.dismiss()
-            }
-            dialog?.show()
-        }
-
+        seasonEpisodeNumberSelector.setOnClickListener { createNumberPicker() }
         pictureBackground.setOnClickListener { selectPictureDialog() }
         uploadPhoto.setOnClickListener { selectPictureDialog() }
         changePhoto.setOnClickListener { selectPictureDialog() }
+        episodeTitle.addTextChangedListener(textWatcher(1, 50))
+        episodeDescription.addTextChangedListener(textWatcher(1, 50))
 
-        episodeTitle.addTextChangedListener(textWatcher)
-        episodeDescription.addTextChangedListener(textWatcher)
-
-        btnSave.setOnClickListener {
-
-            val episode = Episode(
-                fileURL.toString(),
-                episodeNum,
-                seasonNum,
-                episodeDescription.text.toString(),
-                episodeTitle.text.toString()
-            )
-
-            viewModel.addEpisode(episode)
-            activity?.supportFragmentManager?.popBackStack()
-        }
+        btnSave.setOnClickListener { saveEpisode() }
 
         if (savedInstanceState != null) {
             seasonNum = savedInstanceState.getString(SAVED_INSTANCE_SEASON) ?: "01"
@@ -148,9 +106,66 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
             if (uri != null) fileURL = Uri.parse(uri)
 
 
-            seasonEpisodeNumberSelector.text = String.format("S%02d E%02d", Integer.parseInt(seasonNum), Integer.parseInt(episodeNum))
+            seasonEpisodeNumberSelector.text =
+                String.format("S%02d E%02d", Integer.parseInt(seasonNum), Integer.parseInt(episodeNum))
             image.setImageURI(fileURL)
         }
+
+        context?.let {
+            if (!isNetworkAvailable(context = it)) {
+                AlertDialog.Builder(it)
+                    .setTitle("Info")
+                    .setMessage("Seems you have no internet connection. Functionality limited. :( ")
+                    .setPositiveButton("OK", null)
+                    .create()
+                    .show()
+            }
+        }
+
+    }
+
+    private fun saveEpisode() {
+        val episode = Episode(
+            null,
+            episodeTitle.text.toString(),
+            episodeDescription.text.toString(),
+            seasonNum,
+            episodeNum,
+            null,
+            showId,
+            null
+        )
+        viewModel.postEpisode(episode, photoPath)
+        activity?.supportFragmentManager?.popBackStack()
+    }
+
+    private fun createNumberPicker() {
+        val builder = context?.let { AlertDialog.Builder(it) }
+        val view = layoutInflater.inflate(R.layout.number_picker, null)
+
+        val seasonNumberPicker = view.findViewById(R.id.seasonNumberPicker) as NumberPicker
+        val episodeNumberPicker = view.findViewById(R.id.episodeNumberPicker) as NumberPicker
+        val saveButton = view.findViewById(R.id.saveButton) as Button
+
+        seasonNumberPicker.maxValue = MAX_SEASON_NUM
+        seasonNumberPicker.minValue = MIN_SEASON_NUM
+        episodeNumberPicker.maxValue = MAX_EPISODE_NUM
+        episodeNumberPicker.minValue = MIN_EPISODE_NUM
+
+        seasonNumberPicker.value = Integer.parseInt(seasonNum)
+        episodeNumberPicker.value = Integer.parseInt(episodeNum)
+
+        builder?.setView(view)
+        val dialog = builder?.create()
+
+        saveButton.setOnClickListener {
+            episodeNum = episodeNumberPicker.value.toString()
+            seasonNum = seasonNumberPicker.value.toString()
+            seasonEpisodeNumberSelector.text =
+                String.format("S%02d E%02d", Integer.parseInt(seasonNum), Integer.parseInt(episodeNum))
+            dialog?.dismiss()
+        }
+        dialog?.show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -162,10 +177,10 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        savedInstanceState?.putString(SAVED_INSTANCE_SEASON, seasonNum)
-        savedInstanceState?.putString(SAVED_INSTANCE_EPISODE, episodeNum)
+        savedInstanceState.putString(SAVED_INSTANCE_SEASON, seasonNum)
+        savedInstanceState.putString(SAVED_INSTANCE_EPISODE, episodeNum)
         if (fileURL != null) {
-            savedInstanceState?.putString(SAVED_INSTANCE_FILEURI, fileURL.toString())
+            savedInstanceState.putString(SAVED_INSTANCE_FILEURI, fileURL.toString())
         }
         super.onSaveInstanceState(savedInstanceState)
     }
@@ -239,15 +254,18 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
     private fun openCamera() {
         val storageDir = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val image = File.createTempFile("image", ".jpg", storageDir)
+        photoPath = image.absolutePath
         fileURL = FileProvider.getUriForFile(requireContext(), "com.example.shows_jurenivan", image)
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(activity?.packageManager) != null) {
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileURL)
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            startActivityForResult(
-                intent,
-                TAKE_PHOTO
-            )
+        if (activity?.packageManager != null) {
+            if (intent.resolveActivity(activity?.packageManager) != null) {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileURL)
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                startActivityForResult(
+                    intent,
+                    TAKE_PHOTO
+                )
+            }
         }
     }
 
@@ -289,26 +307,33 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         builder.show()
     }
 
-    private val textWatcher = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            btnSave.isEnabled =
-                checkAllTextBoxConditions(episodeTitle) && checkAllTextBoxConditions(episodeDescription)
-        }
 
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+    private fun textWatcher(minLen: Int, minLenSecond: Int): TextWatcher {
+        return object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                btnSave.isEnabled =
+                    checkAllTextBoxConditions(episodeTitle, minLen) && checkAllTextBoxConditions(
+                        episodeDescription,
+                        minLenSecond
+                    )
+            }
 
-        private fun checkAllTextBoxConditions(textBox: TextInputEditText?): Boolean {
-            return textBox?.text?.length?.let { len -> len >= 1 } ?: false
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+
+            private fun checkAllTextBoxConditions(textBox: TextInputEditText?, minLen: Int): Boolean {
+                return textBox?.text?.length?.let { len -> len >= minLen } ?: false
+            }
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) =
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 TAKE_PHOTO -> image.setImageURI(fileURL)
                 PICK_PHOTO -> {
-                    fileURL = data!!.data
+                    fileURL = data?.data
+                    photoPath = getFile(data)?.absolutePath
                     image.setImageURI(fileURL)
                 }
             }
@@ -316,6 +341,20 @@ class AddEpisodeFragment : Fragment(), BackKeyInterface {
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+
+    private fun getFile(data: Intent?): File? {
+        val selectedImage = data?.data ?: return null
+        val cursor = context?.contentResolver?.query(
+            selectedImage,
+            arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null
+        )
+        cursor?.moveToFirst()
+
+        val idx = cursor?.getColumnIndex(MediaStore.Images.ImageColumns.DATA) ?: return null
+        val selectedImagePath = cursor.getString(idx)
+        cursor.close()
+
+        return File(selectedImagePath)
     }
 
     private fun changeVisibility() {

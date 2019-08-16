@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@color/white"
+>
+
+    <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/appBarLayout">
+
+        <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar"
+                android:navigationIcon="?attr/homeAsUpIndicator"
+                app:title="@string/addEpisode"
+                style="@style/MyToolbarTheme"
+        />
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+            android:baselineAligned="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="100"
+    >
+
+        <ScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="60">
+
+
+            <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp">
+
+                <android.support.design.widget.TextInputLayout
+                        android:id="@+id/episodeTitleLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:errorEnabled="true">
+                    <android.support.design.widget.TextInputEditText
+                            android:id="@+id/episodeTitle"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:hint="@string/episodeTitle"
+                            android:inputType="text"
+                            android:textSize="16sp"
+                    />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/seasonAndEpisode"
+                        android:textSize="16sp"
+                        android:layout_marginTop="16dp"
+                />
+
+                <TextView
+                        android:id="@+id/seasonEpisodeNumberSelector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/seasonEpisode"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"/>
+
+                <android.support.design.widget.TextInputLayout
+                        android:id="@+id/episodeDescriptionLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:errorEnabled="true">
+
+                    <android.support.design.widget.TextInputEditText
+                            android:id="@+id/episodeDescription"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:hint="@string/episodeDescripiton"
+                            android:inputType="text"
+                            android:textSize="16sp"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+        <android.support.constraint.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="40"
+                android:orientation="vertical"
+                android:id="@+id/pictureBackground"
+        >
+            <LinearLayout
+                    android:id="@+id/imageContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+
+                    android:gravity="center"
+                    android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:src="@drawable/ic_camera"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="@string/small_camera_picture"
+                />
+
+            </LinearLayout>
+
+            <TextView
+                    android:id="@+id/uploadPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/uploadPhoto"
+                    android:textSize="15sp"
+                    android:textColor="#ff758c"
+                    android:lineSpacingExtra="7sp"
+                    android:gravity="center"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@+id/imageContainer" android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/btnSave"/>
+
+            <TextView
+                    android:id="@+id/changePhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/changePhoto"
+                    android:textSize="15sp"
+                    android:textColor="#ff758c"
+                    android:lineSpacingExtra="7sp"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/imageContainer"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/btnSave"/>
+
+            <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:background="@drawable/button_selector"
+
+                    android:text="@string/save"
+                    android:textSize="16sp"
+                    android:textColor="#ffffff"
+                    android:letterSpacing="0.02"
+                    android:lineSpacingExtra="4sp"
+                    android:textAlignment="center"
+
+                    android:enabled="false"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="48dp"
+                    app:layout_constraintTop_toBottomOf="@+id/imageContainer" android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
+

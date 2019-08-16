@@ -8,10 +8,10 @@ import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.RetrofitClient
 import com.example.shows_jurenivan.data.dataStructures.Show
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_show.view.*
+import kotlinx.android.synthetic.main.item_show_list.view.*
 
 
-class ShowsAdapter(val clickAction: (Int) -> Unit = {}) :
+class ShowsAdapter(private val gridActive:Boolean,val clickAction: (Int) -> Unit = {}) :
     RecyclerView.Adapter<ShowsAdapter.ViewHolder>() {
 
     private var shows = listOf<Show>()
@@ -21,14 +21,16 @@ class ShowsAdapter(val clickAction: (Int) -> Unit = {}) :
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder =
-        ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_show,
-                parent,
-                false
-            )
+    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
+        if (gridActive) {
+            return ViewHolder(LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_show_grid, parent, false))
+        }
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(
+                R.layout.item_show_list, parent, false)
         )
+    }
+
 
     override fun getItemCount(): Int = shows.size
 
@@ -40,9 +42,14 @@ class ShowsAdapter(val clickAction: (Int) -> Unit = {}) :
             var show = shows[position]
             with(itemView) {
                 itemShowListTitle.text = show.title
+                if(itemLikeCount!=null){
+                    itemLikeCount.text=show.likesCount.toString()
+                }
+
                 Picasso.get().load(RetrofitClient.BASE_URL + show.imageURL)
-                    .placeholder(R.drawable.ic_img_placeholder_episodes).error(R.drawable.ic_img_placeholder_episodes)
+                    .placeholder(R.drawable.rc8j4).error(R.drawable.ic_img_placeholder_episodes)
                     .into(imageViewPicture)
+
                 showListID.setOnClickListener { clickAction(position) }
             }
         }

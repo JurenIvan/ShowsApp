@@ -3,8 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
->
+        android:layout_height="wrap_content">
 
     <android.support.constraint.ConstraintLayout
             android:id="@+id/seasonLayout"
@@ -70,10 +69,9 @@
                 android:id="@+id/episodeNumberPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/textView4"
-
-        />
+                app:layout_constraintTop_toBottomOf="@+id/textView4"/>
     </android.support.constraint.ConstraintLayout>
+
     <Button
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
@@ -85,7 +83,6 @@
 
             android:textAllCaps="true"
             android:textColor="@color/colorAccent"
-            android:background="@color/colorPrimary"
-    />
+            android:background="@color/white"/>
 
 </android.support.constraint.ConstraintLayout>

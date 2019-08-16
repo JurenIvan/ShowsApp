@@ -6,6 +6,19 @@
         android:layout_width="match_parent" android:layout_height="match_parent"
 >
 
+    <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+    />
+
     <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="250dp"
@@ -73,7 +86,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="150dp">
                 <TextView
-                        android:id="@+id/showDescription"
+                        android:id="@+id/episodeDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="#505050"
@@ -156,7 +169,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/somebodyFallenAsleep"
-                        android:textColor="@color/showsTitleColor"
+                        android:textColor="@color/textLight"
                         android:gravity="center_horizontal"
                 />
 
@@ -164,7 +177,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dontWakeHimUp"
-                        android:textColor="@color/showsTitleColor"
+                        android:textColor="@color/textLight"
                         android:gravity="center_horizontal"/>
 
                 <TextView

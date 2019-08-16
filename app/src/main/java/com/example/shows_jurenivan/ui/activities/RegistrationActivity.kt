@@ -1,11 +1,13 @@
 package com.example.shows_jurenivan.ui.activities
 
+import android.app.ProgressDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,9 +17,10 @@ import android.widget.Toast
 import com.example.shows_jurenivan.R
 import com.example.shows_jurenivan.data.dataStructures.User
 import com.example.shows_jurenivan.data.viewModels.RegisterViewModel
+import com.example.shows_jurenivan.isNetworkAvailable
 import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllPasswordConditions
 import com.example.shows_jurenivan.ui.activities.LoginActivity.Companion.checkAllUsernameConditions
-import kotlinx.android.synthetic.main.registration_activity.*
+import kotlinx.android.synthetic.main.activity_registration.*
 
 
 class RegistrationActivity : AppCompatActivity() {
@@ -37,11 +40,11 @@ class RegistrationActivity : AppCompatActivity() {
 
     private lateinit var sharedPref: SharedPreferences
     private lateinit var viewModel: RegisterViewModel
-
+    private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.registration_activity)
+        setContentView(R.layout.activity_registration)
         viewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
         sharedPref = getSharedPreferences(LOGIN, Context.MODE_PRIVATE)
 
@@ -70,32 +73,59 @@ class RegistrationActivity : AppCompatActivity() {
 
             viewModel.registerLiveData.observe(this, Observer { user ->
                 if (user?.isSuccessful == true) {
-                    var userToLogIn = user.data!!
+                    val userToLogIn = user.data!!
                     userToLogIn.password = password1.text.toString().trim()
                     viewModel.loginUser(userToLogIn)
+                    viewModel.registerLiveData.removeObservers(this)
                 }
             })
+
             viewModel.tokenLiveData.observe(this, Observer { token ->
                 if (token?.isSuccessful == true) {
-                    var userEmail = viewModel.registerLiveData.value?.data?.email
-                    if (userEmail.isNullOrBlank().not()){
-                        if (intent.getBooleanExtra(REMEMBER_ME_CHECK,false)) {
-                            sharedPref.edit()
-                                .putString(LoginActivity.USERNAME, userEmail)
-                                .putString(LoginActivity.TOKEN, token.data.toString())
-                                .apply()
-                        }
-                    startActivity(WelcomeActivity.newInstance(this, userEmail!!, token.data.toString()))
-                    finishAffinity()
+                    val userEmail = viewModel.registerLiveData.value?.data?.email
+                    if (userEmail.isNullOrBlank().not()) {
+
+                        sharedPref.edit()
+                            .putString(LoginActivity.USERNAME, userEmail)
+                            .putString(LoginActivity.TOKEN, token.data?.token)
+                            .putBoolean(LoginActivity.REMEMBER_ME, intent.getBooleanExtra(REMEMBER_ME_CHECK, false))
+                            .apply()
+
+                        startActivity(userEmail?.let { _ -> WelcomeActivity.newInstance(this, userEmail) })
+                        finishAffinity()
                     }
-                }else{
-                    Toast.makeText(this,"bposkfpsodfks",Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
                 }
             })
         }
 
         password1.addTextChangedListener(textWatcher)
         password2.addTextChangedListener(textWatcher)
+
+        viewModel.errorLiveData.observe(this, Observer { errors ->
+            if (errors != null && errors.isNotBlank()) {
+                Toast.makeText(this, errors, Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.loadingLiveData.observe(this, Observer { loading ->
+            if (loading == null || !loading) {
+                progressDialog?.cancel()
+            } else {
+                if (progressDialog == null)
+                    progressDialog = ProgressDialog.show(this, "Shows", "Loading", true, true)
+            }
+        })
+
+        if (!isNetworkAvailable(context = this)) {
+            AlertDialog.Builder(this)
+                .setTitle("Info")
+                .setMessage("Seems you have no internet connection. Functionality limited. :( ")
+                .setPositiveButton("OK", null)
+                .create()
+                .show()
+        }
 
     }
 

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+>
+
+    <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+    />
+
+    <TextView
+            android:fontFamily="@font/karla_bold"
+            android:layout_margin="20dp"
+            android:id="@+id/showsId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
+            android:textColor="#2e2e2e"
+            android:lineSpacingExtra="12sp"
+            android:text="@string/shows"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@+id/item_detail_container"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"/>
+
+    <ImageView
+            android:id="@+id/logout"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_round_power_settings_new_24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/logout_shape"
+            app:layout_constraintTop_toTopOf="@+id/item_detail_container"
+            android:padding="8dp"
+    />
+
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/recyclerViewShows"
+            android:layout_below="@+id/showsId"
+            app:layout_constraintTop_toBottomOf="@id/showsId"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/item_detail_container"/>
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/viewPicker"
+            app:fabSize="normal"
+            android:src="@drawable/ic_gridview_white"
+            style="@style/FloatingActionButton"
+
+            app:layout_constraintBottom_toBottomOf="@+id/item_detail_container"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/item_detail_container"
+            app:elevation="0dp"
+    />
+
+    <FrameLayout
+            android:id="@+id/item_detail_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="30dp"/>
+
+</android.support.constraint.ConstraintLayout>

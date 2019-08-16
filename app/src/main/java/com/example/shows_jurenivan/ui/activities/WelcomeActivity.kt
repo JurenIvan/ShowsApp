@@ -1,5 +1,6 @@
 package com.example.shows_jurenivan.ui.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -13,24 +14,24 @@ class WelcomeActivity : AppCompatActivity() {
 
     companion object {
         const val EMAIL_KEY = "user"
-        const val TOKEN = "token"
 
-        fun newInstance(context: Context, email: String, token: String): Intent {
-            val intent = Intent(context, HomeActivity::class.java)
+        fun newInstance(context: Context, email: String): Intent {
+            val intent = Intent(context, WelcomeActivity::class.java)
             intent.putExtra(EMAIL_KEY, email)
-            intent.putExtra(TOKEN, token)
             return intent
         }
     }
 
     private val handler = Handler()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 
-        val username = intent.getStringExtra(EMAIL_KEY)
-        welcome_user.text = "Welcome $username"
+        val username = intent.getStringExtra(EMAIL_KEY).split("@")[0]
+        @SuppressLint("SetTextI18n")
+        welcome_user.text = getString(R.string.welcome)+ " " + username
 
         postDelayed()
     }
@@ -48,16 +49,8 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun postDelayed() {
         handler.postDelayed({
-            startActivity(
-                HomeActivity.newInstance(
-                    this,
-                    intent.getStringExtra(EMAIL_KEY),
-                    intent.getStringExtra(TOKEN)
-                )
-            )
+            startActivity(HomeActivity.newInstance(this))
             finish()
-        }, 1000)
+        }, 2000)
     }
-
-
 }
